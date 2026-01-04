@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Herramienta educativa universitaria sobre C++. Basada en Deitel y O'Reilly.">
+    <title>Unidad Didáctica 02 - Paradigma de Objetos - Parte 1</title>
+    
+    <!-- Fuentes Académicas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Roboto+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #fdfdfd;
+            --bg-secondary: #f4f4f4;
+            --bg-paper: #ffffff;
+            --text-primary: #212121;
+            --text-secondary: #5f6368;
+            --accent: #0056b3; 
+            --accent-hover: #003d80;
+            --code-bg: #f5f5f5;
+            --border: #e0e0e0;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --timeline-line: #ccc;
+            --success: #2e7d32;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-paper: #242424;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --accent: #64b5f6;
+            --accent-hover: #42a5f5;
+            --code-bg: #2d2d2d;
+            --border: #333333;
+            --shadow: 0 4px 6px rgba(0,0,0,0.5);
+            --timeline-line: #444;
+            --success: #81c784;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Tipografía */
+        h1, h2, h3, h4 {
+            font-family: 'Roboto', sans-serif;
+            margin-top: 1.5em;
+        }
+
+        h1 { font-weight: 700; font-size: 2.2rem; text-align: center; margin-bottom: 2rem; }
+        h1 a { text-decoration: none; color: var(--accent); }
+        h2 { border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; color: var(--accent); font-size: 1.8rem; }
+        h3 { color: var(--text-primary); border-left: 4px solid var(--accent); padding-left: 1rem; }
+        
+        p { margin-bottom: 1.2rem; font-size: 1.05rem; text-align: justify; }
+
+        code {
+            font-family: 'Roboto Mono', monospace;
+            background-color: var(--code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--accent);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            border-left: 5px solid var(--accent);
+            box-shadow: var(--shadow);
+            margin: 1.5rem 0;
+        }
+
+        /* Layout */
+        .app-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 100vh;
+        }
+
+        aside {
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-header h2 { border: none; font-size: 1.2rem; margin-bottom: 1rem; color: var(--text-primary); }
+
+        .nav-links { list-style: none; padding: 0; margin: 0; }
+        .nav-links li { margin-bottom: 0.3rem; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.85rem;
+            display: block;
+            padding: 0.6rem;
+            border-radius: 6px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            padding-left: 1.2rem;
+            box-shadow: var(--shadow);
+        }
+
+        main {
+            padding: 4rem 8%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        section {
+            scroll-margin-top: 5rem;
+            margin-bottom: 6rem;
+            padding: 3rem;
+            background-color: var(--bg-paper);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tooltips */
+        .abbr {
+            border-bottom: 2px dotted var(--accent);
+            cursor: help;
+            position: relative;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .abbr:hover::after {
+            content: attr(data-title);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            white-space: normal;
+            min-width: 200px;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+            margin: 3rem 0;
+            border-left: 4px solid var(--accent);
+        }
+        .timeline-item { margin-bottom: 2.5rem; position: relative; }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3.65rem;
+            top: 0.2rem;
+            width: 1.2rem;
+            height: 1.2rem;
+            background: var(--bg-paper);
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+        }
+        .timeline-date { font-weight: 800; color: var(--accent); font-size: 1.1rem; display: block; }
+
+        /* Diagramas */
+        .diagram-mem {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 2rem 0;
+        }
+        .mem-cell {
+            border: 2px solid var(--border);
+            padding: 1rem;
+            text-align: center;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+        }
+        .mem-cell.active { border-color: var(--accent); background: rgba(0,86,179,0.1); }
+
+        /* Tablas */
+        .table-res { overflow-x: auto; margin: 2rem 0; border-radius: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; background: var(--bg-paper); }
+        th, td { padding: 1.2rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background-color: var(--bg-secondary); color: var(--accent); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+
+        /* UI Elements */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            z-index: 1000;
+        }
+
+        .btn-ref {
+            display: inline-block;
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+        .btn-ref:hover { background: var(--accent); color: white; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: var(--bg-paper);
+            padding: 3rem;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 90%;
+            position: relative;
+        }
+
+        .practice-box {
+            background: rgba(46, 125, 50, 0.05);
+            border-left: 6px solid var(--success);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .icon-sec { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .app-container { grid-template-columns: 1fr; }
+            aside { display: none; }
+            main { padding: 2rem 5%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <aside>
+        <div class="nav-header">
+            <h2>CONTENIDOS</h2>
+            <p style="font-size: 0.75rem; color: var(--text-secondary);">Guía Universitaria de C++</p>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#sec-2">2 Introducción</a></li>
+            <li><a href="#sec-2-1">2.1 Introducción al Lenguaje</a></li>
+            <li><a href="#sec-2-2">2.2 Su primer programa: Salida</a></li>
+            <li><a href="#sec-2-3">2.3 Modificando el programa</a></li>
+            <li><a href="#sec-2-4">2.4 Suma de Enteros</a></li>
+            <li><a href="#sec-2-5">2.5 Conceptos de Memoria</a></li>
+            <li><a href="#sec-2-6">2.6 Aritmética en C++</a></li>
+            <li><a href="#sec-2-7">2.7 Toma de decisiones</a></li>
+            <li><a href="#sec-2-8">2.8 Ingeniería: Caso ATM</a></li>
+            <li><a href="#sec-2-9">2.9 Repaso General</a></li>
+        </ul>
+    </aside>
+
+    <main>
+        <header id="home">
+            <h1><a href="#home">Unidad Didáctica 02 - Paradigma de Objetos - Parte 1</a></h1>
+            <p style="text-align: center; font-style: italic;">"La maestría en el desarrollo de software comienza con el dominio de los fundamentos de la sintaxis y la arquitectura de memoria."</p>
+        </header>
+
+        <!-- 2 Introducción -->
+        <section id="sec-2">
+            <span class="icon-sec">🚀</span>
+            <h2>2 Introducción a la programación en C++</h2>
+            <p>Usted está por comenzar un viaje técnico profundo. C++ no es simplemente otro lenguaje; es el estándar de oro para aplicaciones que requieren alto rendimiento, control de hardware y robustez arquitectónica. Como futuros ingenieros o licenciados, deben entender que en C++ cada línea de código tiene una repercusión directa en la eficiencia del sistema.</p>
+            <p>Basado en el enfoque de <strong>Deitel</strong>, este capítulo desglosa los componentes elementales: desde cómo el <span class="abbr" data-title="Compilador: Programa que traduce el código fuente (C++) a código máquina ejecutable.">compilador</span> procesa sus intenciones hasta cómo se organiza la información en los circuitos de la computadora. Según el cuaderno de <strong>Metodologías Activas</strong>, se recomienda que usted no solo lea, sino que tipee cada ejemplo en su <span class="abbr" data-title="IDE: Integrated Development Environment (Entorno de Desarrollo Integrado).">IDE</span> favorito para generar memoria procedimental.</p>
+            <button class="btn-ref" onclick="openRef('ref-2')">Referencia: Deitel Cap. 2</button>
+        </section>
+
+        <!-- 2.1 Introducción -->
+        <section id="sec-2-1">
+            <span class="icon-sec">📖</span>
+            <h2>2.1 Introducción</h2>
+            <p>El lenguaje C++ fue desarrollado por <span class="abbr" data-title="Bjarne Stroustrup: Creador de C++ en Bell Labs (1979), originalmente llamado C con Clases.">Bjarne Stroustrup</span> a principios de los años 80. Su propósito fue extender el lenguaje C para soportar el paradigma orientado a objetos sin perder la eficiencia del lenguaje original. Este lenguaje es <strong>multiparadigma</strong>, lo que significa que le permite a usted programar de forma estructurada, orientada a objetos o genérica.</p>
+            
+            <h3>Evolución Histórica</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-date">1972 - Lenguaje C</span>
+                    <p>Dennis Ritchie crea C para el sistema UNIX. Es la base de toda la computación moderna.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">1983 - C++</span>
+                    <p>Stroustrup lanza C++. El operador <code>++</code> simboliza la evolución natural del lenguaje.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">1998 - Estándar ANSI/ISO</span>
+                    <p>Se ratifica la primera versión estándar oficial, garantizando portabilidad.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">2011 (C++11) a Hoy</span>
+                    <p>El "C++ Moderno" introduce punteros inteligentes y mejoras críticas en la seguridad.</p>
+                </div>
+            </div>
+            
+            <p>Comparado con otros lenguajes como Java o Python, C++ le otorga a usted la responsabilidad (y el riesgo) de gestionar la memoria. Como indica el PDF de <strong>O'Reilly</strong>, "un programador de C++ debe pensar como el hardware".</p>
+            <button class="btn-ref" onclick="openRef('ref-2-1')">Referencia: O'Reilly Cap. 1</button>
+        </section>
+
+        <!-- 2.2 Su primer programa -->
+        <section id="sec-2-2">
+            <span class="icon-sec">💻</span>
+            <h2>2.2 Su primer programa en C++: imprimir una línea de texto</h2>
+            <p>Iniciamos con el código más simple, pero rico en conceptos estructurales. Analizá el siguiente fragmento:</p>
+            <pre><code>// Programa de impresión en C++
+#include &lt;iostream&gt; // Directiva de preprocesador
+
+int main() {
+    std::cout << "Bienvenido a C++!\n"; // Salida de datos
+    return 0; // Indica que el programa terminó con éxito
+}</code></pre>
+            <h3>Desglose Técnico:</h3>
+            <ul>
+                <li><strong>Comentarios:</strong> Iniciados con <code>//</code>, son ignorados por el compilador pero vitales para la documentación académica.</li>
+                <li><strong>Preprocesador:</strong> La línea <code>#include &lt;iostream&gt;</code> le avisa al compilador que incluya la biblioteca estándar para entrada y salida.</li>
+                <li><strong>La función main:</strong> Todo programa ejecutable comienza aquí. Es el punto de entrada obligatorio.</li>
+                <li><strong>Objetos de salida:</strong> <code>std::cout</code> (character output) es un objeto de flujo que envía datos a la consola.</li>
+            </ul>
+            <p>Notá el uso de <code>std::</code>. Esto se llama <strong>prefijo de ámbito</strong> e indica que <code>cout</code> pertenece al <span class="abbr" data-title="Namespace: Espacio de nombres que ayuda a evitar conflictos entre funciones con el mismo nombre en proyectos grandes.">espacio de nombres</span> estándar.</p>
+            <button class="btn-ref" onclick="openRef('ref-2-2')">Referencia: Deitel pág. 34</button>
+        </section>
+
+        <!-- 2.3 Modificación -->
+        <section id="sec-2-3">
+            <span class="icon-sec">🔧</span>
+            <h2>2.3 Modificación de nuestro primer programa en C++</h2>
+            <p>Podemos imprimir múltiples líneas con un solo enunciado o usar secuencias de escape para formatear la salida. Las <span class="abbr" data-title="Escape Sequences: Caracteres especiales que comienzan con barra invertida (\) y realizan funciones de formato.">secuencias de escape</span> permiten controlar el cursor de la pantalla.</p>
+            
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Secuencia</th>
+                            <th>Significado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>\n</code></td><td>Nueva línea</td><td>Mueve el cursor al inicio de la siguiente línea.</td></tr>
+                        <tr><td><code>\t</code></td><td>Tabulación</td><td>Mueve el cursor al siguiente tabulador horizontal.</td></tr>
+                        <tr><td><code>\r</code></td><td>Retorno de carro</td><td>Mueve el cursor al inicio de la línea actual.</td></tr>
+                        <tr><td><code>\\</code></td><td>Barra invertida</td><td>Imprime un carácter de barra invertida.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="practice-box">
+                <strong>💡 Desafío Práctico:</strong> Escribí un programa que imprima tu nombre y apellido centrados en la consola usando únicamente tabulaciones (<code>\t</code>) y nuevas líneas (<code>\n</code>).
+            </div>
+            <button class="btn-ref" onclick="openRef('ref-2-3')">Referencia: Deitel pág. 38</button>
+        </section>
+
+        <!-- 2.4 Suma de enteros -->
+        <section id="sec-2-4">
+            <span class="icon-sec">➕</span>
+            <h2>2.4 Otro programa en C++: suma de enteros</h2>
+            <p>Ahora introducimos la interactividad mediante variables y la entrada de datos del usuario. C++ es un lenguaje de **tipado fuerte**, lo que significa que debés declarar el tipo de datos antes de usarlos.</p>
+            <pre><code>#include &lt;iostream&gt;
+
+int main() {
+    int numero1; // Declaración
+    int numero2;
+    int suma;
+
+    std::cout << "Ingresá el primer número: ";
+    std::cin >> numero1; // Entrada de datos
+
+    std::cout << "Ingresá el segundo número: ";
+    std::cin >> numero2;
+
+    suma = numero1 + numero2; // Procesamiento
+
+    std::cout << "La suma es: " << suma << std::endl;
+    return 0;
+}</code></pre>
+            <p>El objeto <code>std::cin</code> (character input) lee datos desde el teclado y los almacena en la variable indicada. El operador <code>>></code> se conoce como <strong>operador de extracción</strong>.</p>
+            <button class="btn-ref" onclick="openRef('ref-2-4')">Referencia: O'Reilly Cap. 4</button>
+        </section>
+
+        <!-- 2.5 Conceptos memoria -->
+        <section id="sec-2-5">
+            <span class="icon-sec">🧠</span>
+            <h2>2.5 Conceptos acerca de la memoria</h2>
+            <p>Usted debe visualizar la memoria de la computadora como una serie de celdas o buzones. Cada variable en C++ tiene un nombre, un tipo, un tamaño y un valor.</p>
+            
+            <div class="diagram-mem">
+                <div class="mem-cell">Dirección 0x01<br><small>numero1</small><br><strong>45</strong></div>
+                <div class="mem-cell active">Dirección 0x02<br><small>numero2</small><br><strong>72</strong></div>
+                <div class="mem-cell">Dirección 0x03<br><small>suma</small><br><strong>117</strong></div>
+            </div>
+
+            <p>Regla de Oro en C++:</p>
+            <ul>
+                <li><strong>Lectura Destructiva:</strong> Al colocar un valor en una variable (por ejemplo, mediante <code>cin</code>), el valor anterior se sobreescribe y se pierde para siempre.</li>
+                <li><strong>Lectura No Destructiva:</strong> Al leer un valor de una celda de memoria (por ejemplo, para calcular la suma), el valor original permanece intacto en la celda.</li>
+            </ul>
+            <button class="btn-ref" onclick="openRef('ref-2-5')">Referencia: Deitel pág. 43</button>
+        </section>
+
+        <!-- 2.6 Aritmética -->
+        <section id="sec-2-6">
+            <span class="icon-sec">🧮</span>
+            <h2>2.6 Aritmética</h2>
+            <p>C++ utiliza operadores binarios similares a la notación algebraica. Sin embargo, existe una jerarquía estricta conocida como **precedencia de operadores**.</p>
+            
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operación</th>
+                            <th>Operador</th>
+                            <th>Ejemplo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Suma</td><td><code>+</code></td><td>f + 7</td></tr>
+                        <tr><td>Resta</td><td><code>-</code></td><td>p - c</td></tr>
+                        <tr><td>Multiplicación</td><td><code>*</code></td><td>b * m</td></tr>
+                        <tr><td>División</td><td><code>/</code></td><td>x / y</td></tr>
+                        <tr><td>Módulo (Resto)</td><td><code>%</code></td><td>7 % 2 (Resultado: 1)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><strong>Nota importante:</strong> La división de enteros trunca el resultado. <code>7 / 4</code> devolverá <code>1</code>, no <code>1.75</code>. Para obtener el resto, debés usar el operador módulo <code>%</code>.</p>
+            <button class="btn-ref" onclick="openRef('ref-2-6')">Referencia: Deitel pág. 45</button>
+        </section>
+
+        <!-- 2.7 Toma de decisiones -->
+        <section id="sec-2-7">
+            <span class="icon-sec">⚖️</span>
+            <h2>2.7 Toma de decisiones: operadores de igualdad y relacionales</h2>
+            <p>Los programas inteligentes deben responder a condiciones. Usamos la estructura <code>if</code> junto con operadores de comparación. El resultado de estas expresiones es siempre un valor booleano (verdadero o falso).</p>
+            
+            <pre><code>if (numero1 == numero2) {
+    std::cout << "Son iguales";
+}</code></pre>
+
+            <h3>Operadores Relacionales:</h3>
+            <ul>
+                <li><code>==</code> : Igual a (¡No confundir con <code>=</code> de asignación!)</li>
+                <li><code>!=</code> : Diferente de</li>
+                <li><code>&gt;</code> : Mayor que</li>
+                <li><code>&lt;</code> : Menor que</li>
+                <li><code>&gt;=</code> : Mayor o igual que</li>
+            </ul>
+            <div class="practice-box">
+                <strong>🚩 Error Común:</strong> Usar un solo signo igual (<code>=</code>) dentro de un <code>if</code>. Esto asignará el valor en lugar de compararlo, lo que suele resultar en un error lógico difícil de detectar.
+            </div>
+            <button class="btn-ref" onclick="openRef('ref-2-7')">Referencia: O'Reilly Cap. 6</button>
+        </section>
+
+        <!-- 2.8 ATM Case Study -->
+        <section id="sec-2-8">
+            <span class="icon-sec">🏧</span>
+            <h2>2.8 (Opcional) Ejemplo práctico de Ingeniería de Software: ATM</h2>
+            <p>La ingeniería de software aplicada nos enseña a modelar antes de programar. El caso de estudio del <span class="abbr" data-title="ATM: Automated Teller Machine (Cajero Automático).">ATM</span> es un clásico de Deitel para introducir el pensamiento orientado a objetos.</p>
+            <p>Al examinar los requerimientos, buscamos **sustantivos** (que se convertirán en <span class="abbr" data-title="Clases: Plantillas que definen los atributos y comportamientos de un objeto.">clases</span>) y **verbos** (que se convertirán en métodos o funciones).</p>
+            
+            <h3>Análisis Inicial:</h3>
+            <ul>
+                <li><strong>Sustantivos:</strong> Pantalla, Teclado numérico, Ranura para depósitos, Dispensador de efectivo, Base de datos de cuentas.</li>
+                <li><strong>Verbos (Acciones):</strong> Autenticar usuario, Consultar saldo, Realizar retiro, Depositar fondos.</li>
+            </ul>
+            <p>Este proceso es parte fundamental de las **Metodologías Activas** (Aprendizaje basado en problemas), ya que conecta la sintaxis abstracta de C++ con una necesidad tangible del mundo financiero.</p>
+            <button class="btn-ref" onclick="openRef('ref-2-8')">Referencia: Deitel Secc. 1.21 / 2.8</button>
+        </section>
+
+        <!-- 2.9 Repaso -->
+        <section id="sec-2-9">
+            <span class="icon-sec">🔄</span>
+            <h2>2.9 Repaso</h2>
+            <p>Habiendo completado esta sección, usted debería ser capaz de:</p>
+            <ol>
+                <li>Escribir, compilar y ejecutar programas básicos de consola.</li>
+                <li>Entender el flujo de datos usando <code>cin</code> y <code>cout</code>.</li>
+                <li>Gestionar variables y entender su representación en la memoria física.</li>
+                <li>Aplicar lógica condicional simple mediante el enunciado <code>if</code>.</li>
+            </ol>
+            <p>Como indica el cuaderno de <strong>Desarrollo Web</strong>, la consistencia es clave. No te desanimes si el compilador arroja errores; los mensajes de error son tus mejores maestros en esta etapa.</p>
+            <button class="btn-ref" onclick="location.href='#home'">Volver al Inicio</button>
+        </section>
+
+        <footer style="text-align: center; padding: 4rem 0; border-top: 1px solid var(--border); color: var(--text-secondary);">
+            <p>© 2024 - Cátedra de Programación - Universidad Nacional de Ingeniería</p>
+            <p><small>Basado en Deitel (6ta Ed.) y O'Reilly Practical C++. <br> 
+            Principios de UX/UI aplicados para mejorar la legibilidad y accesibilidad.</small></p>
+        </footer>
+    </main>
+</div>
+
+<!-- Control de Tema -->
+<button class="theme-toggle" id="themeToggle" title="Alternar Modo Oscuro/Claro">
+    🌓
+</button>
+
+<!-- Modal de Referencias -->
+<div id="refModal" class="modal">
+    <div class="modal-content">
+        <h3 id="refTitle">Referencia Bibliográfica</h3>
+        <p id="refBody">Cargando...</p>
+        <button class="btn-ref" onclick="closeRef()">Entendido</button>
+    </div>
+</div>
+
+<script>
+    // --- Lógica de Referencias ---
+    const biblio = {
+        'ref-2': 'Basado en el PDF de Deitel - C++ Cómo Programar, Capítulo 2. Enfoque en la estructura general y sintaxis inicial.',
+        'ref-2-1': 'Basado en el PDF de O\'Reilly - Practical C++ Programming. Historia de los lenguajes y necesidad del control de hardware.',
+        'ref-2-2': 'Basado en el PDF de Deitel - C++ Cómo Programar. Explicación técnica del flujo iostream y el operador de inserción.',
+        'ref-2-3': 'Basado en el PDF de Deitel - C++ Cómo Programar. Tabla de secuencias de escape y control de caracteres especiales.',
+        'ref-2-4': 'Sintetizado del PDF de O\'Reilly y Deitel. Manejo de tipos de datos básicos y flujo cin.',
+        'ref-2-5': 'Basado en el PDF de Deitel - C++ Cómo Programar. Metáfora de celdas de memoria y conceptos de destrucción de datos.',
+        'ref-2-6': 'Análisis técnico de precedencia de operadores según el estándar ANSI/ISO citado en Deitel.',
+        'ref-2-7': 'Basado en el PDF de O\'Reilly - Practical C++ Programming. Análisis de errores lógicos comunes en comparaciones.',
+        'ref-2-8': 'Sintetizado de Deitel y el cuaderno de NotebookLM sobre Metodologías Activas para el diseño orientado a objetos.'
+    };
+
+    function openRef(id) {
+        document.getElementById('refBody').innerText = biblio[id];
+        document.getElementById('refModal').style.display = 'flex';
+    }
+
+    function closeRef() {
+        document.getElementById('refModal').style.display = 'none';
+    }
+
+    // --- Modo Oscuro Persistente ---
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+
+    const savedTheme = localStorage.getItem('user-theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const current = html.getAttribute('data-theme');
+        const next = current === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('user-theme', next);
+    });
+
+    // --- Navegación Activa (Intersection Observer) ---
+    // Verificación y optimización del menú lateral
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    // Opciones del observador: rootMargin ajustado para detectar la sección predominante
+    const obsOptions = { 
+        threshold: [0.1, 0.5, 0.8], // Múltiples umbrales para mayor robustez
+        rootMargin: "-25% 0px -45% 0px" // "Banda de detección" central-superior
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            // Solo actuamos si la sección está entrando significativamente en el foco
+            if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
+                const activeId = entry.target.getAttribute('id');
+                const activeLink = document.querySelector(`.nav-links a[href="#${activeId}"]`);
+                
+                if (activeLink) {
+                    // Limpiar estados previos
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    // Resaltar ubicación actual
+                    activeLink.classList.add('active');
+                    
+                    // Asegurar que el link activo sea visible en el scroll del sidebar (si es muy largo)
+                    activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
+        });
+    }, obsOptions);
+
+    sections.forEach(s => observer.observe(s));
+
+    // Cerrar modal al clickear fuera
+    window.onclick = function(e) {
+        if (e.target.className === 'modal') closeRef();
+    }
+</script>
+
+</body>
+</html>

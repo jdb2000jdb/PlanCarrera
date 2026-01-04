@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Guía de estudio universitaria sobre clases y objetos en C++ basada en Deitel y O'Reilly.">
+    <title>Unidad Didáctica 02 - Paradigma de Objetos - Parte 2</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Roboto+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #fdfdfd;
+            --bg-secondary: #f4f4f4;
+            --bg-paper: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --accent: #0056b3;
+            --accent-hover: #003d80;
+            --code-bg: #f8f9fa;
+            --border: #dee2e6;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --timeline-line: #0056b3;
+            --success: #28a745;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f111a;
+            --bg-secondary: #1a1c2e;
+            --bg-paper: #1e2132;
+            --text-primary: #e6edf3;
+            --text-secondary: #9198a1;
+            --accent: #58a6ff;
+            --accent-hover: #1f6feb;
+            --code-bg: #0d1117;
+            --border: #30363d;
+            --shadow: 0 4px 12px rgba(0,0,0,0.4);
+            --timeline-line: #58a6ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+        }
+
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; color: var(--accent); }
+        h2 { font-size: 1.8rem; border-left: 5px solid var(--accent); padding-left: 1rem; margin-top: 3rem; }
+        
+        .home-link {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        /* Layout */
+        .app-wrapper {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 100vh;
+        }
+
+        aside {
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-links li { margin-bottom: 0.8rem; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-family: 'Roboto', sans-serif;
+            display: block;
+            padding: 0.6rem;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--accent);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        main {
+            padding: 4rem 12%;
+            max-width: 1400px;
+        }
+
+        /* Components */
+        section {
+            margin-bottom: 6rem;
+            scroll-margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.8s forwards;
+        }
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .abbr {
+            border-bottom: 2px dotted var(--accent);
+            cursor: help;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .abbr:hover::after {
+            content: attr(data-title);
+            position: absolute;
+            background: #333;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            z-index: 100;
+            width: 250px;
+            font-family: 'Roboto', sans-serif;
+            margin-top: 25px;
+        }
+
+        .diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .box {
+            background: var(--bg-paper);
+            border: 2px solid var(--accent);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 160px;
+            box-shadow: var(--shadow);
+            font-weight: bold;
+        }
+
+        .arrow { font-size: 2rem; color: var(--accent); }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        th, td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th { background: var(--bg-secondary); color: var(--accent); }
+
+        /* Timeline */
+        .timeline {
+            border-left: 4px solid var(--timeline-line);
+            margin: 2rem 0;
+            padding-left: 2rem;
+        }
+
+        .timeline-event {
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -2.45rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 4px solid var(--bg-primary);
+        }
+
+        .date { font-weight: bold; color: var(--accent); }
+
+        /* Theme Toggle */
+        .theme-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ref-btn {
+            background: none;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--bg-paper);
+            padding: 2.5rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: var(--shadow);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 900px) {
+            .app-wrapper { grid-template-columns: 1fr; }
+            aside { display: none; }
+            main { padding: 2rem 5%; }
+        }
+
+        .icon { font-size: 1.6rem; vertical-align: middle; margin-right: 10px; color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+    <aside>
+        <h2 style="border:none; padding:0; margin-bottom: 1.5rem;">
+            <a href="#" class="home-link">Índice Académico</a>
+        </h2>
+        <ul class="nav-links">
+            <li><a href="#sec3">3. Introducción a Clases</a></li>
+            <li><a href="#sec31">3.1 Introducción</a></li>
+            <li><a href="#sec32">3.2 Clases y Objetos</a></li>
+            <li><a href="#sec33">3.3 Generalidades de Ejemplos</a></li>
+            <li><a href="#sec34">3.4 Definición de Clase</a></li>
+            <li><a href="#sec35">3.5 Función con Parámetros</a></li>
+            <li><a href="#sec36">3.6 Miembros de Datos</a></li>
+            <li><a href="#sec37">3.7 Constructores</a></li>
+            <li><a href="#sec38">3.8 Archivos Separados</a></li>
+            <li><a href="#sec39">3.9 Interfaz e Implementación</a></li>
+            <li><a href="#sec310">3.10 Validación de Datos</a></li>
+            <li><a href="#sec311">3.11 ATM: Ing. de Software</a></li>
+            <li><a href="#sec312">3.12 Repaso</a></li>
+        </ul>
+    </aside>
+
+    <main>
+        <header>
+            <h1 id="top"><a href="#" class="home-link">Unidad Didáctica 02 - Paradigma de Objetos - Parte 2</a></h1>
+            <p><strong>Cátedra:</strong> Programación Avanzada I. <strong>Nivel:</strong> Universitario. <strong>Basado en:</strong> Deitel & Deitel (6ta Ed.) y O'Reilly (Practical C++).</p>
+        </header>
+
+        <!-- 3 -->
+        <section id="sec3">
+            <h2><span class="icon">🏗️</span>3 Introducción a las clases y los objetos</h2>
+            <p>En esta sección, nos adentramos en el núcleo de la <span class="abbr" data-title="POO: Paradigma de programación basado en objetos que contienen datos y comportamientos">POO</span>. Según el PDF de <strong>Deitel</strong>, el desarrollo de software moderno requiere pensar en el sistema como una colección de entidades autónomas. No se trata solo de escribir instrucciones secuenciales, sino de modelar la realidad mediante <strong>clases</strong> y <strong>objetos</strong>.</p>
+            <p>Ustedes, como futuros ingenieros, deben comprender que una clase es más que un simple conjunto de variables; es un contrato de comportamiento. <strong>O'Reilly</strong> complementa esto señalando que la robustez de un sistema depende de cuán bien hayamos definido estas fronteras lógicas.</p>
+            <button class="ref-btn" onclick="showRef('3')">Referencia Bibliográfica</button>
+        </section>
+
+        <!-- 3.1 -->
+        <section id="sec31">
+            <h2><span class="icon">🔍</span>3.1 Introducción</h2>
+            <p>Tradicionalmente, la programación se centraba en las funciones (hacer cosas). Sin embargo, a medida que los sistemas crecieron en complejidad, este enfoque se volvió ingobernable. Basado en el texto de <strong>Deitel</strong>, la transición hacia los objetos permite gestionar la complejidad dividiendo el software en unidades que tienen sentido en el mundo real.</p>
+            <div class="timeline">
+                <div class="timeline-event">
+                    <span class="date">1970s</span>
+                    <p>Dominio de la programación estructurada (C, Pascal). Enfoque en algoritmos.</p>
+                </div>
+                <div class="timeline-event">
+                    <span class="date">1980s</span>
+                    <p>Nacimiento de C++ por Bjarne Stroustrup. Introducción de la clase como "C con Clases".</p>
+                </div>
+                <div class="timeline-event">
+                    <span class="date">1990s - Hoy</span>
+                    <p>Estandarización de la POO. El objeto se vuelve el estándar de la industria.</p>
+                </div>
+            </div>
+            <p>En Argentina, la enseñanza universitaria prioriza este enfoque porque facilita el mantenimiento y la reutilización de código en equipos de desarrollo grandes. Ustedes verán que aprender C++ les da el control del <span class="abbr" data-title="Bajo Nivel: Lenguajes que tienen mayor control sobre el hardware y la memoria">bajo nivel</span> con la elegancia de la abstracción de objetos.</p>
+            <button class="ref-btn" onclick="showRef('3.1')">Referencia Bibliográfica</button>
+        </section>
+
+        <!-- 3.2 -->
+        <section id="sec32">
+            <h2><span class="icon">📦</span>3.2 Clases, objetos, funciones miembro y miembros de datos</h2>
+            <p>Imaginen un automóvil. Un plano de ingeniería del auto no es el auto en sí, sino las instrucciones para crearlo. Ese plano es la <strong>Clase</strong>. El auto que manejás por la Av. Rivadavia es el <strong>Objeto</strong> (una instancia).</p>
+            <p><strong>Componentes clave según Deitel:</strong></p>
+            <ul>
+                <li><strong>Miembros de Datos (Atributos):</strong> Representan el estado (ej. cantidad de nafta, color).</li>
+                <li><strong>Funciones Miembro (Métodos):</strong> Representan el comportamiento (ej. acelerar, frenar).</li>
+            </ul>
+            <div class="diagram">
+                <div class="box">Clase: CuentaBancaria<br><small>(El Molde)</small></div>
+                <div class="arrow">⬇ Instanciación</div>
+                <div class="box">Objeto: miCuenta<br><small>(Entidad en Memoria)</small></div>
+            </div>
+            <p>Es vital recordar que los objetos poseen <strong>identidad</strong>, <strong>estado</strong> y <strong>comportamiento</strong>. Ustedes manipularán estos objetos invocando sus funciones miembro a través del operador punto (<code>.</code>).</p>
+            <button class="ref-btn" onclick="showRef('3.2')">Referencia Bibliográfica</button>
+        </section>
+
+        <!-- 3.3 -->
+        <section id="sec33">
+            <h2><span class="icon">📋</span>3.3 Generalidades acerca de los ejemplos del capítulo</h2>
+            <p>A lo largo de este estudio, utilizaremos ejemplos incrementales. Empezaremos con una clase simple <code>LibroCalificaciones</code> que solo imprime un mensaje, y la evolucionaremos hasta convertirla en un sistema robusto con validación y persistencia de datos. Este método pedagógico, mencionado en el cuaderno de <strong>Metodologías Activas</strong>, busca que ustedes vean la necesidad de cada nueva característica antes de aprenderla.</p>
+            <button class="ref-btn" onclick="showRef('3.3')">Referencia Bibliográfica</button>
+        </section>
+
+        <!-- 3.4 -->
+        <section id="sec34">
+            <h2><span class="icon">✍️</span>3.4 Definición de una clase con una función miembro</h2>
+            <p>La sintaxis es fundamental. En C++, definimos una clase usando la palabra reservada <code>class</code>. Por defecto, los miembros son privados, por lo que debemos usar la etiqueta <code>public:</code> para que nuestras funciones sean accesibles desde fuera de la clase.</p>
+            <div class="code-block">
+<pre>class LibroCalificaciones {
+public:
+    void mostrarMensaje() {
+        cout << "Bienvenido al curso de C++!" << endl;
+    }
+};</pre>
+            </div>
+            <p>Ustedes notarán que las funciones definidas dentro de una clase tienen acceso implícito a todos sus miembros. <strong>Deitel</strong> resalta que el punto y coma (<code>;</code>) al finalizar la llave de cierre de la clase es obligatorio y suele ser un error común en los exámenes parciales.</p>
+            <button class="ref-btn" onclick="showRef('3.4')">Referencia Bibliográfica</button>
+        </section>
+
+        <!-- 3.5 -->
+        <section id="sec35">
+            <h2><span class="icon">📥</span>3.5 Definición de una función miembro con un parámetro</h2>
+            <p>Para que nuestras clases sean dinámicas, deben recibir información. Esto se logra mediante parámetros en las funciones. Basado en el libro de <strong>Deitel</strong>, el paso de parámetros permite que un solo objeto se comporte de manera diferente según la entrada recibida.</p>
+            <div class="code-block">
+<pre>void mostrarMensaje(string nombreCurso) {
+    cout << "Bienvenido al curso: " << nombreCurso << "!" << endl;
+}</pre>
+            </div>
+            <p>Aquí introducimos la biblioteca <code>&lt;string&gt;</code>. Es importante que ustedes incluyan esta cabecera para manejar cadenas de texto de forma segura, evitando los problemas de los antiguos arreglos de caracteres de C.</p>
+            <button class="ref-btn" onclick="showRef('3.5')">Referencia Bibliográfica</button>
+        </section>
+
+        <!-- 3.6 -->
+        <section id="sec36">
+            <h2><span class="icon">🛡️</span>3.6 Miembros de datos, funciones establecer y funciones obtener</h2>
+            <p>Este es el principio del <strong>Encapsulamiento</strong>. Los datos deben ser <code>private</code> (privados). Para acceder a ellos, usamos funciones públicas conocidas como <strong>Getters</strong> (obtener) y <strong>Setters</strong> (establecer).</p>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Propósito</th>
+                            <th>Acceso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Atributo</td>
+                            <td>Almacenar datos (estado).</td>
+                            <td>Privado (private)</td>
+                        </tr>
+                        <tr>
+                            <td>Setter (Establecer)</td>
+                            <td>Modificar el valor con validación.</td>
+                            <td>Público (public)</td>
+                        </tr>
+                        <tr>
+                            <td>Getter (Obtener)</td>
+                            <td>Retornar el valor de forma controlada.</td>
+                            <td>Público (public)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>En nuestro país, solemos llamar a esto "ocultamiento de información". Esto evita que un programador externo "rompa" el estado interno del objeto asignando valores imposibles (ej. una nota de -5).</p>
+            <button class="ref-btn" onclick="showRef('3.6')">Referencia Bibliográfica</button>
+        </section>
+
+        <!-- 3.7 -->
+        <section id="sec37">
+            <h2><span class="icon">🆕</span>3.7 Inicialización de objetos mediante constructores</h2>
+            <p>Un <strong>constructor</strong> es una función miembro especial que se ejecuta automáticamente cuando se crea un objeto. No tiene tipo de retorno y debe llamarse igual que la clase. Según <strong>Deitel</strong>, el propósito primordial es asegurar que el objeto nazca en un estado válido.</p>
+            <div class="code-block">
+<pre>class LibroCalificaciones {
+public:
+    // Constructor
+    LibroCalificaciones(string nombre) {
+        establecerNombreCurso(nombre);
+    }
+private:
+    string nombreCurso;
+};</pre>
+            </div>
+            <p>Si no definís un constructor, el compilador genera uno predeterminado, pero es una buena práctica (y exigencia académica) definirlo nosotros para evitar "valores basura" en memoria.</p>
+            <button class="ref-btn" onclick="showRef('3.7')">Referencia Bibliográfica</button>
+        </section>
+
+        <!-- 3.8 -->
+        <section id="sec38">
+            <h2><span class="icon">📁</span>3.8 Colocar una clase en un archivo separado para fines de reutilización</h2>
+            <p>En el desarrollo industrial, no ponemos todo en el <code>main.cpp</code>. Dividimos el código en archivos de cabecera (<code>.h</code>) y archivos de implementación. Esto facilita la reutilización. Ustedes pueden crear una clase <code>Cuenta</code> una vez y usarla en cien proyectos diferentes simplemente incluyendo el archivo.</p>
+            <p><strong>Directiva de Preprocesador:</strong> Usamos <code>#include "MiClase.h"</code>. Noten las comillas: indican al compilador que busque en nuestra carpeta de proyecto, no en las librerías estándar del sistema.</p>
+            <button class="ref-btn" onclick="showRef('3.8')">Referencia Bibliográfica</button>
+        </section>
+
+        <!-- 3.9 -->
+        <section id="sec39">
+            <h2><span class="icon">🔌</span>3.9 Separar la interfaz de la implementación</h2>
+            <p>La <strong>interfaz</strong> le dice al usuario <em>qué</em> hace la clase (está en el <code>.h</code>). La <strong>implementación</strong> dice <em>cómo</em> lo hace (está en el <code>.cpp</code>). Basado en <strong>O'Reilly</strong>, esto permite cambiar la lógica interna sin que los usuarios de la clase tengan que cambiar su código.</p>
+            <div class="diagram">
+                <div class="box">Archivo .h<br><small>Declaraciones (Firma)</small></div>
+                <div class="arrow">➕</div>
+                <div class="box">Archivo .cpp<br><small>Definiciones (Lógica)</small></div>
+            </div>
+            <p>Ustedes deben usar el operador de resolución de ámbito (<code>::</code>) en el archivo <code>.cpp</code> para vincular las funciones a su clase correspondiente.</p>
+            <button class="ref-btn" onclick="showRef('3.9')">Referencia Bibliográfica</button>
+        </section>
+
+        <!-- 3.10 -->
+        <section id="sec310">
+            <h2><span class="icon">✅</span>3.10 Validación de datos mediante funciones establecer</h2>
+            <p>La validación es el guardián de la integridad. No basta con recibir un valor; hay que verificarlo. Según <strong>Deitel</strong>, el setter es el lugar ideal para aplicar lógica de negocio. Si el valor es inválido, podemos rechazarlo o asignar un valor predeterminado.</p>
+            <div class="code-block">
+<pre>void establecerNombreCurso(string nombre) {
+    if (nombre.length() <= 25) {
+        nombreCurso = nombre;
+    } else {
+        nombreCurso = nombre.substr(0, 25); // Recorta
+        cout << "Nombre excedia los 25 caracteres. Se recorto." << endl;
+    }
+}</pre>
+            </div>
+            <button class="ref-btn" onclick="showRef('3.10')">Referencia Bibliográfica</button>
+        </section>
+
+        <!-- 3.11 -->
+        <section id="sec311">
+            <h2><span class="icon">🏧</span>3.11 (Opcional) Ejemplo práctico: identificación de las clases en el ATM</h2>
+            <p>En ingeniería de software, usamos la técnica de <strong>identificación de sustantivos</strong>. Tomamos el requerimiento del cliente (ej. "El usuario retira dinero del cajero usando su tarjeta") y buscamos los nombres:</p>
+            <ul>
+                <li><strong>Sustantivos:</strong> Cajero, Usuario, Dinero, Tarjeta, Cuenta. (Candidatos a ser <strong>Clases</strong>).</li>
+                <li><strong>Verbos:</strong> Retirar, Validar, Consultar. (Candidatos a ser <strong>Funciones Miembro</strong>).</li>
+            </ul>
+            <p>Este proceso es el primer paso para crear un diagrama <span class="abbr" data-title="UML: Lenguaje Unificado de Modelado, usado para visualizar el diseño de sistemas">UML</span> profesional.</p>
+            <button class="ref-btn" onclick="showRef('3.11')">Referencia Bibliográfica</button>
+        </section>
+
+        <!-- 3.12 -->
+        <section id="sec312">
+            <h2><span class="icon">🏁</span>3.12 Repaso</h2>
+            <p>Hemos cubierto los pilares de la construcción de clases en C++. Recuerden: la clase es el molde, el objeto es la realidad. Protejan sus datos, validen sus entradas y separen su código para que sea escalable. Ustedes tienen ahora las herramientas para empezar a construir sistemas complejos.</p>
+            <p><strong>Actividad sugerida:</strong> Intentá implementar una clase <code>Alumno</code> con atributos para <code>legajo</code> y <code>promedio</code>, asegurándote que el promedio no pueda ser mayor a 10.</p>
+            <button class="ref-btn" onclick="showRef('3.12')">Referencia Bibliográfica</button>
+        </section>
+
+        <footer style="border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 5rem; text-align: center; color: var(--text-secondary);">
+            <p>&copy; 2024 - Herramienta Didáctica Universitaria para C++.</p>
+            <p>Desarrollado siguiendo principios de UX/UI y Metodologías Activas.</p>
+        </footer>
+    </main>
+</div>
+
+<!-- Theme Toggle -->
+<button class="theme-btn" id="themeToggle" title="Cambiar Tema">🌓</button>
+
+<!-- Modal Referencias -->
+<div id="refModal" class="modal">
+    <div class="modal-content">
+        <h3 id="refTitle">Referencia Académica</h3>
+        <p id="refBody"></p>
+        <button class="ref-btn" onclick="closeModal()" style="width:100%; padding:1rem; font-weight:bold;">Entendido</button>
+    </div>
+</div>
+
+<script>
+    // --- Referencias Bibliográficas ---
+    const biblio = {
+        "3": "Deitel, P. J., & Deitel, H. M. (2009). C++ Cómo Programar (6ta ed.). Capítulo 3: Introducción a las clases y los objetos. Pearson Educación.",
+        "3.1": "Deitel (2009), Sección 3.1, pág. 72. Evolución del diseño centrado en funciones al diseño centrado en objetos.",
+        "3.2": "Deitel (2009), Sección 3.2. Analogía del automóvil y conceptos de abstracción.",
+        "3.3": "Cuaderno de NotebookLM sobre Metodologías Activas: Importancia del aprendizaje incremental y casos de estudio.",
+        "3.4": "Practical C++ Programming (O'Reilly, 2003). Sintaxis de clases y manejo de ámbitos públicos/privados.",
+        "3.5": "Deitel (2009), Sección 3.5. Interacción de objetos mediante paso de mensajes (parámetros).",
+        "3.6": "Deitel (2009), Sección 3.6. El concepto de encapsulamiento y protección de atributos.",
+        "3.7": "Oualline, S. (2003). Practical C++ Programming. Constructores y destructores: Gestión del ciclo de vida.",
+        "3.8": "Deitel (2009), Sección 3.8. Organización de archivos y directivas del preprocesador.",
+        "3.9": "O'Reilly (2003), Cap. 13. Abstracción de datos y separación de la interfaz (header files).",
+        "3.10": "Deitel (2009), Sección 3.10. Técnicas de validación y robustez en la entrada de datos.",
+        "3.11": "Booch, G. (2005). El Lenguaje Unificado de Modelado (UML). Identificación de clases y relaciones de dominio.",
+        "3.12": "Síntesis pedagógica basada en el Cuaderno de NotebookLM sobre Educación: Evaluación formativa y repaso conceptual."
+    };
+
+    function showRef(id) {
+        document.getElementById('refBody').innerText = biblio[id];
+        document.getElementById('refModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('refModal').style.display = 'none';
+    }
+
+    // --- Persistencia de Tema ---
+    const themeBtn = document.getElementById('themeToggle');
+    const html = document.documentElement;
+
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+
+    themeBtn.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    });
+
+    // --- Navegación Activa (Intersection Observer) ---
+    const sections = document.querySelectorAll('section');
+    const navItems = document.querySelectorAll('.nav-links a');
+
+    const observerOptions = {
+        threshold: 0.3
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('href').substring(1) === entry.target.id) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(sec => observer.observe(sec));
+
+    // Cierre de modal al hacer clic fuera
+    window.onclick = (e) => {
+        if (e.target == document.getElementById('refModal')) closeModal();
+    };
+</script>
+
+</body>
+</html>
