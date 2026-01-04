@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidad Didáctica 01 - Introducción a las computadoras, Internet y World Wide Web</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Roboto:wght@300;400;500;700&display=swap');
+        
+        :root {
+            /* Variables de Modo Claro (Basadas en el ejemplo provisto) */
+            --bg-primary: #fdfdfd;
+            --bg-secondary: #f4f4f4;
+            --bg-paper: #ffffff;
+            --text-primary: #212121;
+            --text-secondary: #5f6368;
+            --accent: #0056b3; 
+            --accent-hover: #003d80;
+            --code-bg: #f5f5f5;
+            --border: #e0e0e0;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --timeline-line: #ccc;
+        }
+
+        [data-theme="dark"] {
+            /* Variables de Modo Oscuro (Basadas en el ejemplo provisto) */
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-paper: #242424;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --accent: #64b5f6;
+            --accent-hover: #42a5f5;
+            --code-bg: #2d2d2d;
+            --border: #333333;
+            --shadow: 0 4px 6px rgba(0,0,0,0.5);
+            --timeline-line: #444;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Tipografía Académica */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-primary);
+        }
+
+        .glass-nav {
+            background-color: var(--bg-paper);
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-nav {
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 2px solid var(--accent);
+            cursor: help;
+            font-weight: 600;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 240px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 10px;
+            position: absolute;
+            z-index: 50;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            font-size: 0.75rem;
+            line-height: 1.2;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .tooltip .tooltiptext {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        .section-fade {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sidebar-scroll::-webkit-scrollbar { width: 6px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+        .activity-container {
+            background-color: var(--bg-paper);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-link-btn {
+            color: var(--text-secondary);
+            border-radius: 0.5rem;
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .nav-link-btn:hover, .nav-link-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+        }
+
+        .academic-btn {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .academic-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="fixed top-0 w-full z-[100] glass-nav h-16 flex items-center justify-between px-6">
+        <div class="flex items-center gap-3 cursor-pointer group" onclick="loadLanding()">
+            <div class="p-2 bg-blue-700 rounded-lg group-hover:bg-blue-600 transition-colors shadow-md">
+                <i data-lucide="monitor" class="text-white w-5 h-5"></i>
+            </div>
+            <h1 class="font-bold text-lg hidden md:block tracking-tight" style="color: var(--text-primary)">Unidad Didáctica 01 - Introducción a la Computación <span class="font-mono" style="color: var(--accent)">v1.3</span></h1>
+        </div>
+        <div class="flex items-center gap-6">
+            <!-- Botón de Tema (Estilo del ejemplo) -->
+            <button id="themeToggle" class="p-2.5 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 transition-all border border-transparent" title="Cambiar Tema Claro/Oscuro">
+                <i data-lucide="sun" id="sunIcon" class="w-5 h-5" style="color: var(--accent)"></i>
+                <i data-lucide="moon" id="moonIcon" class="hidden w-5 h-5" style="color: var(--accent)"></i>
+            </button>
+            <div class="hidden sm:flex flex-col items-end border-l pl-6 border-slate-300" style="border-color: var(--border)">
+                <span class="text-[10px] uppercase font-bold" style="color: var(--text-secondary)">Perfil Académico</span>
+                <span class="text-xs font-mono" style="color: var(--accent)">SISTEMAS_GRADO_AR</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex pt-16 flex-1">
+        <!-- Sidebar Navigation -->
+        <nav class="w-72 fixed h-[calc(100vh-4rem)] overflow-y-auto sidebar-scroll sidebar-nav hidden lg:block p-6">
+            <h2 class="text-[11px] font-bold uppercase tracking-widest mb-6" style="color: var(--text-secondary)">Contenidos de Cátedra</h2>
+            <ul class="space-y-1.5" id="navLinks">
+                <!-- Generated by JS -->
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:ml-72 p-8 md:p-12 lg:p-16 max-w-6xl mx-auto w-full">
+            <div id="contentArea" class="section-fade">
+                <!-- Landing Content placeholder -->
+            </div>
+
+            <!-- Global Reference Footer -->
+            <footer class="mt-24 pt-12 border-t text-sm" style="border-color: var(--border); color: var(--text-secondary)">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div>
+                        <h4 class="font-bold mb-3 text-base" style="color: var(--text-primary)">Marco Bibliográfico</h4>
+                        <ul class="space-y-2 opacity-90">
+                            <li class="flex items-center gap-2"><i data-lucide="book" class="w-3 h-3"></i> Deitel, P. J. & Deitel, H. M. - C++ Cómo Programar</li>
+                            <li class="flex items-center gap-2"><i data-lucide="book" class="w-3 h-3"></i> Oualline, S. - Practical C++ Programming</li>
+                            <li class="flex items-center gap-2"><i data-lucide="file-text" class="w-3 h-3"></i> Cuadernos de Análisis NotebookLM (UX/Desarrollo/Educación)</li>
+                        </ul>
+                    </div>
+                    <div class="md:text-right text-xs leading-relaxed italic opacity-75">
+                        <p>Recurso pedagógico adaptado a las normativas de accesibilidad WCAG 2.2.</p>
+                        <p>Diseño basado en heurísticas de usabilidad para el entorno universitario nacional.</p>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- References Modal -->
+    <div id="refModal" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden z-[200] items-center justify-center p-4">
+        <div class="w-full max-w-xl rounded-2xl p-8 shadow-2xl border" style="background-color: var(--bg-paper); border-color: var(--border)">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-blue-600 rounded-lg">
+                        <i data-lucide="library" class="text-white w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-xl font-bold" style="color: var(--text-primary)">Referencia Académica</h3>
+                </div>
+                <button onclick="closeModal()" class="p-2 hover:bg-slate-100 rounded-full transition-colors">
+                    <i data-lucide="x" class="w-5 h-5" style="color: var(--text-secondary)"></i>
+                </button>
+            </div>
+            <div id="refContent" class="leading-relaxed text-sm mb-8 space-y-3" style="color: var(--text-primary)"></div>
+            <button onclick="closeModal()" class="w-full text-white py-3.5 rounded-xl font-bold transition-colors shadow-lg" style="background-color: var(--accent)">
+                Cerrar consulta
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const sections = [
+            { 
+                id: "1.1", 
+                title: "Introducción", 
+                icon: "info",
+                ref: "Cuaderno NotebookLM Educación: Metodologías Activas. Pág 3: El rol del estudiante en el ABP. Deitel Cap 1.",
+                content: `
+                    <p class="text-lg leading-relaxed mb-6">Usted está por iniciar un proceso de formación técnica centrado en la autonomía. Basándonos en las <strong>metodologías activas</strong>, este recurso busca que sea el arquitecto de su propio aprendizaje. Como señalan <strong>Deitel & Deitel</strong>, el estudio de la programación no se limita a la sintaxis, sino que abarca la resolución lógica de problemas complejos.</p>
+                    <p class="mb-6">C++ representa una de las herramientas más potentes de la computación moderna, permitiendo un control preciso sobre los recursos del sistema mientras facilita la construcción de grandes infraestructuras mediante la orientación a objetos. En estas secciones, analizaremos la evolución de las computadoras y los protocolos que sostienen la red global.</p>
+                    <div class="p-6 rounded-xl border my-8" style="background-color: var(--bg-secondary); border-color: var(--accent)">
+                        <h4 class="font-bold mb-2" style="color: var(--accent)">Objetivo Pedagógico:</h4>
+                        <p class="text-sm">Lograr que el estudiante comprenda la interdependencia entre el hardware, el sistema operativo y los lenguajes de alto nivel.</p>
+                    </div>
+                `,
+                activity: {
+                    type: "Análisis Diagnóstico",
+                    desc: "Seleccione tres aplicaciones de software que utilice en su ámbito académico o laboral. Analice por qué cada una de ellas requiere una arquitectura web o de escritorio específica, considerando la velocidad de respuesta y la privacidad de los datos."
+                }
+            },
+            { 
+                id: "1.2", 
+                title: "¿Qué es una computadora?", 
+                icon: "cpu",
+                ref: "Deitel, C++ Cómo Programar, Sección 1.2. O'Reilly, Cap 1: Computación práctica.",
+                content: `
+                    <p class="mb-4">Técnicamente, una computadora es un sistema digital capaz de procesar datos bajo el control de una serie de instrucciones denominadas <span class="tooltip">programas de computadora<span class="tooltiptext">Secuencia lógica de instrucciones que procesan datos para obtener un resultado</span></span>. Estos programas guían a la máquina a través de cálculos matemáticos y decisiones lógicas.</p>
+                    <p class="mb-4">Basándonos en <strong>O'Reilly</strong>, la potencia de la computación actual no reside meramente en el componente físico (<span class="tooltip">Hardware<span class="tooltiptext">Componentes electrónicos y mecánicos del sistema</span></span>), sino en la sofisticación del <span class="tooltip">Software<span class="tooltiptext">Conjunto de programas y reglas lógicas que permiten la operación del hardware</span></span> que lo gestiona.</p>
+                `,
+                activity: {
+                    type: "Simulación de Arquitectura",
+                    desc: "Simule el flujo de una operación aritmética simple (ej. una resta). Describa por escrito el recorrido de los datos desde que ingresan por el periférico hasta que se alojan en la memoria RAM y son procesados por la ALU."
+                }
+            },
+            { 
+                id: "1.3", 
+                title: "Organización de una computadora", 
+                icon: "layers",
+                ref: "Deitel, Sección 1.3: Unidades lógicas funcionales.",
+                content: `
+                    <p class="mb-6">Independientemente de su tamaño, las computadoras se estructuran en seis unidades lógicas clave, según el manual de <strong>Deitel</strong>:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary)"><strong>1. Unidad de Entrada:</strong> Captura de datos (teclado, sensores).</div>
+                        <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary)"><strong>2. Unidad de Salida:</strong> Entrega de información (monitores, impresoras).</div>
+                        <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary)"><strong>3. Unidad de Memoria:</strong> Almacenamiento primario volátil (RAM).</div>
+                        <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary)"><strong>4. Unidad Aritmética y Lógica:</strong> Ejecución de cálculos (ALU).</div>
+                        <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary)"><strong>5. Unidad Central de Procesamiento:</strong> Coordinador central (CPU).</div>
+                        <div class="p-4 rounded-lg" style="background-color: var(--bg-secondary)"><strong>6. Unidad de Almacenamiento Secundario:</strong> SSD/HDD.</div>
+                    </div>
+                `,
+                activity: {
+                    type: "Auditoría de Hardware",
+                    desc: "Acceda a la configuración de sistema de su dispositivo actual. Identifique el modelo de la CPU, la cantidad de memoria RAM disponible y el tipo de almacenamiento persistente. Compare estas especificaciones con los requisitos de un entorno de desarrollo profesional."
+                }
+            },
+            {
+                id: "1.4",
+                title: "Primeros sistemas operativos",
+                icon: "history",
+                content: `<p class='mb-4'>En los orígenes de la computación, el hardware era un recurso costoso. El <span class='tooltip'>procesamiento por lotes<span class='tooltiptext'>Batch processing: ejecución de una serie de trabajos en secuencia</span></span> permitía optimizar el tiempo de CPU, aunque obligaba a los usuarios a esperar horas por resultados.</p><p class='mb-6'>La evolución tecnológica permitió la <strong>multiprogramación</strong>, logrando que múltiples procesos residieran en memoria simultáneamente, sentando las bases del <strong>tiempo compartido</strong> moderno.</p>`,
+                activity: { type: "Investigación Histórica", desc: "Investigue el impacto del sistema operativo UNIX en la década del 70. Identifique tres conceptos introducidos por UNIX que sigan presentes en los sistemas operativos modernos como Windows 11 o Linux." }
+            },
+            {
+                id: "1.5",
+                title: "Computación distribuida y cliente/servidor",
+                icon: "network",
+                content: `<p class='mb-4'>La arquitectura de computación ha migrado hacia redes interconectadas. Según el cuaderno de <strong>Desarrollo Web</strong>, el modelo <strong>Cliente/Servidor</strong> es el pilar de la interacción digital actual.</p><p class='mb-4'>En este paradigma, una aplicación 'cliente' solicita servicios o recursos a una aplicación 'servidor' remota. C++ se destaca por su capacidad para gestionar peticiones de alta frecuencia con latencia mínima.</p>`,
+                activity: { type: "Esquema de Red", desc: "Diseñe un diagrama lógico que represente la interacción entre un usuario que utiliza una aplicación de home banking y el servidor central del banco. Indique dónde se valida la contraseña." }
+            },
+            {
+                id: "1.6",
+                title: "Internet y World Wide Web",
+                icon: "globe",
+                content: `<p class='mb-4'>Es fundamental distinguir entre Internet (la infraestructura global) y la <span class='tooltip'>WWW<span class='tooltiptext'>World Wide Web: sistema de documentos interconectados</span></span>. La Web utiliza el protocolo <span class='tooltip'>HTTP<span class='tooltiptext'>Protocolo de transferencia de hipertexto</span></span> para navegar entre nodos de información.</p>`,
+                activity: { type: "Laboratorio de Protocolos", desc: "Utilizando las herramientas de desarrollador de su navegador (F12), analice las cabeceras (headers) de una petición a un sitio web de noticias. Identifique el código de estado (status code)." }
+            },
+            {
+                id: "1.7",
+                title: "Web 2.0",
+                icon: "users",
+                content: `<p class='mb-4'>El término Web 2.0 describe el paso de una web estática a una colaborativa. Desde el punto de vista UX, el cuaderno de <strong>NotebookLM sobre UX/UI</strong> destaca que introdujo interfaces dinámicas que responden sin recargar la página completa.</p>`,
+                activity: { type: "Debate Formativo", desc: "Discuta con sus compañeros si el concepto de Web 2.0 ha sido superado por la Web 3.0. Fundamente su respuesta analizando cómo la IA está modificando la creación de contenido." }
+            },
+            {
+                id: "1.8",
+                title: "Lenguajes de programación",
+                icon: "code",
+                content: `<p class='mb-4'>Programadores utilizan niveles de abstracción para comunicarse con la máquina. <strong>Deitel</strong> establece tres categorías:</p><ul class='list-disc pl-8 space-y-2 mb-6'><li><strong>Lenguaje Máquina:</strong> Binario puro.</li><li><strong>Lenguaje Ensamblador:</strong> Mnemónicos del inglés.</li><li><strong>Lenguajes de Alto Nivel:</strong> Próximos al lenguaje humano (C++, Java).</li></ul>`,
+                activity: { type: "Traducción de Lógica", desc: "Escriba un párrafo que describa la acción de 'calcular el promedio de tres números'. Luego, intente esquematizar cómo se vería esa misma lógica en C++." }
+            },
+            {
+                id: "1.9",
+                title: "Historia de C y C++",
+                icon: "landmark",
+                content: `<p class='mb-4'>C fue diseñado en 1972 por Dennis Ritchie. En 1979, Bjarne Stroustrup desarrolló C++ integrando la <strong>tecnología de objetos</strong>. Basado en el PDF de <strong>O'Reilly</strong>, C++ mantiene la eficiencia pero añade abstracciones de alto nivel.</p>`,
+                activity: { type: "Línea de Tiempo", desc: "Cree una cronología de la evolución de C++. Incluya los hitos de C++11 y C++20, detallando qué cambio sustancial introdujo cada estándar en la industria." }
+            },
+            {
+                id: "1.10",
+                title: "Biblioteca estándar de C++",
+                icon: "library",
+                content: `<p class='mb-4'>La potencia de C++ reside en su biblioteca estándar, que incluye la <span class='tooltip'>STL<span class='tooltiptext'>Standard Template Library: clases y algoritmos predefinidos</span></span>. Esto permite utilizar estructuras complejas sin implementarlas desde cero.</p>`,
+                activity: { type: "Investigación de Repositorio", desc: "Consulte la documentación oficial en 'cppreference.com'. Busque el contenedor 'std::vector' y explique qué ventaja ofrece sobre un arreglo tradicional de C." }
+            },
+            { id: "1.11", title: "Historia de Java", icon: "coffee", content: `<p class='mb-4'>Java surgió bajo la premisa 'Escribí una vez, ejecutalo en cualquier parte'. Aunque se basa en C++, elimina los punteros directos por razones de seguridad. Es fundamental en entornos empresariales.</p>`, activity: { type: "Contraste Técnico", desc: "Compare la gestión de memoria entre C++ (manual) y Java (automática). ¿En qué escenario de ingeniería preferiría usted tener control manual sobre la memoria?" } },
+            { id: "1.12", title: "FORTRAN, COBOL, Pascal y Ada", icon: "terminal", content: `<p class='mb-4'>FORTRAN para ciencia, COBOL para aplicaciones administrativas bancarias, Pascal para enseñanza y Ada para sistemas críticos del Departamento de Defensa.</p>`, activity: { type: "Análisis de Legado", desc: "Investigue qué proporción de sistemas financieros aún dependen de COBOL. Evalúe el riesgo técnico de mantener este tipo de software hoy." } },
+            { id: "1.13", title: "BASIC, VB, Visual C++, C# y .NET", icon: "layout", content: `<p class='mb-4'>Microsoft consolidó un ecosistema centrado en la productividad. C# y .NET permiten crear aplicaciones robustas integrando lo mejor de C++ y Java en un entorno gestionado.</p>`, activity: { type: "Relevamiento de Mercado", desc: "Analice búsquedas laborales en Argentina. Identifique qué industrias solicitan desarrolladores en C# y cuáles se enfocan más en C++ nativo." } },
+            { id: "1.14", title: "Tecnología de los objetos", icon: "box", content: `<p class='mb-4'>La programación orientada a objetos (POO) propone modelar el software mediante entidades que agrupan datos y comportamientos. Permite manejar la complejidad de los sistemas modernos.</p>`, activity: { type: "Modelado Abstracto", desc: "Modele un sistema para una concesionaria. Defina la clase 'Vehículo', sus atributos y sus métodos. Dibuje la relación de herencia con la clase 'Auto'." } },
+            { id: "1.15", title: "Entorno típico en C++", icon: "settings", content: `<p class='mb-4'>El proceso consta de varias fases: Edición, Preprocesamiento, Compilación, Enlace, Carga y Ejecución. Comprender cada etapa es vital para el depurado de errores (<span class='tooltip'>debugging<span class='tooltiptext'>Proceso de identificar y corregir errores</span></span>).</p>`, activity: { type: "Diagrama de Flujo", desc: "Diseñe un diagrama que ilustre qué ocurre con un archivo '.cpp' desde que usted pulsa 'Guardar' hasta que la CPU ejecuta la instrucción. Indique dónde interviene el preprocesador." } },
+            { id: "1.16", title: "C++ y este libro", icon: "book-open", content: `<p class='mb-4'>El enfoque de <strong>Deitel</strong> se basa en el 'Código en Vivo'. Esto implica que aprenderá mediante programas completos y funcionales, evitando fragmentos de código aislados sin contexto.</p>`, activity: { type: "Crítica Pedagógica", desc: "Basado en el cuaderno de Metodologías Activas, evalúe por qué el enfoque de 'Código en Vivo' fomenta un aprendizaje más profundo que manuales meramente teóricos." } },
+            { id: "1.17", title: "Prueba de una aplicación", icon: "check-circle", content: `<p class='mb-4'>Probar una aplicación implica someter al código a condiciones de borde para asegurar su robustez. Un software sin pruebas no es un software profesional ni confiable.</p>`, activity: { type: "Diseño de Casos de Prueba", desc: "Si programa un sistema que calcula descuentos por edad, diseñe cinco casos de prueba. ¿Qué ocurre si el usuario ingresa una letra en lugar de un número?" } },
+            { id: "1.18", title: "Tecnologías de software", icon: "git-branch", content: `<p class='mb-4'>Hablamos de metodologías ágiles, control de versiones (Git) y estándares. El cuaderno sobre <strong>Desarrollo Web</strong> enfatiza que la colaboración mediante estas herramientas es obligatoria.</p>`, activity: { type: "Simulación de Versiones", desc: "Explique qué sucedería en un equipo si no utilizaran Git. ¿Cómo resolverían el conflicto si dos personas modifican la misma función al mismo tiempo?" } },
+            { id: "1.19", title: "Juegos con bibliotecas Ogre", icon: "gamepad", content: `<p class='mb-4'>Ogre es un motor de renderizado 3D de alta complejidad con una eficiencia que C++ permite alcanzar. Sigue siendo el estándar para motores de alto rendimiento industrial.</p>`, activity: { type: "Análisis de Motores", desc: "Investigue qué motores actuales (ej: Unreal Engine) utilizan C++. ¿Por qué cree que no se utiliza Python para el núcleo de estos motores?" } },
+            { id: "1.20", title: "Futuro de C++", icon: "zap", content: `<p class='mb-4'>C++ es un lenguaje vivo. Las bibliotecas Boost funcionan como banco de pruebas para futuras características que eventualmente se integran al estándar oficial del lenguaje.</p>`, activity: { type: "Radar de Tendencias", desc: "Busque información sobre el estándar C++23. Identifique una característica nueva que le resulte interesante y explique cómo cree que simplificará el código." } },
+            { id: "1.21", title: "Ingeniería de Software: UML", icon: "map", content: `<p class='mb-4'>El <span class='tooltip'>UML<span class='tooltiptext'>Lenguaje visual estándar para especificar sistemas de software</span></span> permite visualizar el diseño antes de la codificación. Es el plano técnico indispensable para cualquier proyecto de ingeniería.</p>`, activity: { type: "Práctica de Modelado UML", desc: "Dibuje un Diagrama de Clases UML para un sistema de gestión universitaria. Debe incluir al menos las clases 'Estudiante' y 'Cátedra'." } },
+            { 
+                id: "1.22", 
+                title: "Programación Estructurada y Entorno", 
+                icon: "binary",
+                ref: "Deitel Cap 1.15 y O'Reilly Cap 2: Estructuras y Entorno de Ejecución.",
+                content: `
+                    <p class="mb-4">La programación estructurada constituye el cimiento lógico de C++, permitiendo organizar el flujo mediante estructuras de secuencia, selección y repetición. A diferencia de lenguajes interpretados como Python o de ejecución en máquinas virtuales como Java, C++ se traduce directamente a lenguaje máquina. Esta característica exige que usted gestione los recursos y la memoria de forma explícita, otorgando una eficiencia computacional superior pero demandando mayor rigor técnico.</p>
+                    <p class="mb-4">El entorno de desarrollo en C++ involucra fases discretas fundamentales. Usted inicia con la edición del código fuente (.cpp), que atraviesa el preprocesador para resolver directivas. El compilador genera el código objeto, el cual es unido por el enlazador (linker) con las bibliotecas estándar para producir un ejecutable. Finalmente, el cargador sitúa el programa en la memoria RAM para su ejecución por la CPU. Comprender este ciclo es vital para diagnosticar errores de vinculación y memoria en sistemas de alta performance.</p>
+                `,
+                activity: {
+                    type: "Esquema de Diagnóstico",
+                    desc: "Diseñe un cuadro comparativo donde relacione las seis fases del entorno de desarrollo C++ con el tipo de error que podría surgir en cada una (sintaxis, enlazado, lógica o carga). Argumente por qué la gestión manual de memoria en C++ resulta una ventaja técnica crítica en el desarrollo de sistemas de tiempo real."
+                }
+            }
+        ];
+
+        // Core UI Logic
+        function init() {
+            renderSidebar();
+            loadLanding();
+            lucide.createIcons();
+            applySavedTheme();
+        }
+
+        function loadLanding() {
+            const contentArea = document.getElementById('contentArea');
+            contentArea.innerHTML = `
+                <div class="section-fade py-16 text-center">
+                    <div class="inline-block p-5 bg-blue-600/10 rounded-full mb-8">
+                        <i data-lucide="graduation-cap" class="w-14 h-14" style="color: var(--accent)"></i>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-black mb-6 tracking-tight">Guía Académica de C++</h2>
+                    <p class="text-xl max-w-3xl mx-auto leading-relaxed mb-12" style="color: var(--text-secondary)">
+                        Esta plataforma integra los fundamentos técnicos de <strong>Deitel & O'Reilly</strong> con las heurísticas de <strong>UX/UI</strong> y los paradigmas de <strong>metodología activa</strong> analizados en la cátedra.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                        <div class="activity-container p-8">
+                            <i data-lucide="brain-circuit" class="mb-4" style="color: var(--accent)"></i>
+                            <h3 class="font-bold text-lg mb-2">Aprendizaje Activo</h3>
+                            <p class="text-sm opacity-80 leading-relaxed" style="color: var(--text-secondary)">Enfoque centrado en la resolución de problemas reales y el pensamiento crítico.</p>
+                        </div>
+                        <div class="activity-container p-8">
+                            <i data-lucide="file-check-2" class="mb-4" style="color: var(--accent)"></i>
+                            <h3 class="font-bold text-lg mb-2">Fuentes Directas</h3>
+                            <p class="text-sm opacity-80 leading-relaxed" style="color: var(--text-secondary)">Contenido extraído y validado de los manuales técnicos de referencia internacional.</p>
+                        </div>
+                        <div class="activity-container p-8">
+                            <i data-lucide="accessibility" class="mb-4" style="color: var(--accent)"></i>
+                            <h3 class="font-bold text-lg mb-2">Interfaz Inclusiva</h3>
+                            <p class="text-sm opacity-80 leading-relaxed" style="color: var(--text-secondary)">Diseño accesible optimizado para la lectura técnica prolongada bajo estándares WCAG.</p>
+                        </div>
+                    </div>
+                    <div class="mt-16 p-6 border-t" style="border-color: var(--border)">
+                        <p class="text-sm font-medium" style="color: var(--text-secondary)">Seleccione un módulo del menú lateral para comenzar su estudio.</p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderSidebar() {
+            const navLinks = document.getElementById('navLinks');
+            sections.forEach(sec => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <button onclick="loadSection('${sec.id}')" class="group w-full text-left px-4 py-3 nav-link-btn flex items-center gap-3 transition-all active:scale-95">
+                        <i data-lucide="${sec.icon}" class="w-4 h-4 opacity-50 group-hover:opacity-100"></i>
+                        <span>${sec.id} ${sec.title}</span>
+                    </button>
+                `;
+                navLinks.appendChild(li);
+            });
+        }
+
+        function loadSection(id) {
+            const section = sections.find(s => s.id === id);
+            const contentArea = document.getElementById('contentArea');
+            
+            contentArea.innerHTML = `
+                <div class="section-fade">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 pb-8 border-b" style="border-color: var(--border)">
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-widest mb-2 block" style="color: var(--accent)">Unidad Curricular</span>
+                            <h2 class="text-3xl md:text-4xl font-black tracking-tight">${section.id} ${section.title}</h2>
+                        </div>
+                        <button onclick="openRef('${section.id}')" class="flex items-center gap-2 text-xs font-bold academic-btn px-6 py-3 rounded-xl transition-all active:scale-95 shadow-sm">
+                            <i data-lucide="library" class="w-4 h-4"></i> Consultar Fuente
+                        </button>
+                    </div>
+                    
+                    <div class="max-w-none leading-relaxed text-base">
+                        <div class="prose-academic" style="color: var(--text-primary)">
+                            ${section.content}
+                        </div>
+                    </div>
+
+                    <div class="mt-16 overflow-hidden rounded-2xl border shadow-lg" style="border-color: var(--border); background-color: var(--bg-paper)">
+                        <div class="p-4 flex items-center gap-3" style="background-color: var(--accent)">
+                            <i data-lucide="terminal" class="text-white w-5 h-5"></i>
+                            <h4 class="font-bold text-white uppercase tracking-wider text-[11px]">Actividad de Metodología Activa (ABP)</h4>
+                        </div>
+                        <div class="p-8">
+                            <p class="text-[11px] font-bold uppercase mb-3 tracking-widest" style="color: var(--accent)">${section.activity.type}</p>
+                            <p class="text-lg leading-relaxed font-medium" style="color: var(--text-primary)">
+                                ${section.activity.desc}
+                            </p>
+                            <div class="mt-8 pt-6 border-t flex items-center justify-between opacity-60" style="border-color: var(--border)">
+                                <span class="text-[10px] uppercase font-bold" style="color: var(--text-secondary)">Nivel Universitario - Sistematización de Saberes</span>
+                                <div class="flex gap-2">
+                                    <span class="w-2 h-2 rounded-full animate-pulse" style="background-color: var(--accent)"></span>
+                                    <span class="w-2 h-2 rounded-full delay-150" style="background-color: var(--accent)"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- Modo Oscuro Persistente (Sistema del Ejemplo Proporcionado) ---
+        const toggleBtn = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        const root = document.documentElement;
+
+        // Cargar preferencia guardada
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            root.setAttribute('data-theme', currentTheme);
+            if (currentTheme === 'dark') {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            if (root.getAttribute('data-theme') === 'dark') {
+                root.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                root.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        });
+
+        function applySavedTheme() {
+            // Ya manejado en la inicialización arriba para evitar parpadeos
+        }
+
+        function openRef(id) {
+            const section = sections.find(s => s.id === id);
+            const modal = document.getElementById('refModal');
+            const refContent = document.getElementById('refContent');
+            refContent.innerHTML = `
+                <p>${section.ref || "Esta unidad sintetiza información técnica de los manuales de Deitel (Cap 1) y O'Reilly (Cap 1), integrando principios de accesibilidad WCAG 2.2 analizados en los cuadernos de desarrollo web."}</p>
+                <div class="pt-4 border-t text-[10px]" style="border-color: var(--border); color: var(--text-secondary)">
+                    Sincronizado con base de datos académica v1.3
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('refModal').classList.add('hidden');
+            document.getElementById('refModal').classList.remove('flex');
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
