@@ -331,216 +331,837 @@
         </section>
 
         <!-- 2.1 Introducción -->
-        <section id="sec-2-1">
+		<section id="sec-2-1">
             <span class="icon-sec">📖</span>
-            <h2>2.1 Introducción</h2>
-            <p>El lenguaje C++ fue desarrollado por <span class="abbr" data-title="Bjarne Stroustrup: Creador de C++ en Bell Labs (1979), originalmente llamado C con Clases.">Bjarne Stroustrup</span> a principios de los años 80. Su propósito fue extender el lenguaje C para soportar el paradigma orientado a objetos sin perder la eficiencia del lenguaje original. Este lenguaje es <strong>multiparadigma</strong>, lo que significa que le permite a usted programar de forma estructurada, orientada a objetos o genérica.</p>
+            <h2>2.1 Introducción al lenguaje C++</h2>
+            <p>El lenguaje de programación C++ representa uno de los pilares fundamentales de la computación moderna, diseñado originalmente por <span class="abbr" data-title="Bjarne Stroustrup: Creador de C++ en AT&T Bell Labs (1979). Su objetivo era añadir características de Simula 67 al lenguaje C para facilitar el desarrollo de sistemas complejos sin sacrificar la eficiencia de bajo nivel.">Bjarne Stroustrup</span> a principios de la década de 1980 en los laboratorios AT&T Bell. Su creación no fue un evento aislado, sino el resultado de una necesidad crítica: la capacidad de organizar y procesar cantidades masivas de información de manera eficiente mientras se mantiene la cercanía al hardware. C++ evolucionó a partir del lenguaje C, el cual a su vez heredó características de los lenguajes BCPL (1967) y B (1970). Como indica el PDF de <strong>Deitel</strong>, C++ es un lenguaje <strong>multiparadigma</strong> que permite a los desarrolladores elegir entre la programación estructurada, la programación orientada a objetos (POO) o la programación genérica mediante plantillas, adaptándose a las exigencias de rendimiento de sistemas operativos, aplicaciones gráficas y firmware.</p>
             
-            <h3>Evolución Histórica</h3>
+            <p>Desde una perspectiva académica, la filosofía de C++ se basa en el principio de "no pagar por lo que no se usa", lo que significa que las abstracciones de alto nivel no deben imponer una penalización de rendimiento sobre el código escrito a bajo nivel. [cite_start]Según el PDF de <strong>O'Reilly</strong>, C++ actúa como un puente entre el programador y la "máquina cruda", obligando al desarrollador a comprender cómo se organiza la memoria en bytes y cómo las instrucciones son traducidas por el compilador en código máquina ejecutable[cite: 2000, 2001].</p>
+
+            <h3>Evolución Histórica y Estandarización</h3>
             <div class="timeline">
                 <div class="timeline-item">
-                    <span class="timeline-date">1972 - Lenguaje C</span>
-                    <p>Dennis Ritchie crea C para el sistema UNIX. Es la base de toda la computación moderna.</p>
+                    <span class="timeline-date">1967-1970: Antecedentes (BCPL y B)</span>
+                    <p>Martin Richards desarrolla BCPL para escribir sistemas operativos. Posteriormente, Ken Thompson crea el lenguaje B, basado en BCPL, para implementar las primeras versiones del sistema UNIX en Bell Labs.</p>
                 </div>
                 <div class="timeline-item">
-                    <span class="timeline-date">1983 - C++</span>
-                    <p>Stroustrup lanza C++. El operador <code>++</code> simboliza la evolución natural del lenguaje.</p>
+                    <span class="timeline-date">1972: El surgimiento de C</span>
+                    <p>Dennis Ritchie evoluciona el lenguaje B hacia C. Diseñado específicamente para UNIX, C se vuelve popular por ser independiente del hardware y extremadamente flexible.</p>
                 </div>
                 <div class="timeline-item">
-                    <span class="timeline-date">1998 - Estándar ANSI/ISO</span>
-                    <p>Se ratifica la primera versión estándar oficial, garantizando portabilidad.</p>
+                    <span class="timeline-date">1979-1980: C con Clases</span>
+                    <p>Bjarne Stroustrup inicia el desarrollo de "C con Clases". Su innovación principal fue la integración del concepto de <em>objetos</em> (datos agrupados con las operaciones que actúan sobre ellos), inspirado en el lenguaje Simula 67.</p>
                 </div>
                 <div class="timeline-item">
-                    <span class="timeline-date">2011 (C++11) a Hoy</span>
-                    <p>El "C++ Moderno" introduce punteros inteligentes y mejoras críticas en la seguridad.</p>
+                    <span class="timeline-date">1983: Nace C++</span>
+                    <p>El lenguaje es renombrado oficialmente como C++. El operador de incremento <code>++</code> simboliza que es una evolución natural de C. Se introducen funciones virtuales, sobrecarga de operadores y referencias.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">1998: Estándar ANSI/ISO (C++98)</span>
+                    <p>Se publica el primer estándar internacional (ISO/IEC 14882:1998), que garantiza la portabilidad del código entre diferentes plataformas y compiladores, e incluye la Biblioteca de Plantillas Estándar (STL).</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">2011: C++11 (C++ Moderno)</span>
+                    <p>Originalmente conocido como C++0x, esta versión introduce mejoras críticas en seguridad y rendimiento, como punteros inteligentes para la gestión automática de memoria y expresiones lambda.</p>
                 </div>
             </div>
+
+            <h3>Arquitectura y Filosofía del Diseño</h3>
+            <p>La potencia de C++ reside en su capacidad para manejar la complejidad mediante la tecnología de objetos. Mientras que los lenguajes procedimentales se enfocan en <em>acciones</em> (verbos), C++ se enfoca en <em>objetos</em> (sustantivos). De acuerdo con el PDF de <strong>Deitel</strong>, una <code>clase</code> funciona como un plano de construcción (un <em>blueprint</em>), mientras que un <code>objeto</code> es la instancia física creada a partir de ese plano. Por ejemplo, una clase "CuentaBancaria" define los atributos (saldo) y comportamientos (depositar, retirar), pero solo los objetos individuales contienen el dinero real de un cliente.</p>
             
-            <p>Comparado con otros lenguajes como Java o Python, C++ le otorga a usted la responsabilidad (y el riesgo) de gestionar la memoria. Como indica el PDF de <strong>O'Reilly</strong>, "un programador de C++ debe pensar como el hardware".</p>
-            <button class="btn-ref" onclick="openRef('ref-2-1')">Referencia: O'Reilly Cap. 1</button>
+            <p>Este enfoque facilita lo que se conoce como <strong>ocultamiento de información</strong> (<em>information hiding</em>). Los objetos interactúan a través de interfaces bien definidas, pero sus detalles de implementación interna permanecen privados. [cite_start]Como señala <strong>O'Reilly</strong>, esto permite que un programador cambie la estructura interna de una clase sin afectar al resto del programa, siempre que la interfaz pública se mantenga constante[cite: 2005, 2039]. [cite_start]Esta modularidad es esencial para el mantenimiento a largo plazo de sistemas que hoy superan el millón de líneas de código[cite: 2570, 2575].</p>
+
+            <h3>Gestión de Memoria y Rendimiento</h3>
+            <p>A diferencia de lenguajes como Java o Python, que utilizan recolectores de basura automáticos, C++ otorga al programador el control total sobre el ciclo de vida de los datos. El proceso de creación y destrucción de variables puede ser <strong>automático</strong> (en el <em>stack</em>, donde los datos desaparecen al salir del bloque) o <strong>estático</strong> (donde los datos persisten durante toda la ejecución). [cite_start]El PDF de <strong>O'Reilly</strong> advierte que "un programador de C++ debe pensar como el hardware", ya que errores sutiles como los <em>dangling references</em> (referencias a variables destruidas) o fugas de memoria pueden comprometer la estabilidad del sistema[cite: 37, 2021, 2022].</p>
+            
+            <p>El rendimiento se optimiza mediante técnicas como las funciones <code>inline</code>, que reducen la sobrecarga de las llamadas a funciones al insertar el código directamente en el flujo de ejecución. Además, el uso de <strong>paso por referencia</strong> evita la copia costosa de objetos grandes, permitiendo que las funciones operen directamente sobre los datos originales de manera eficiente.</p>
+
+            <h3>El Futuro del Lenguaje: Bibliotecas Boost y C++ Moderno</h3>
+            <p>El desarrollo de C++ no se detuvo con su estandarización inicial. El futuro del lenguaje está fuertemente influenciado por la comunidad de código fuente abierto, destacando las <strong>Bibliotecas Boost</strong>. Muchos de los componentes de Boost, como las expresiones regulares y los punteros inteligentes, han sido incorporados en los Reportes Técnicos (TR1) y en los estándares más recientes (C++11/C++14/C++17). El objetivo de estas actualizaciones es facilitar el aprendizaje del lenguaje, mejorar las herramientas para la creación de bibliotecas y aumentar la compatibilidad con el estándar C99.</p>
+            
+            <p>En conclusión, C++ sigue siendo el lenguaje de elección para sistemas donde el control, la velocidad y la escalabilidad son críticos. Su naturaleza multiparadigma y su continua evolución aseguran que, aunque es un lenguaje "difícil" que requiere que el programador gestione la memoria y entienda el hardware, las recompensas en términos de capacidad técnica y profesional son inigualables en la industria del software.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-2-1')">Referencia: Deitel Cap. 1 & O'Reilly Cap. 1</button>
         </section>
+
 
         <!-- 2.2 Su primer programa -->
-        <section id="sec-2-2">
-            <span class="icon-sec">💻</span>
-            <h2>2.2 Su primer programa en C++: imprimir una línea de texto</h2>
-            <p>Iniciamos con el código más simple, pero rico en conceptos estructurales. Analizá el siguiente fragmento:</p>
-            <pre><code>// Programa de impresión en C++
-#include &lt;iostream&gt; // Directiva de preprocesador
+	<section id="sec-2-2">
+    <span class="icon-sec">💻</span>
+    <h2>2.2 Su primer programa en C++: imprimir una línea de texto</h2>
+    <p>La transición hacia el dominio de C++ comienza con la internalización de su estructura mínima funcional. Este primer programa, aunque elemental en apariencia, constituye la piedra angular para comprender la sintaxis, el proceso de compilación y la filosofía de diseño del lenguaje. Basado en el enfoque pedagógico de Deitel, este ejemplo utiliza el método de "código activo" para ilustrar cómo los componentes individuales interactúan para producir una salida coherente en la consola.</p>
+    
+    <pre><code>// Figura 2.1: bienvenido.cpp
+// Programa para imprimir una línea de texto en C++
+#include &lt;iostream&gt; // Directiva para el uso de flujos de entrada/salida
 
+// La función main es el punto de inicio obligatorio de todo programa
 int main() {
-    std::cout << "Bienvenido a C++!\n"; // Salida de datos
-    return 0; // Indica que el programa terminó con éxito
-}</code></pre>
-            <h3>Desglose Técnico:</h3>
-            <ul>
-                <li><strong>Comentarios:</strong> Iniciados con <code>//</code>, son ignorados por el compilador pero vitales para la documentación académica.</li>
-                <li><strong>Preprocesador:</strong> La línea <code>#include &lt;iostream&gt;</code> le avisa al compilador que incluya la biblioteca estándar para entrada y salida.</li>
-                <li><strong>La función main:</strong> Todo programa ejecutable comienza aquí. Es el punto de entrada obligatorio.</li>
-                <li><strong>Objetos de salida:</strong> <code>std::cout</code> (character output) es un objeto de flujo que envía datos a la consola.</li>
-            </ul>
-            <p>Notá el uso de <code>std::</code>. Esto se llama <strong>prefijo de ámbito</strong> e indica que <code>cout</code> pertenece al <span class="abbr" data-title="Namespace: Espacio de nombres que ayuda a evitar conflictos entre funciones con el mismo nombre en proyectos grandes.">espacio de nombres</span> estándar.</p>
-            <button class="btn-ref" onclick="openRef('ref-2-2')">Referencia: Deitel pág. 34</button>
-        </section>
+    // Uso del objeto de flujo de salida estándar para mostrar un mensaje
+    std::cout << "¡Bienvenido a la programación en C++!\n"; 
+
+    return 0; // Notificación al sistema operativo de que el programa finalizó con éxito
+} // Fin de la función main</code></pre>
+
+    <h3>1. Análisis de la Documentación: El Rol de los Comentarios</h3>
+    <p>Según el PDF de Deitel, los comentarios iniciados con <code>//</code> representan documentación de una sola línea, mientras que el estilo heredado de C (<code>/* ... */</code>) permite bloques multilínea. Desde la perspectiva académica de las metodologías activas de NotebookLM, la documentación no es un simple accesorio, sino una herramienta de metacognición que permite al estudiante estructurar su pensamiento lógico antes de la codificación. O'Reilly enfatiza que un programa debe leerse como un ensayo técnico, donde los comentarios actúan como "oraciones temáticas" que guían al lector a través de la complejidad del algoritmo. Una "buena práctica de programación" fundamental es iniciar todo archivo con un bloque de comentarios que detalle el autor, el propósito y la fecha de creación del software[cite: 4, 5].</p>
+
+    <h3>2. El Preprocesador y la Biblioteca Estándar</h3>
+    <p>La línea <code>#include &lt;iostream&gt;</code> no es una instrucción del compilador, sino un mensaje para el <strong>preprocesador</strong>. Basado en el PDF de O'Reilly, el preprocesador es esencialmente un "editor de texto especializado" que procesa el código antes de que ocurra la traducción a lenguaje máquina. Al incluir <code>&lt;iostream&gt;</code>, el preprocesador inserta en el código fuente las definiciones necesarias para manejar flujos de datos (streams). Esta modularidad permite la <strong>reutilización de software</strong>, un pilar que evita que el programador tenga que "reinventar la rueda" para tareas básicas de entrada y salida.</p>
+    
+    <h3>3. La Función <code>main</code>: El Punto de Entrada</h3>
+    <p>Todo programa ejecutable en C++ requiere una función denominada <code>main</code>. De acuerdo con la teoría técnica, los paréntesis <code>()</code> después de <code>main</code> indican que se trata de una función, y la palabra clave <code>int</code> a su izquierda especifica que la función debe devolver un valor entero al sistema operativo. En este contexto, el uso de <code>return 0;</code> al final del cuerpo de la función es vital, ya que el valor 0 actúa como un código de estado que informa que el programa terminó correctamente; cualquier otro valor suele interpretarse como un indicio de error. Es imperativo que el cuerpo de la función esté delimitado por llaves <code>{ }</code>, definiendo así el alcance o bloque de ejecución.</p>
+
+    <h3>4. Flujos de Salida y Espacios de Nombres</h3>
+    <p>La instrucción <code>std::cout</code> es un ejemplo de la potencia de la orientación a objetos en C++. Según Deitel, <code>cout</code> representa el <strong>objeto de flujo estándar de salida</strong>, que normalmente está conectado a la pantalla. El operador <code><<</code> se denomina <strong>operador de inserción de flujo</strong> y su diseño visual simboliza el movimiento de los datos hacia el objeto de salida.</p>
+    <p>Un detalle técnico crítico es el prefijo <code>std::</code>. Este denota que el objeto pertenece al <strong>espacio de nombres (namespace) estándar</strong>. El uso de namespaces es una estrategia de arquitectura de software para evitar colisiones de nombres en proyectos de gran envergadura. Aunque existen formas de omitir este prefijo mediante declaraciones <code>using</code>, el uso explícito de <code>std::</code> fomenta la claridad y el rigor académico en el aprendizaje inicial.</p>
+
+    <h3>5. Secuencias de Escape y Formato de Texto</h3>
+    <p>Dentro de la cadena de caracteres <code>"¡Bienvenido a C++!\n"</code>, observamos el uso de <code>\n</code>. Esta es una <strong>secuencia de escape</strong>, donde la barra diagonal inversa (backslash) actúa como un carácter de control que modifica el significado del carácter siguiente. En este caso, <code>\n</code> representa una "nueva línea", posicionando el cursor al principio de la línea siguiente. Basado en el PDF de O'Reilly, otras secuencias comunes incluyen <code>\t</code> para tabulaciones horizontales y <code>\"</code> para imprimir comillas dobles dentro de una cadena.</p>
+
+    <h3>6. Estilo, Legibilidad y UX del Código</h3>
+    <p>Más allá de la corrección sintáctica, el desarrollo web y la interfaz de usuario (UX) sugieren que la legibilidad es tan importante como la funcionalidad. Según el cuaderno de NotebookLM sobre UX UI, la presentación visual de la información afecta directamente el modelo mental del usuario/programador. O'Reilly argumenta que la "guerra religiosa" sobre el estilo de sangría es secundaria a la <strong>consistencia</strong>: un programa debe estar organizado mediante sangrías (preferiblemente de 3 o 4 espacios) para que la estructura sea evidente de un vistazo. El principio <strong>KIS (Keep It Simple)</strong> dicta que se debe preferir el código claro y directo sobre el uso de "trucos astutos" que dificulten el mantenimiento futuro.</p>
+
+    <p>En conclusión, el dominio de este primer programa requiere no solo entender cada carácter, sino también apreciar el flujo de la pre-compilación, la importancia de la documentación metacognitiva y el compromiso con un estilo de codificación profesional[cite: 3, 4].</p>
+
+    <button class="btn-ref" onclick="openRef('ref-2-2')">Referencia: Deitel (6ª Ed) págs. 36-39, 11, 17; O'Reilly Cap. 2-3 (págs. 18-25)</button>
+</section>
 
         <!-- 2.3 Modificación -->
-        <section id="sec-2-3">
-            <span class="icon-sec">🔧</span>
-            <h2>2.3 Modificación de nuestro primer programa en C++</h2>
-            <p>Podemos imprimir múltiples líneas con un solo enunciado o usar secuencias de escape para formatear la salida. Las <span class="abbr" data-title="Escape Sequences: Caracteres especiales que comienzan con barra invertida (\) y realizan funciones de formato.">secuencias de escape</span> permiten controlar el cursor de la pantalla.</p>
+		<section id="sec-2-3">
+		<span class="icon-sec">🔧</span>
+		<h2>2.3 Modificación de nuestro primer programa en C++: Profundización en la salida de datos</h2>
+
+        <p>La capacidad de modificar un programa base es una de las estrategias fundamentales dentro de las <strong>metodologías activas</strong> de aprendizaje. Según el <em>cuaderno de NotebookLM sobre educación</em>, el aprendizaje basado en la experimentación controlada (scaffolding) permite al estudiante transitar de la mera copia de sintaxis a la comprensión semántica del código. En este sentido, la modificación de nuestro primer programa no es solo un ejercicio de edición, sino un estudio sobre cómo el flujo de salida de datos (output stream) interactúa con el entorno de ejecución.</p>
+
+        <p>De acuerdo con el <em>Libro de C++ de Deitel (pág. 38)</em>, un solo enunciado de salida puede mostrar múltiples líneas de texto utilizando <span class="abbr" data-title="Escape Sequences: Caracteres especiales que comienzan con barra invertida (\) y realizan funciones de formato.">secuencias de escape</span>. Estas secuencias permiten al programador ejercer un control granular sobre el cursor en el dispositivo de salida estándar. La barra invertida (<code>\</code>) es denominada por Deitel como el <strong>carácter de escape</strong>; cuando el compilador encuentra este carácter en una cadena de texto, lo interpreta como un aviso de que el siguiente carácter tiene un significado especial.</p>
+
+        <h3>La lógica del flujo de salida y la legibilidad</h3>
+        <p>Desde la perspectiva del <em>cuaderno de NotebookLM sobre UX UI</em>, la presentación de la información en una interfaz —incluso si esta es de consola— debe minimizar la carga cognitiva del usuario. Una salida de texto apelmazada dificulta la escaneabilidad. Por ello, el uso estratégico de espacios y saltos de línea no es estético, sino funcional. El <em>PDF de O'Reilly (Practical C++ Programming)</em> enfatiza que la claridad en la salida es tan importante como la claridad en el código fuente, sugiriendo que el diseño del "output" debe preverse antes de la codificación.</p>
+
+        <div class="table-res">
+            <table>
+                <caption>Tabla extendida de secuencias de escape (Basado en Deitel y O'Reilly)</caption>
+                <thead>
+                    <tr>
+                        <th>Secuencia</th>
+                        <th>Significado</th>
+                        <th>Acción Técnica y Aplicación UX</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>\n</code></td>
+                        <td>Nueva línea</td>
+                        <td>Mueve el cursor al inicio de la siguiente línea. Esencial para crear jerarquía visual en reportes de consola.</td>
+                    </tr>
+                    <tr>
+                        <td><code>\t</code></td>
+                        <td>Tabulador horizontal</td>
+                        <td>Mueve el cursor al siguiente tabulador. Útil para alinear datos en columnas sin depender de espacios manuales, mejorando la legibilidad (NotebookLM UX).</td>
+                    </tr>
+                    <tr>
+                        <td><code>\r</code></td>
+                        <td>Retorno de carro</td>
+                        <td>Mueve el cursor al inicio de la línea actual. Se utiliza frecuentemente en indicadores de progreso que se actualizan sobre sí mismos.</td>
+                    </tr>
+                    <tr>
+                        <td><code>\a</code></td>
+                        <td>Alerta (Bell)</td>
+                        <td>Produce un sonido de sistema. Según Deitel, se usa para notificar errores críticos o finalización de procesos largos.</td>
+                    </tr>
+                    <tr>
+                        <td><code>\\</code></td>
+                        <td>Barra invertida</td>
+                        <td>Imprime una barra invertida literal. Necesaria para representar rutas de archivos en sistemas operativos que usan este carácter.</td>
+                    </tr>
+                    <tr>
+                        <td><code>\"</code></td>
+                        <td>Comilla doble</td>
+                        <td>Permite imprimir comillas dentro de una cadena de texto delimitada por comillas, evitando errores de sintaxis del compilador.</td>
+                    </tr>
+                    <tr>
+                        <td><code>\'</code></td>
+                        <td>Comilla simple</td>
+                        <td>Utilizada para representar el carácter de comilla simple sin ambigüedad gramatical.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Consideraciones Técnicas sobre el Rendimiento</h3>
+        <p>Es pertinente mencionar la distinción técnica entre el uso de la secuencia de escape <code>\n</code> y el manipulador de flujo <code>endl</code>. Basado en el <em>PDF de Deitel</em>, mientras que <code>\n</code> simplemente inserta un salto de línea, <code>endl</code> realiza una operación adicional: vacía el <strong>búfer de salida</strong> (output buffer). El <em>cuaderno de NotebookLM sobre desarrollo web</em> menciona paralelismos en el manejo de flujos de datos donde la eficiencia depende de no saturar los canales de comunicación; en C++, el uso excesivo de vaciado de búfer puede impactar el rendimiento en aplicaciones de alto volumen de datos, por lo que <code>\n</code> es preferible cuando la velocidad es prioridad sobre la visualización inmediata.</p>
+
+        <div class="practice-box">
+            <strong>💡 Desafío de Ingeniería y Diseño:</strong>
+            <p>Aplicando los principios de <strong>Diseño de Interacción</strong> del <em>cuaderno de UX UI</em>, desarrolle un programa que genere un encabezado de factura o reporte. El programa debe:</p>
+            <ul>
+                <li>Utilizar una única instrucción <code>std::cout</code>.</li>
+                <li>Incluir el nombre de la empresa centrado usando <code>\t</code>.</li>
+                <li>Utilizar <code>\"</code> para encerrar un eslogan corporativo.</li>
+                <li>Separar las secciones con líneas divisorias creadas con caracteres de texto y <code>\n</code>.</li>
+            </ul>
+            <p><em>Objetivo Pedagógico:</em> Comprender la concatenación de secuencias de escape y su impacto en la jerarquía visual de la información.</p>
+        </div>
+
+        <h3>Errores Comunes y Depuración</h3>
+        <p>El <em>Libro de O'Reilly</em> advierte sobre el error de olvidar el carácter de escape. Escribir <code>n</code> en lugar de <code>\n</code> simplemente imprimirá la letra, lo cual es un error lógico frecuente en programadores novatos. Asimismo, el <em>cuaderno de NotebookLM sobre Educación</em> sugiere que estos errores son "momentos de enseñanza" ideales para practicar la <strong>metodología de revisión por pares</strong>, donde los estudiantes deben identificar fallos de formato en los códigos de sus compañeros para reforzar la atención al detalle sintáctico.</p>
+
+        <button class="btn-ref" onclick="openRef('ref-2-3')">Referencia: Deitel pág. 38-41 | O'Reilly Cap. 4</button>
+    </section>
+
+        <!-- 2.4 Suma de enteros -->
+		<section id="sec-2-4">
+		<span class="icon-sec">➕</span>
+		<h2>2.4 Otro programa en C++: Interactividad y Procesamiento de la Suma de Enteros</h2>
+
+        <p>La introducción de la interactividad marca un hito en la enseñanza de la programación. Según el <em>cuaderno de NotebookLM sobre educación y metodologías activas</em>, este paso representa la transición del "pensamiento estático" (salida de texto fija) al "pensamiento dinámico" (procesamiento de datos variables). En este contexto, el programa de suma de enteros no es solo un cálculo aritmético, sino la primera interacción real entre el usuario y la lógica interna de la máquina.</p>
+
+        <p>C++ se define fundamentalmente como un lenguaje de <strong>tipado fuerte</strong>. De acuerdo con el <em>Libro de C++ de Deitel (6ª Edición)</em>, esto implica que cada entidad de datos debe poseer un tipo claramente definido antes de ser utilizada en el programa. Esta característica permite al compilador realizar comprobaciones de seguridad exhaustivas, garantizando que las operaciones (como la suma) se realicen sobre operandos compatibles, evitando así comportamientos indefinidos en tiempo de ejecución.</p>
+
+        <div class="code-container">
+            <pre><code>#include &lt;iostream&gt; // Directiva de preprocesador para flujo de entrada y salida
+
+
+int main() {
+// Declaración de variables: Definición de nombres y tipos de datos
+int numero1; // Primer entero a sumar
+int numero2; // Segundo entero a sumar
+int suma;    // Variable para almacenar el resultado
+
+// Interacción con el usuario (Capa de Presentación)
+std::cout << "Ingresá el primer número entero: ";
+std::cin >> numero1; // Operador de extracción para entrada de datos
+
+std::cout << "Ingresá el segundo número entero: ";
+std::cin >> numero2;
+
+// Lógica de Procesamiento
+suma = numero1 + numero2; // Asignación del resultado de la operación aritmética
+
+// Salida de resultados
+std::cout << "La suma es: " << suma << std::endl;
+
+return 0; // Indica que el programa finalizó exitosamente
+
+
+}</code></pre>
+</div>
+
+        <h3>Análisis Técnico de la Declaración de Variables</h3>
+        <p>El <em>PDF de Deitel</em> explica que una variable es, en esencia, una ubicación en la memoria de la computadora donde se puede almacenar un valor para que el programa lo utilice posteriormente. Al declarar <code>int numero1;</code>, le estamos pidiendo al compilador que reserve un espacio suficiente para albergar un número entero (generalmente 4 bytes en sistemas modernos). Desde la perspectiva del <em>PDF de O'Reilly (Practical C++ Programming)</em>, es vital que los nombres de las variables sean descriptivos; evitar nombres crípticos como <code>n1</code> o <code>x</code> es una práctica de "limpieza de código" que facilita el mantenimiento a largo plazo.</p>
+
+        <h3>El Objeto std::cin y el Operador de Extracción (>>)</h3>
+        <p>La entrada de datos se gestiona a través del objeto <code>std::cin</code>. Técnicamente, <code>std::cin</code> representa el flujo de entrada estándar (usualmente el teclado). El operador <code>>></code>, conocido como <strong>operador de extracción</strong>, toma la información del flujo y la coloca en la variable situada a su derecha. El <em>Libro de Deitel</em> destaca que el compilador determina el tipo de datos que se debe extraer basándose en el tipo de la variable de destino; si el usuario introduce texto cuando se espera un entero, el flujo de entrada entrará en un estado de falla.</p>
+
+        <h3>UX UI: El Diseño de la Interacción en Consola</h3>
+        <p>Aunque estemos trabajando en un entorno de texto, los principios del <em>cuaderno de NotebookLM sobre UX UI</em> siguen siendo aplicables. Un programa sin etiquetas claras (prompts) genera incertidumbre. Por ello, siempre precedemos un <code>std::cin</code> con un <code>std::cout</code> descriptivo. 
+        <ul>
+            <li><strong>Claridad:</strong> El mensaje "Ingresá el primer número" reduce la carga cognitiva, indicando exactamente qué acción se espera.</li>
+            <li><strong>Feedback Inmediato:</strong> La visualización del resultado "La suma es: " confirma que la acción del usuario ha sido procesada correctamente.</li>
+            <li><strong>Consistencia:</strong> Mantener un formato uniforme en las solicitudes de datos mejora la curva de aprendizaje del usuario final.</li>
+        </ul>
+        </p>
+
+        <h3>La Operación de Asignación y la Aritmética</h3>
+        <p>En la línea <code>suma = numero1 + numero2;</code>, el operador <code>+</code> realiza la suma binaria, y el operador <code>=</code> (operador de asignación) transfiere el valor calculado a la variable <code>suma</code>. Es fundamental entender, como señala el <em>PDF de O'Reilly</em>, que la asignación en C++ funciona de derecha a izquierda: primero se calcula la expresión a la derecha del igual y luego se guarda el resultado. Este concepto es crucial para evitar errores de lógica donde se intenta asignar un valor a una expresión aritmética (ej. <code>numero1 + numero2 = suma;</code>), lo cual resultaría en un error de compilación.</p>
+
+        <div class="table-res">
+            <table>
+                <caption>Resumen de Componentes de Interacción (2.4)</caption>
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Tipo de Entidad</th>
+                        <th>Función Principal</th>
+                        <th>Fuente Referencial</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>int</code></td>
+                        <td>Tipo de dato primario</td>
+                        <td>Representa números enteros positivos y negativos.</td>
+                        <td>Deitel pág. 43</td>
+                    </tr>
+                    <tr>
+                        <td><code>std::cin</code></td>
+                        <td>Objeto de flujo (Stream)</td>
+                        <td>Captura la entrada desde el periférico estándar.</td>
+                        <td>O'Reilly Cap. 4</td>
+                    </tr>
+                    <tr>
+                        <td><code>>></code></td>
+                        <td>Operador</td>
+                        <td>Extrae datos del flujo y los asigna a variables.</td>
+                        <td>Deitel pág. 44</td>
+                    </tr>
+                    <tr>
+                        <td><code>=</code></td>
+                        <td>Operador de asignación</td>
+                        <td>Almacena el valor de la derecha en la variable de la izquierda.</td>
+                        <td>O'Reilly Cap. 4</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Consideraciones desde el Desarrollo Web y la Educación</h3>
+        <p>Desde el enfoque del <em>cuaderno de NotebookLM sobre desarrollo web</em>, podemos comparar el <code>std::cin</code> con los elementos <code>&lt;input&gt;</code> de HTML. En ambos casos, existe la necesidad de validar que el dato ingresado sea del tipo esperado antes de procesarlo en el backend o en la lógica de C++. Pedagógicamente, el <em>cuaderno sobre metodologías activas</em> sugiere que los estudiantes realicen variaciones de este programa (por ejemplo, restas o multiplicaciones) para afianzar el concepto de que las variables son contenedores genéricos cuyo contenido cambia, pero cuya estructura (tipo) permanece constante.</p>
+
+        <div class="practice-box">
+            <strong>💡 Desafío de Aplicación:</strong>
+            <p>Cree un programa que solicite tres números enteros al usuario y calcule el promedio de los mismos. Tenga en cuenta:</p>
+            <ul>
+                <li>Utilizar variables descriptivas siguiendo las normas de O'Reilly.</li>
+                <li>Asegurarse de que cada solicitud de datos (input) esté precedida por un mensaje claro (output) siguiendo las guías de UX de NotebookLM.</li>
+                <li>Reflexionar: ¿Qué sucedería si el resultado de la división no es un entero? (Introducción conceptual a los tipos de punto flotante).</li>
+            </ul>
+        </div>
+
+        <button class="btn-ref" onclick="openRef('ref-2-4')">Referencia: Deitel pág. 42-45 | O'Reilly Cap. 4: Variables y Tipos</button>
+    </section>
+
+        <!-- 2.5 Conceptos memoria -->
+		<section id="sec-2-5">
+            <span class="icon-sec">🧠</span>
+            <h2>2.5 Conceptos acerca de la memoria: Anatomía y Persistencia de los Datos</h2>
             
+            <p>Para dominar el desarrollo de software, es imperativo que el programador desarrolle un <strong>modelo mental</strong> preciso de cómo la computadora gestiona la información. Según el <em>cuaderno de NotebookLM sobre UX UI</em>, los sistemas abstractos son más fáciles de comprender cuando se visualizan mediante metáforas espaciales. En C++, debemos visualizar la memoria de acceso aleatorio (RAM) como una vasta serie de celdas o "buzones" numerados, donde cada variable representa una de estas ubicaciones físicas con atributos específicos.</p>
+
+            <p>De acuerdo con el <em>Libro de C++ de Deitel (6ª Edición, pág. 43)</em>, toda variable en C++ posee cuatro atributos inalienables que definen su existencia en el ecosistema del programa: <strong>un nombre, un tipo, un tamaño y un valor</strong>. El nombre funciona como un alias para una dirección de memoria física; el tipo determina qué clase de datos puede albergar y qué operaciones son válidas; el tamaño (expresado en bytes) dicta cuánto espacio ocupa en el hardware; y el valor es el contenido binario actual de dicha ubicación.</p>
+
+            <div class="diagram-mem">
+                <div class="mem-cell">
+                    <span class="addr">Dirección 0x01</span><br>
+                    <small>Variable: <code>numero1</code></small><br>
+                    <strong>45</strong>
+                    <div class="cell-type">int (4 bytes)</div>
+                </div>
+                <div class="mem-cell active">
+                    <span class="addr">Dirección 0x02</span><br>
+                    <small>Variable: <code>numero2</code></small><br>
+                    <strong>72</strong>
+                    <div class="cell-type">int (4 bytes)</div>
+                </div>
+                <div class="mem-cell">
+                    <span class="addr">Dirección 0x03</span><br>
+                    <small>Variable: <code>suma</code></small><br>
+                    <strong>117</strong>
+                    <div class="cell-type">int (4 bytes)</div>
+                </div>
+            </div>
+
+            <h3>La Dinámica de la Memoria: Lectura vs. Escritura</h3>
+            <p>Uno de los conceptos más críticos para el principiante es entender la naturaleza del flujo de datos hacia y desde estas celdas. El <em>PDF de Deitel</em> establece dos reglas fundamentales que rigen la integridad de la información:</p>
+            
+            <ul>
+                <li><strong>Escritura (Lectura Destructiva):</strong> Al colocar un nuevo valor en una ubicación de memoria (por ejemplo, mediante la instrucción <code>std::cin >> numero1;</code> o una asignación <code>suma = 10;</code>), el valor que residía anteriormente en esa celda se sobreescribe. Este proceso es irreversible; el valor previo se pierde para siempre. Desde el <em>cuaderno de NotebookLM sobre desarrollo web</em>, se advierte que este comportamiento es análogo a la reasignación de variables en JavaScript, donde el estado anterior desaparece para dar paso al nuevo "estado de la aplicación".</li>
+                <li><strong>Lectura (Lectura No Destructiva):</strong> Cuando el programa accede a una variable para realizar un cálculo (como en <code>suma = numero1 + numero2;</code>), el proceso es de naturaleza consultiva. El hardware realiza una copia del valor almacenado para llevarlo a la Unidad Aritmético-Lógica (ALU), pero el valor original permanece intacto en su celda de memoria. Como señala el <em>Libro de O'Reilly</em>, esto permite que una misma variable sea utilizada en múltiples cálculos sin que su estado se altere involuntariamente.</li>
+            </ul>
+
             <div class="table-res">
                 <table>
+                    <caption>Atributos de la Variable en Memoria (Referencia Técnica)</caption>
                     <thead>
                         <tr>
-                            <th>Secuencia</th>
-                            <th>Significado</th>
-                            <th>Acción</th>
+                            <th>Atributo</th>
+                            <th>Definición Técnica</th>
+                            <th>Implicación en el Desarrollo</th>
+                            <th>Fuente</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td><code>\n</code></td><td>Nueva línea</td><td>Mueve el cursor al inicio de la siguiente línea.</td></tr>
-                        <tr><td><code>\t</code></td><td>Tabulación</td><td>Mueve el cursor al siguiente tabulador horizontal.</td></tr>
-                        <tr><td><code>\r</code></td><td>Retorno de carro</td><td>Mueve el cursor al inicio de la línea actual.</td></tr>
-                        <tr><td><code>\\</code></td><td>Barra invertida</td><td>Imprime un carácter de barra invertida.</td></tr>
+                        <tr>
+                            <td>Nombre (Identificador)</td>
+                            <td>Etiqueta amigable para la dirección de memoria.</td>
+                            <td>Debe ser descriptivo para facilitar el mantenimiento (Clean Code).</td>
+                            <td>O'Reilly Cap. 4</td>
+                        </tr>
+                        <tr>
+                            <td>Tipo</td>
+                            <td>Clasificación que define el rango y las operaciones.</td>
+                            <td>Determina cuántos bytes se reservan y cómo se interpretan los bits.</td>
+                            <td>Deitel pág. 43</td>
+                        </tr>
+                        <tr>
+                            <td>Tamaño</td>
+                            <td>Espacio físico ocupado en la RAM (ej: 4 bytes para int).</td>
+                            <td>Crucial para la optimización y prevención de desbordamientos.</td>
+                            <td>Deitel pág. 43</td>
+                        </tr>
+                        <tr>
+                            <td>Valor</td>
+                            <td>Contenido de datos actual de la celda.</td>
+                            <td>Estado dinámico que cambia mediante "lectura destructiva".</td>
+                            <td>NotebookLM Web</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
 
+            <h3>Perspectiva Pedagógica: El "Mito de la Caja"</h3>
+            <p>En las <em>metodologías activas de educación</em> (según el cuaderno de NotebookLM correspondiente), se discute que la metáfora de la "caja" puede ser limitante. Si bien ayuda a entender la contención de datos, el estudiante debe evolucionar hacia la comprensión de la <strong>direccionalidad del flujo</strong>. El <em>PDF de O'Reilly</em> sugiere visualizar las variables no solo como cajas, sino como etiquetas pegadas a un interruptor de hardware. Cambiar el valor no es meter algo en una caja, sino reconfigurar los transistores que representan esa dirección de memoria.</p>
+
+            <p>Esta distinción es vital al tratar el concepto de "variables no inicializadas". Deitel menciona que cuando declaramos una variable pero no le asignamos un valor (ej: <code>int x;</code>), la celda de memoria no está "vacía", sino que contiene un valor residual o "basura" dejado por programas anteriores. No entender esto es una de las principales fuentes de errores lógicos en C++, a diferencia de lenguajes de alto nivel que inicializan automáticamente a cero o nulo.</p>
+
+            <h3>UX UI y la Visibilidad del Estado</h3>
+            <p>Desde el punto de vista de la <em>experiencia de usuario del programador</em>, el entorno de desarrollo (IDE) actúa como una ventana hacia esta memoria invisible. El <em>cuaderno de NotebookLM sobre UX UI</em> enfatiza que las herramientas de depuración (debuggers) que permiten "observar" las variables en tiempo real están diseñadas bajo el principio de <strong>visibilidad del sistema</strong>. Al ver cómo cambian los valores en las celdas de memoria durante la ejecución, el programador reduce la incertidumbre y puede validar su lógica paso a paso.</p>
+
             <div class="practice-box">
-                <strong>💡 Desafío Práctico:</strong> Escribí un programa que imprima tu nombre y apellido centrados en la consola usando únicamente tabulaciones (<code>\t</code>) y nuevas líneas (<code>\n</code>).
-            </div>
-            <button class="btn-ref" onclick="openRef('ref-2-3')">Referencia: Deitel pág. 38</button>
-        </section>
-
-        <!-- 2.4 Suma de enteros -->
-        <section id="sec-2-4">
-            <span class="icon-sec">➕</span>
-            <h2>2.4 Otro programa en C++: suma de enteros</h2>
-            <p>Ahora introducimos la interactividad mediante variables y la entrada de datos del usuario. C++ es un lenguaje de **tipado fuerte**, lo que significa que debés declarar el tipo de datos antes de usarlos.</p>
-            <pre><code>#include &lt;iostream&gt;
-
-int main() {
-    int numero1; // Declaración
-    int numero2;
-    int suma;
-
-    std::cout << "Ingresá el primer número: ";
-    std::cin >> numero1; // Entrada de datos
-
-    std::cout << "Ingresá el segundo número: ";
-    std::cin >> numero2;
-
-    suma = numero1 + numero2; // Procesamiento
-
-    std::cout << "La suma es: " << suma << std::endl;
-    return 0;
-}</code></pre>
-            <p>El objeto <code>std::cin</code> (character input) lee datos desde el teclado y los almacena en la variable indicada. El operador <code>>></code> se conoce como <strong>operador de extracción</strong>.</p>
-            <button class="btn-ref" onclick="openRef('ref-2-4')">Referencia: O'Reilly Cap. 4</button>
-        </section>
-
-        <!-- 2.5 Conceptos memoria -->
-        <section id="sec-2-5">
-            <span class="icon-sec">🧠</span>
-            <h2>2.5 Conceptos acerca de la memoria</h2>
-            <p>Usted debe visualizar la memoria de la computadora como una serie de celdas o buzones. Cada variable en C++ tiene un nombre, un tipo, un tamaño y un valor.</p>
-            
-            <div class="diagram-mem">
-                <div class="mem-cell">Dirección 0x01<br><small>numero1</small><br><strong>45</strong></div>
-                <div class="mem-cell active">Dirección 0x02<br><small>numero2</small><br><strong>72</strong></div>
-                <div class="mem-cell">Dirección 0x03<br><small>suma</small><br><strong>117</strong></div>
+                <strong>💡 Desafío de Trazabilidad:</strong>
+                <p>Imagine que tiene tres variables: <code>A=10</code>, <code>B=20</code> y <code>C=30</code>. Realice un seguimiento manual de memoria (trace) tras ejecutar las siguientes instrucciones:</p>
+                <ol>
+                    <li><code>A = B;</code> (¿Qué valor se pierde? ¿Cuál permanece?)</li>
+                    <li><code>C = A + B;</code> (¿Es esta una operación destructiva para A o B?)</li>
+                    <li><code>B = B + 5;</code> (¿Cómo interactúa aquí la lectura no destructiva con la escritura destructiva?)</li>
+                </ol>
+                <p><em>Sugerencia Pedagógica:</em> Dibuje las celdas de memoria tras cada paso para visualizar el estado final del sistema.</p>
             </div>
 
-            <p>Regla de Oro en C++:</p>
-            <ul>
-                <li><strong>Lectura Destructiva:</strong> Al colocar un valor en una variable (por ejemplo, mediante <code>cin</code>), el valor anterior se sobreescribe y se pierde para siempre.</li>
-                <li><strong>Lectura No Destructiva:</strong> Al leer un valor de una celda de memoria (por ejemplo, para calcular la suma), el valor original permanece intacto en la celda.</li>
-            </ul>
-            <button class="btn-ref" onclick="openRef('ref-2-5')">Referencia: Deitel pág. 43</button>
+            <h3>Conclusión Técnica sobre la Gestión de Recursos</h3>
+            <p>Finalmente, el <em>Libro de O'Reilly</em> recuerda que en C++, a diferencia de lenguajes como Python o Java que gestionan la memoria automáticamente, el programador tiene una responsabilidad directa sobre estos buzones. Comprender la diferencia entre el nombre de la variable y su dirección física es el primer paso hacia conceptos avanzados como los <strong>punteros</strong> y la <strong>gestión dinámica de memoria</strong>, que se tratarán en secciones posteriores. La eficiencia de un programa en C++ radica en la habilidad del desarrollador para utilizar la mínima cantidad de memoria (buzones) necesaria para resolver un problema complejo.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-2-5')">Referencia: Deitel pág. 43-44: Memory Concepts | O'Reilly Cap. 4: Storage</button>
         </section>
 
         <!-- 2.6 Aritmética -->
-        <section id="sec-2-6">
+		<section id="sec-2-6">
             <span class="icon-sec">🧮</span>
-            <h2>2.6 Aritmética</h2>
-            <p>C++ utiliza operadores binarios similares a la notación algebraica. Sin embargo, existe una jerarquía estricta conocida como **precedencia de operadores**.</p>
+            <h2>2.6 Aritmética en C++: Reglas de Precedencia y Operaciones Fundamentales</h2>
             
+            <p>La aritmética es el motor lógico de la mayoría de los programas. Sin embargo, su implementación en C++ requiere una comprensión que va más allá de la simple álgebra escolar. Según el <em>cuaderno de NotebookLM sobre educación y metodologías activas</em>, uno de los mayores obstáculos para el estudiante novato es la "disonancia cognitiva" que surge al intentar aplicar reglas matemáticas sobre un sistema que opera bajo restricciones de tipos de datos y jerarquías de ejecución secuencial. En esta sección, desglosaremos cómo C++ procesa los cálculos y cómo el programador debe estructurar sus expresiones para evitar errores de lógica.</p>
+
+            <p>Basado en el <em>Libro de C++ de Deitel (6ª Edición, pág. 45)</em>, la mayoría de los programas realizan cálculos aritméticos utilizando operadores binarios, los cuales actúan sobre dos operandos. Es fundamental notar que en C++, la sintaxis de estos operadores es consistente con otros lenguajes de alto nivel, pero su comportamiento interno está estrictamente ligado al tipo de las variables involucradas.</p>
+
             <div class="table-res">
                 <table>
+                    <caption>Operadores Aritméticos Fundamentales en C++</caption>
                     <thead>
                         <tr>
                             <th>Operación</th>
                             <th>Operador</th>
-                            <th>Ejemplo</th>
+                            <th>Expresión Algebraica</th>
+                            <th>Expresión en C++</th>
+                            <th>Análisis Técnico (Fuentes)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>Suma</td><td><code>+</code></td><td>f + 7</td></tr>
-                        <tr><td>Resta</td><td><code>-</code></td><td>p - c</td></tr>
-                        <tr><td>Multiplicación</td><td><code>*</code></td><td>b * m</td></tr>
-                        <tr><td>División</td><td><code>/</code></td><td>x / y</td></tr>
-                        <tr><td>Módulo (Resto)</td><td><code>%</code></td><td>7 % 2 (Resultado: 1)</td></tr>
+                        <tr>
+                            <td>Suma</td>
+                            <td><code>+</code></td>
+                            <td>$f + 7$</td>
+                            <td><code>f + 7</code></td>
+                            <td>Operador aditivo estándar.</td>
+                        </tr>
+                        <tr>
+                            <td>Resta</td>
+                            <td><code>-</code></td>
+                            <td>$p - c$</td>
+                            <td><code>p - c</code></td>
+                            <td>Operador de diferencia.</td>
+                        </tr>
+                        <tr>
+                            <td>Multiplicación</td>
+                            <td><code>*</code></td>
+                            <td>$bm$</td>
+                            <td><code>b * m</code></td>
+                            <td>Utiliza el asterisco. No se permite la yuxtaposición (ej. <code>bm</code>) para multiplicar.</td>
+                        </tr>
+                        <tr>
+                            <td>División</td>
+                            <td><code>/</code></td>
+                            <td>$x / y$ o $\frac{x}{y}$</td>
+                            <td><code>x / y</code></td>
+                            <td><strong>Crítico:</strong> El comportamiento depende del tipo (Entero vs. Flotante).</td>
+                        </tr>
+                        <tr>
+                            <td>Módulo (Resto)</td>
+                            <td><code>%</code></td>
+                            <td>$r \pmod s$</td>
+                            <td><code>r % s</code></td>
+                            <td>Devuelve el resto de la división entera. Solo aplicable a tipos enteros (Deitel).</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-            <p><strong>Nota importante:</strong> La división de enteros trunca el resultado. <code>7 / 4</code> devolverá <code>1</code>, no <code>1.75</code>. Para obtener el resto, debés usar el operador módulo <code>%</code>.</p>
-            <button class="btn-ref" onclick="openRef('ref-2-6')">Referencia: Deitel pág. 45</button>
+
+            <h3>El Fenómeno de la División de Enteros y el Operador Módulo</h3>
+            <p>De acuerdo con el <em>PDF de O'Reilly (Practical C++ Programming)</em>, la división de enteros es una de las fuentes más comunes de errores de cálculo en programas financieros o científicos escritos por principiantes. Cuando ambos operandos son del tipo <code>int</code>, C++ realiza una <strong>división truncada</strong>. Esto significa que cualquier parte fraccionaria del resultado se descarta (no se redondea). Por ejemplo, la expresión algebraica $7 / 4$ resultaría en $1.75$, pero en C++:</p>
+            <p style="text-align: center;"><code>7 / 4</code> $\rightarrow$ <code>1</code></p>
+            
+            <p>Para complementar esta pérdida de información, C++ provee el operador <strong>módulo</strong> (<code>%</code>). Como señala el <em>Libro de Deitel</em>, este operador solo puede utilizarse con operandos enteros. La expresión <code>7 % 4</code> devolvería <code>3</code>, que es el residuo de la división. El <em>cuaderno de NotebookLM sobre desarrollo web</em> menciona que el operador módulo es indispensable en lógica de programación para:</p>
+            <ul>
+                <li><strong>Determinación de paridad:</strong> <code>numero % 2 == 0</code> indica un número par.</li>
+                <li><strong>Ciclos y Rangos:</strong> Mantener un contador dentro de los límites de un arreglo circular.</li>
+                <li><strong>Diseño UI:</strong> Alternar colores de filas en una tabla (zebra striping) mediante el índice de la fila.</li>
+            </ul>
+
+            <h3>Reglas de Precedencia y Asociatividad</h3>
+            <p>C++ aplica los operadores en una secuencia específica conocida como <strong>precedencia de operadores</strong>, la cual es casi idéntica a la jerarquía utilizada en el álgebra. El <em>PDF de Deitel (pág. 47)</em> desglosa estas reglas de la siguiente manera:</p>
+            
+            <ol>
+                <li><strong>Paréntesis:</strong> Las expresiones encerradas en <code>()</code> tienen la máxima prioridad. Según el <em>cuaderno de NotebookLM sobre UX UI</em>, el uso de paréntesis no solo asegura la corrección del cálculo, sino que mejora la <strong>legibilidad del código</strong>, reduciendo la carga cognitiva del programador que lee el código meses después.</li>
+                <li><strong>Multiplicación, División y Módulo:</strong> Estas operaciones se realizan antes que la suma y la resta. Si hay varias en una misma línea, se aplican de <strong>izquierda a derecha</strong> (asociatividad por la izquierda).</li>
+                <li><strong>Suma y Resta:</strong> Tienen la menor prioridad entre los operadores básicos. También se aplican de izquierda a derecha.</li>
+            </ol>
+
+            <div class="practice-box">
+                <strong>📝 Análisis de Expresión:</strong>
+                <p>Considere la siguiente fórmula algebraica: $y = ax^2 + bx + c$</p>
+                <p>En C++, siguiendo las reglas de Deitel y O'Reilly, la forma correcta de escribirla para mantener la jerarquía sería:</p>
+                <code>y = a * x * x + b * x + c;</code>
+                <p>¿Por qué? C++ evaluará primero <code>a * x</code>, luego el resultado por <code>x</code>, luego <code>b * x</code>, y finalmente realizará las sumas. Note que no necesitamos paréntesis aquí, pero usarlos como <code>y = (a * x * x) + (b * x) + c;</code> se considera una buena práctica de diseño según el cuaderno de UX UI para evitar ambigüedades visuales.</p>
+            </div>
+
+            <h3>UX UI y la Presentación de Datos Numéricos</h3>
+            <p>Desde la perspectiva del <em>cuaderno de NotebookLM sobre UX UI</em>, la forma en que presentamos los resultados aritméticos al usuario impacta su percepción de la utilidad del sistema. Si un programa de calculadora devuelve <code>1</code> al dividir <code>7 / 4</code> sin explicar que es una división entera, el usuario percibirá un error. Por lo tanto, el diseño de la interfaz debe ser transparente sobre las limitaciones técnicas. El <em>PDF de O'Reilly</em> sugiere que, para una mejor experiencia de usuario, siempre se deben considerar los tipos de punto flotante (<code>float</code> o <code>double</code>) cuando la precisión decimal sea un requisito del dominio del problema.</p>
+
+            <h3>Metodologías Activas: El Aprendizaje por el Error</h3>
+            <p>El <em>cuaderno de NotebookLM sobre educación</em> propone que el aprendizaje de la aritmética en C++ debe ser constructivista. En lugar de memorizar tablas de precedencia, los estudiantes deben enfrentarse a "desafíos de depuración" donde el orden de los factores sí altera el producto. Por ejemplo, calcular el promedio de tres números sin usar paréntesis: <code>promedio = num1 + num2 + num3 / 3;</code>. Este error clásico (donde solo <code>num3</code> se divide) sirve para anclar el conocimiento sobre la jerarquía de operadores mediante la experiencia directa.</p>
+
+            <div class="table-res">
+                <table>
+                    <caption>Resumen de Precedencia (Niveles de Deitel)</caption>
+                    <thead>
+                        <tr>
+                            <th>Operación</th>
+                            <th>Operadores</th>
+                            <th>Orden de Evaluación (Asociatividad)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Paréntesis</td>
+                            <td><code>( )</code></td>
+                            <td>De adentro hacia afuera, de izquierda a derecha.</td>
+                        </tr>
+                        <tr>
+                            <td>Multiplicativos</td>
+                            <td><code>* / %</code></td>
+                            <td>De izquierda a derecha.</td>
+                        </tr>
+                        <tr>
+                            <td>Aditivos</td>
+                            <td><code>+ -</code></td>
+                            <td>De izquierda a derecha.</td>
+                        </tr>
+                        <tr>
+                            <td>Asignación</td>
+                            <td><code>=</code></td>
+                            <td>De derecha a izquierda (Caso especial).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="practice-box">
+                <strong>💡 Desafío Práctico de Optimización:</strong>
+                <p>Escriba un programa que convierta una cantidad de segundos dada por el usuario en horas, minutos y segundos restantes. Deberá aplicar:</p>
+                <ul>
+                    <li>El operador de división entera (<code>/</code>) para obtener las horas y minutos completos.</li>
+                    <li>El operador módulo (<code>%</code>) para obtener los residuos.</li>
+                    <li>Nombres de variables que cumplan con los estándares de limpieza de O'Reilly (ej. <code>segundosTotales</code>, <code>horasResultantes</code>).</li>
+                </ul>
+            </div>
+
+            <button class="btn-ref" onclick="openRef('ref-2-6')">Referencia: Deitel pág. 45-48 | O'Reilly Cap. 5: Arithmetic Operators</button>
         </section>
 
         <!-- 2.7 Toma de decisiones -->
-        <section id="sec-2-7">
+		<section id="sec-2-7">
             <span class="icon-sec">⚖️</span>
-            <h2>2.7 Toma de decisiones: operadores de igualdad y relacionales</h2>
-            <p>Los programas inteligentes deben responder a condiciones. Usamos la estructura <code>if</code> junto con operadores de comparación. El resultado de estas expresiones es siempre un valor booleano (verdadero o falso).</p>
+            <h2>2.7 Toma de decisiones: Operadores de Igualdad y Relacionales en la Estructura Condicional</h2>
             
-            <pre><code>if (numero1 == numero2) {
-    std::cout << "Son iguales";
-}</code></pre>
+            <p>La capacidad de un programa para "decidir" qué camino tomar en función de los datos de entrada es lo que transforma una secuencia estática de instrucciones en un sistema inteligente. Según el <em>cuaderno de NotebookLM sobre educación y metodologías activas</em>, este concepto es el núcleo del <strong>pensamiento computacional</strong>, ya que requiere que el estudiante aprenda a descomponer problemas complejos en bifurcaciones lógicas simples. En C++, esta toma de decisiones se fundamenta en la estructura <code>if</code> y en la evaluación de expresiones que retornan valores booleanos.</p>
 
-            <h3>Operadores Relacionales:</h3>
-            <ul>
-                <li><code>==</code> : Igual a (¡No confundir con <code>=</code> de asignación!)</li>
-                <li><code>!=</code> : Diferente de</li>
-                <li><code>&gt;</code> : Mayor que</li>
-                <li><code>&lt;</code> : Menor que</li>
-                <li><code>&gt;=</code> : Mayor o igual que</li>
-            </ul>
-            <div class="practice-box">
-                <strong>🚩 Error Común:</strong> Usar un solo signo igual (<code>=</code>) dentro de un <code>if</code>. Esto asignará el valor en lugar de compararlo, lo que suele resultar en un error lógico difícil de detectar.
+            <p>De acuerdo con el <em>Libro de C++ de Deitel (6ª Edición, pág. 48)</em>, una sentencia <code>if</code> permite a un programa ejecutar una acción específica solo si se cumple una condición determinada (es decir, si la condición es verdadera). Si la condición es falsa, el programa simplemente omite la sentencia y continúa con la siguiente instrucción. Esta estructura de control de selección simple es el bloque de construcción básico para algoritmos de control de flujo.</p>
+
+            <div class="code-container">
+                <pre><code>// Ejemplo de lógica de decisión (Basado en Deitel y O'Reilly)
+#include &lt;iostream&gt;
+
+int main() {
+    int numero1, numero2;
+
+    std::cout << "Ingrese dos enteros para comparar: ";
+    std::cin >> numero1 >> numero2;
+
+    if (numero1 == numero2) {
+        std::cout << numero1 << " es igual a " << numero2 << std::endl;
+    }
+
+    if (numero1 != numero2) {
+        std::cout << numero1 << " no es igual a " << numero2 << std::endl;
+    }
+
+    if (numero1 < numero2) {
+        std::cout << numero1 << " es menor que " << numero2 << std::endl;
+    }
+
+    return 0;
+}</code></pre>
             </div>
-            <button class="btn-ref" onclick="openRef('ref-2-7')">Referencia: O'Reilly Cap. 6</button>
+
+            <h3>Análisis de los Operadores de Comparación</h3>
+            <p>Para establecer estas condiciones, C++ provee dos categorías de operadores de comparación. El <em>PDF de O'Reilly (Practical C++ Programming)</em> enfatiza que, aunque estos operadores parecen intuitivos, su implementación a nivel de hardware implica comparaciones de registros de CPU que deben manejarse con precisión léxica:</p>
+
+            <div class="table-res">
+                <table>
+                    <caption>Operadores de Igualdad y Relacionales (Referencia Académica)</caption>
+                    <thead>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Operador</th>
+                            <th>Significado Algebraico</th>
+                            <th>Ejemplo en C++</th>
+                            <th>Condición de Verdad ($True$)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2"><strong>Operadores de Igualdad</strong></td>
+                            <td><code>==</code></td>
+                            <td>$x = y$</td>
+                            <td><code>x == y</code></td>
+                            <td>$x$ es exactamente igual a $y$.</td>
+                        </tr>
+                        <tr>
+                            <td><code>!=</code></td>
+                            <td>$x \neq y$</td>
+                            <td><code>x != y</code></td>
+                            <td>$x$ es diferente de $y$.</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4"><strong>Operadores Relacionales</strong></td>
+                            <td><code>&gt;</code></td>
+                            <td>$x > y$</td>
+                            <td><code>x > y</code></td>
+                            <td>$x$ es mayor que $y$.</td>
+                        </tr>
+                        <tr>
+                            <td><code>&lt;</code></td>
+                            <td>$x < y$</td>
+                            <td><code>x < y</code></td>
+                            <td>$x$ es menor que $y$.</td>
+                        </tr>
+                        <tr>
+                            <td><code>&gt;=</code></td>
+                            <td>$x \geq y$</td>
+                            <td><code>x >= y</code></td>
+                            <td>$x$ es mayor o igual que $y$.</td>
+                        </tr>
+                        <tr>
+                            <td><code>&lt;=</code></td>
+                            <td>$x \leq y$</td>
+                            <td><code>x <= y</code></td>
+                            <td>$x$ es menor o igual que $y$.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>El Peligro Semántico: Asignación vs. Igualdad</h3>
+            <p>El error más recurrente y costoso en C++ es la confusión entre el operador de asignación (<code>=</code>) y el operador de igualdad (<code>==</code>). Según el <em>Libro de O'Reilly</em>, esto no es solo un error de sintaxis, sino un "agujero negro" lógico. En C++, una asignación dentro de un <code>if</code>, como en <code>if (x = 5)</code>, no compara si $x$ es 5; en su lugar, asigna el valor 5 a $x$ y luego evalúa el resultado de la asignación. Dado que en C++ cualquier valor distinto de cero se considera "verdadero", esta condición siempre se ejecutará, alterando el valor de la variable de forma silenciosa e inesperada.</p>
+            
+            <p>Desde la perspectiva del <em>cuaderno de NotebookLM sobre UX UI</em>, este tipo de errores degrada la <strong>confiabilidad del sistema</strong>. Si el software toma decisiones basadas en asignaciones accidentales, la experiencia del usuario se vuelve impredecible y errática. Para prevenir esto, algunos desarrolladores utilizan las llamadas "Yoda Conditions" (ej: <code>if (5 == x)</code>), donde poner la constante a la izquierda provoca un error de compilación si se olvida accidentalmente un signo igual.</p>
+
+            <h3>Consideraciones de Diseño y Desarrollo Web</h3>
+            <p>En el <em>cuaderno de NotebookLM sobre desarrollo web</em>, se establece un paralelismo con las estructuras de control en lenguajes de script. A diferencia de lenguajes con "tipado débil" que realizan conversiones automáticas (como el operador <code>==</code> en JavaScript), C++ exige una comparación de tipos coherente. La toma de decisiones en el backend de una aplicación web construida en C++ debe ser extremadamente rigurosa para garantizar la seguridad de los datos, especialmente al comparar credenciales o permisos de acceso.</p>
+
+            <h3>UX UI: Feedback y Visibilidad del Estado Lógico</h3>
+            <p>Un principio fundamental de la <em>experiencia de usuario</em> es que el sistema siempre debe informar lo que está sucediendo. Cuando un programa utiliza un <code>if</code> para validar una entrada del usuario, la respuesta debe ser clara. Según el cuaderno de UX UI, si una comparación resulta en <em>falso</em> y el programa simplemente se detiene sin un mensaje de salida (un "else" conceptual que veremos más adelante), el usuario experimenta una falta de <strong>feedback</strong>. Por lo tanto, cada estructura de decisión debe considerar el diseño de mensajes informativos que guíen al usuario tras la evaluación lógica.</p>
+
+            <h3>Perspectiva Educativa: El Error como Herramienta Constructivista</h3>
+            <p>El <em>cuaderno de NotebookLM sobre educación</em> propone que el aprendizaje de los operadores relacionales es el momento ideal para introducir la <strong>depuración de código (debugging)</strong>. En lugar de dar por sentado que las comparaciones funcionan, los estudiantes deben utilizar herramientas para inspeccionar el valor de las variables justo antes de entrar en la sentencia <code>if</code>. Esto fomenta el aprendizaje activo, donde el estudiante no es un espectador del flujo del programa, sino un analista del estado de la memoria (buzones) que estudiamos en la sección 2.5.</p>
+
+            <div class="practice-box">
+                <strong>🚩 Desafío de Lógica y Prevención:</strong>
+                <p>Basándose en las recomendaciones de O'Reilly y Deitel, escriba un programa que solicite dos edades y determine quién es mayor. Sin embargo, para este ejercicio debe:</p>
+                <ul>
+                    <li>Anticipar el error: ¿Qué sucede si el usuario ingresa la misma edad? Implemente una comparación específica para la igualdad absoluta (<code>==</code>).</li>
+                    <li>Seguridad de Código: Intente escribir una condición usando <code>=</code> en lugar de <code>==</code> y observe cómo el compilador (o el comportamiento del programa) reacciona. Reflexione sobre por qué este error es tan difícil de encontrar en programas grandes.</li>
+                    <li>UX UI: Diseñe los mensajes de salida para que sean amigables y no solo matemáticos (ej: "Ambos usuarios tienen la misma edad" en lugar de "X == Y").</li>
+                </ul>
+            </div>
+
+            <p>Finalmente, Deitel nos recuerda que los operadores de igualdad (<code>==</code> y <code>!=</code>) tienen una precedencia menor que los operadores relacionales (<code>&lt;</code>, <code>&gt;</code>, etc.). Esto significa que en una expresión compleja como <code>x < y == z > w</code>, primero se evalúan las relaciones de magnitud y luego la igualdad de los resultados booleanos. No obstante, para mantener la claridad y la "salud mental" del desarrollador, siempre es preferible el uso de paréntesis para agrupar las comparaciones lógicas.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-2-7')">Referencia: Deitel pág. 48-53: Control Statements | O'Reilly Cap. 6: Decision Statements</button>
         </section>
 
         <!-- 2.8 ATM Case Study -->
-        <section id="sec-2-8">
+		<section id="sec-2-8">
             <span class="icon-sec">🏧</span>
-            <h2>2.8 (Opcional) Ejemplo práctico de Ingeniería de Software: ATM</h2>
-            <p>La ingeniería de software aplicada nos enseña a modelar antes de programar. El caso de estudio del <span class="abbr" data-title="ATM: Automated Teller Machine (Cajero Automático).">ATM</span> es un clásico de Deitel para introducir el pensamiento orientado a objetos.</p>
-            <p>Al examinar los requerimientos, buscamos **sustantivos** (que se convertirán en <span class="abbr" data-title="Clases: Plantillas que definen los atributos y comportamientos de un objeto.">clases</span>) y **verbos** (que se convertirán en métodos o funciones).</p>
+            <h2>2.8 (Opcional) Ejemplo práctico de Ingeniería de Software: El Caso de Estudio del ATM</h2>
             
-            <h3>Análisis Inicial:</h3>
+            <p>La ingeniería de software no comienza frente al teclado, sino en la fase de análisis y modelado. Según el <em>Libro de C++ de Deitel (6ª Edición, pág. 22)</em>, el desarrollo de sistemas complejos requiere una metodología que permita descomponer un problema del mundo real en componentes manejables. El caso de estudio del <span class="abbr" data-title="ATM: Automated Teller Machine (Cajero Automático).">ATM</span> es el ejemplo paradigmático utilizado para introducir el <strong>Análisis y Diseño Orientado a Objetos (ADOO)</strong>, permitiendo al estudiante visualizar cómo la sintaxis de C++ se traduce en soluciones para necesidades humanas y financieras.</p>
+
+            <p>Desde la perspectiva del <em>cuaderno de NotebookLM sobre educación y metodologías activas</em>, este ejercicio se clasifica dentro del <strong>Aprendizaje Basado en Problemas (ABP)</strong>. En lugar de enseñar funciones aisladas, se presenta un ecosistema donde cada línea de código responde a un requerimiento funcional. Esta técnica de "andamiaje" (scaffolding) facilita que el alumno conecte conceptos abstractos (como las clases y los métodos) con objetos físicos y acciones concretas del entorno cotidiano.</p>
+
+            <h3>Fase 1: Análisis de Requerimientos y Extracción de Sustantivos</h3>
+            <p>El primer paso en la ingeniería de software, de acuerdo con el <em>PDF de O'Reilly (Practical C++ Programming)</em>, es la identificación de las entidades que componen el sistema. Un método infalible propuesto por Deitel es el análisis gramatical del documento de requerimientos: buscamos los <strong>sustantivos</strong> para identificar las posibles <span class="abbr" data-title="Clases: Plantillas que definen los atributos y comportamientos de un objeto.">clases</span>.</p>
+
+            <div class="table-res">
+                <table>
+                    <caption>Modelado de Clases: Del Mundo Físico al Código (Basado en Deitel)</caption>
+                    <thead>
+                        <tr>
+                            <th>Entidad (Sustantivo)</th>
+                            <th>Representación en C++</th>
+                            <th>Responsabilidad en el Sistema</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ATM (Cajero)</td>
+                            <td>Clase <code>ATM</code></td>
+                            <td>Coordina la interacción entre los componentes y el usuario.</td>
+                        </tr>
+                        <tr>
+                            <td>Pantalla</td>
+                            <td>Clase <code>Pantalla</code></td>
+                            <td>Maneja la salida de datos visuales (Capa de Presentación).</td>
+                        </tr>
+                        <tr>
+                            <td>Teclado numérico</td>
+                            <td>Clase <code>Teclado</code></td>
+                            <td>Captura la entrada del usuario (Capa de Interacción).</td>
+                        </tr>
+                        <tr>
+                            <td>Dispensador</td>
+                            <td>Clase <code>DispensadorEfectivo</code></td>
+                            <td>Controla el hardware de entrega de billetes y verifica existencias.</td>
+                        </tr>
+                        <tr>
+                            <td>Base de Datos</td>
+                            <td>Clase <code>BaseDatosBanco</code></td>
+                            <td>Almacena y valida la información de las cuentas de los clientes.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Fase 2: Identificación de Comportamientos (Verbos)</h3>
+            <p>Una vez definidas las clases, debemos determinar cómo interactúan. Los <strong>verbos</strong> en los requerimientos nos indican las funciones o métodos que cada clase debe ejecutar. Como señala el <em>Libro de C++ de Deitel</em>, este proceso define el "comportamiento" de los objetos. Desde el enfoque del <em>cuaderno de NotebookLM sobre desarrollo web</em>, este flujo de trabajo es idéntico al diseño de una API, donde definimos los endpoints (acciones) antes de escribir la lógica del servidor.</p>
+
+            <p>Ejemplos de verbos transformados en métodos de C++:</p>
             <ul>
-                <li><strong>Sustantivos:</strong> Pantalla, Teclado numérico, Ranura para depósitos, Dispensador de efectivo, Base de datos de cuentas.</li>
-                <li><strong>Verbos (Acciones):</strong> Autenticar usuario, Consultar saldo, Realizar retiro, Depositar fondos.</li>
+                <li><strong>"Autenticar usuario":</strong> Se convierte en un método de la clase <code>BaseDatosBanco</code> para verificar el PIN.</li>
+                <li><strong>"Consultar saldo":</strong> Acción ejecutada por la clase <code>Cuenta</code> a petición del <code>ATM</code>.</li>
+                <li><strong>"Realizar retiro":</strong> Una transacción compleja que involucra al <code>Dispensador</code> y a la <code>BaseDatosBanco</code>.</li>
             </ul>
-            <p>Este proceso es parte fundamental de las **Metodologías Activas** (Aprendizaje basado en problemas), ya que conecta la sintaxis abstracta de C++ con una necesidad tangible del mundo financiero.</p>
-            <button class="btn-ref" onclick="openRef('ref-2-8')">Referencia: Deitel Secc. 1.21 / 2.8</button>
+
+            <h3>UX UI: El Factor Humano en el Modelado Técnico</h3>
+            <p>El <em>cuaderno de NotebookLM sobre UX UI</em> nos recuerda que un sistema de ATM es, ante todo, una interfaz crítica. La ingeniería de software no termina en la lógica correcta de la suma o resta, sino en la claridad de la interacción. En el diseño del ATM, los principios de UX dictan que:</p>
+            <ul>
+                <li><strong>Visibilidad del Estado:</strong> La clase <code>Pantalla</code> debe informar siempre si el sistema está procesando, si hubo un error de PIN o si no hay fondos suficientes.</li>
+                <li><strong>Prevención de Errores:</strong> El <code>Teclado</code> debe validar que la entrada sea numérica antes de enviarla a procesamiento (evitando "crashes" por tipos de datos incompatibles).</li>
+                <li><strong>Seguridad Mental:</strong> El sistema debe asegurar que el usuario recupere su tarjeta antes de dispensar el efectivo, un patrón de diseño que previene el olvido de la tarjeta.</li>
+            </ul>
+
+            <h3>Integración Tecnológica y el Futuro del Código</h3>
+            <p>El <em>PDF de O'Reilly</em> advierte que un error común en esta etapa es intentar programarlo todo en una sola función <code>main</code>. La ingeniería de software moderna exige <strong>modularidad</strong>. Cada componente (Pantalla, Teclado, Dispensador) debe ser independiente. Esto permite que, si en el futuro el banco decide cambiar la pantalla física por una pantalla táctil, solo sea necesario modificar la clase <code>Pantalla</code>, sin alterar la lógica de las transacciones bancarias.</p>
+
+            <div class="practice-box">
+                <strong>📝 Desafío de Pensamiento Arquitectónico:</strong>
+                <p>Imagine que debe extender el sistema del ATM para incluir una función de "Cambio de PIN". Basándose en lo aprendido:</p>
+                <ol>
+                    <li>¿Qué sustantivo nuevo aparece en este requerimiento?</li>
+                    <li>¿Qué métodos (verbos) debería añadir a la clase <code>BaseDatosBanco</code> para procesar este cambio de forma segura?</li>
+                    <li>Según el cuaderno de UX UI, ¿qué mensajes de confirmación debería mostrar la <code>Pantalla</code> para que el usuario se sienta seguro durante el proceso?</li>
+                </ol>
+                <p><em>Objetivo:</em> Practicar la descomposición de problemas antes de escribir una sola línea de código en C++.</p>
+            </div>
+
+            <p>En conclusión, el estudio del ATM nos enseña que programar en C++ es un acto de traducción. Traducimos necesidades humanas en clases, acciones en métodos y hardware en objetos digitales. Como afirma Deitel, dominar este proceso de modelado es lo que distingue a un "codificador" de un "ingeniero de software".</p>
+
+            <button class="btn-ref" onclick="openRef('ref-2-8')">Referencia: Deitel Secc. 1.21 y 2.8: Case Study | O'Reilly Cap. 2: Software Engineering Basics</button>
         </section>
 
         <!-- 2.9 Repaso -->
-        <section id="sec-2-9">
+		<section id="sec-2-9">
             <span class="icon-sec">🔄</span>
-            <h2>2.9 Repaso</h2>
-            <p>Habiendo completado esta sección, usted debería ser capaz de:</p>
-            <ol>
-                <li>Escribir, compilar y ejecutar programas básicos de consola.</li>
-                <li>Entender el flujo de datos usando <code>cin</code> y <code>cout</code>.</li>
-                <li>Gestionar variables y entender su representación en la memoria física.</li>
-                <li>Aplicar lógica condicional simple mediante el enunciado <code>if</code>.</li>
-            </ol>
-            <p>Como indica el cuaderno de <strong>Desarrollo Web</strong>, la consistencia es clave. No te desanimes si el compilador arroja errores; los mensajes de error son tus mejores maestros en esta etapa.</p>
-            <button class="btn-ref" onclick="location.href='#home'">Volver al Inicio</button>
+            <h2>2.9 Repaso Integral y Consolidación de Competencias</h2>
+            
+            <p>Al concluir este segundo capítulo, el estudiante no solo ha adquirido conocimientos sintácticos sobre C++, sino que ha iniciado la construcción de un <strong>modelo mental</strong> fundamental para la ingeniería de software. Según el <em>cuaderno de NotebookLM sobre educación y metodologías activas</em>, la fase de repaso no es una mera repetición, sino un proceso de <strong>metacognición</strong>: la capacidad de reflexionar sobre el propio aprendizaje para identificar áreas de maestría y puntos de confusión. Este cierre de sección busca consolidar los conceptos de flujo, memoria y lógica bajo una perspectiva académica y profesional.</p>
+
+            <h3>I. Arquitectura y Flujo de un Programa C++</h3>
+            <p>Desde el análisis del primer programa, hemos establecido que C++ requiere una estructura formal obligatoria. El <em>Libro de C++ de Deitel (6ª Edición)</em> enfatiza que cada componente tiene un propósito específico:</p>
+            <ul>
+                <li><strong>Directivas de Preprocesador:</strong> <code>#include &lt;iostream&gt;</code> no es solo una línea de código, es la conexión con la biblioteca estándar que habilita la comunicación con el hardware.</li>
+                <li><strong>La Función <code>main</code>:</strong> El punto de entrada único. Según el <em>cuaderno de NotebookLM sobre desarrollo web</em>, la consistencia en el retorno de <code>0</code> es vital para que el sistema operativo comprenda que el proceso finalizó sin errores, un principio de estabilidad transferible a cualquier entorno de ejecución.</li>
+                <li><strong>Secuencias de Escape:</strong> El uso de <code>\n</code> y <code>\t</code> representa el control sobre la <strong>Capa de Presentación</strong>. El <em>cuaderno de NotebookLM sobre UX UI</em> destaca que el espaciado y la alineación son herramientas de diseño que reducen la carga cognitiva del usuario final, facilitando la interpretación de los datos mostrados.</li>
+            </ul>
+
+            <h3>II. Gestión de Datos y la Memoria Física</h3>
+            <p>En la sección 2.5 profundizamos en la naturaleza de las variables. Basado en el <em>PDF de Deitel</em>, hemos aprendido que una variable es un <strong>alias de dirección de memoria</strong>. El repaso de estos conceptos es crítico para evitar errores de lógica avanzados:</p>
+            
+            <div class="table-res">
+                <table>
+                    <caption>Resumen de la Dinámica de Datos en Memoria</caption>
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Regla Técnica (Deitel/O'Reilly)</th>
+                            <th>Implicación Pedagógica (NotebookLM)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Declaración</strong></td>
+                            <td>Reserva espacio en RAM según el tipo (ej. <code>int</code>).</td>
+                            <td>Define el "molde" del contenedor de datos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Escritura Destructiva</strong></td>
+                            <td>Al asignar un valor, el previo se elimina permanentemente.</td>
+                            <td>Requiere atención constante al estado de la aplicación.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lectura No Destructiva</strong></td>
+                            <td>Al usar una variable, su valor permanece intacto en la celda.</td>
+                            <td>Permite la reutilización de datos en múltiples cálculos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inicialización</strong></td>
+                            <td>Las variables sin valor contienen "basura" de memoria.</td>
+                            <td>Fomenta la disciplina de "defensa de código".</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>III. Lógica Condicional y Operadores</h3>
+            <p>La toma de decisiones mediante <code>if</code> y los operadores relacionales introducida en la sección 2.7 representa el primer paso hacia la algoritmia inteligente. El <em>PDF de O'Reilly (Practical C++ Programming)</em> advierte que la precisión en la comparación es lo que separa un software robusto de uno defectuoso. Hemos repasado la importancia de no confundir la asignación (<code>=</code>) con la igualdad (<code>==</code>), un error que el <em>cuaderno de UX UI</em> describe como una falla en la <strong>visibilidad del sistema</strong>, ya que el programa hace algo distinto a lo que el código parece indicar a simple vista.</p>
+
+            <p>Asimismo, la aritmética en C++ nos ha enseñado que el lenguaje respeta una <strong>jerarquía de precedencia</strong>. El truncamiento en la división de enteros (<code>/</code>) y la utilidad del operador módulo (<code>%</code>) son herramientas que el ingeniero debe manejar con maestría para garantizar la exactitud de los resultados procesados.</p>
+
+            <h3>IV. Ingeniería de Software: El Enfoque Orientado a Objetos</h3>
+            <p>A través del ejemplo del ATM (sección 2.8), hemos transitado de la codificación lineal al <strong>modelado arquitectónico</strong>. Como indica Deitel, la identificación de sustantivos (clases) y verbos (métodos) es la base de la programación moderna. Esta metodología activa permite que el estudiante visualice el software como un conjunto de componentes modulares y reutilizables, un principio central del <em>cuaderno de NotebookLM sobre desarrollo web</em>.</p>
+
+            <div class="practice-box">
+                <strong>📝 Lista de Verificación de Competencias (Autoevaluación):</strong>
+                <p>Antes de avanzar al Capítulo 3, asegúrese de dominar los siguientes puntos técnicos:</p>
+                <ol>
+                    <li>¿Puedo explicar por qué <code>std::cin</code> usa el operador <code>>></code> y <code>std::cout</code> usa <code><<</code> basándome en el flujo de datos?</li>
+                    <li>¿Entiendo la diferencia de salida entre <code>7 / 2</code> y <code>7 % 2</code>?</li>
+                    <li>¿Soy capaz de identificar un error lógico si una variable no se inicializa antes de ser leída?</li>
+                    <li>¿Puedo diseñar un flujo de decisión usando <code>if</code> que valide si una entrada de usuario es correcta antes de procesarla?</li>
+                </ol>
+            </div>
+
+            <h3>V. Conclusión: El Valor del Error</h3>
+            <p>Finalmente, retomando las notas del <em>cuaderno de NotebookLM sobre desarrollo web</em>, es fundamental recordar que <strong>el compilador es un mentor, no un adversario</strong>. Los mensajes de error son diagnósticos precisos sobre la violación de las reglas del lenguaje. En la programación profesional, la capacidad de leer, interpretar y corregir errores es tan valorada como la capacidad de escribir código nuevo. El <em>cuaderno sobre metodologías activas</em> sugiere que el estudiante debe "abrazar el fallo" como la forma más rápida de adquirir experiencia técnica.</p>
+
+            <p>Usted está ahora preparado para profundizar en las estructuras de control más complejas, habiendo cimentado las bases de la interacción humano-computadora, la gestión de memoria y la sintaxis fundamental de C++.</p>
+
+            <div class="diagram-mem" style="background-color: #f0f4f8; border-radius: 8px; padding: 20px; text-align: center;">
+                <strong>Camino de Aprendizaje Completado: Capítulo 2</strong><br>
+                <small>Entrada de Datos ➔ Procesamiento Aritmético ➔ Memoria ➔ Lógica ➔ Modelado</small>
+            </div>
+
+            <button class="btn-ref" onclick="location.href='#home'">Volver al Índice Principal</button>
         </section>
 
         <footer style="text-align: center; padding: 4rem 0; border-top: 1px solid var(--border); color: var(--text-secondary);">
@@ -602,31 +1223,28 @@ int main() {
         localStorage.setItem('user-theme', next);
     });
 
-    // --- Navegación Activa (Intersection Observer) ---
-    // Verificación y optimización del menú lateral
+// --- Navegación Activa (Intersection Observer Optimizado) ---
     const sections = document.querySelectorAll('section');
     const navLinks = document.querySelectorAll('.nav-links a');
 
-    // Opciones del observador: rootMargin ajustado para detectar la sección predominante
+    // Ajustamos las opciones para manejar secciones muy largas
     const obsOptions = { 
-        threshold: [0.1, 0.5, 0.8], // Múltiples umbrales para mayor robustez
-        rootMargin: "-25% 0px -45% 0px" // "Banda de detección" central-superior
+        threshold: 0, // Se activa en cuanto entra el primer píxel
+        rootMargin: "-20% 0px -70% 0px" // Banda de detección en la parte superior (donde se lee)
     };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            // Solo actuamos si la sección está entrando significativamente en el foco
-            if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
+            // Eliminamos la restricción del ratio (0.1) para que funcione con textos largos
+            if (entry.isIntersecting) {
                 const activeId = entry.target.getAttribute('id');
                 const activeLink = document.querySelector(`.nav-links a[href="#${activeId}"]`);
                 
                 if (activeLink) {
-                    // Limpiar estados previos
                     navLinks.forEach(link => link.classList.remove('active'));
-                    // Resaltar ubicación actual
                     activeLink.classList.add('active');
                     
-                    // Asegurar que el link activo sea visible en el scroll del sidebar (si es muy largo)
+                    // UX: Asegurar que el menú lateral haga scroll si el enlace queda fuera de vista
                     activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }
             }
