@@ -320,201 +320,852 @@
         </header>
 
         <!-- 3 -->
-        <section id="sec3">
+		<section id="sec3">
             <h2><span class="icon">🏗️</span>3 Introducción a las clases y los objetos</h2>
-            <p>En esta sección, nos adentramos en el núcleo de la <span class="abbr" data-title="POO: Paradigma de programación basado en objetos que contienen datos y comportamientos">POO</span>. Según el PDF de <strong>Deitel</strong>, el desarrollo de software moderno requiere pensar en el sistema como una colección de entidades autónomas. No se trata solo de escribir instrucciones secuenciales, sino de modelar la realidad mediante <strong>clases</strong> y <strong>objetos</strong>.</p>
-            <p>Ustedes, como futuros ingenieros, deben comprender que una clase es más que un simple conjunto de variables; es un contrato de comportamiento. <strong>O'Reilly</strong> complementa esto señalando que la robustez de un sistema depende de cuán bien hayamos definido estas fronteras lógicas.</p>
+            
+            <p>En esta sección, nos adentramos en el núcleo de la <span class="abbr" data-title="POO: Paradigma de programación basado en objetos que contienen datos y comportamientos">POO</span>. Según el PDF de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), el desarrollo de software moderno requiere pensar en el sistema como una colección de entidades autónomas. No se trata solo de escribir instrucciones secuenciales, sino de modelar la realidad mediante <strong>clases</strong> y <strong>objetos</strong>. Este cambio de paradigma es fundamental para el ingeniero; mientras que la programación procedimental se centra en verbos (acciones), la POO se centra en sustantivos (objetos) que poseen tanto estado como comportamiento.</p>
+
+            <h3>3.1 La analogía del plano y la construcción</h3>
+            <p>Basado en el PDF de <strong>Deitel</strong>, una clase puede entenderse como el "plano" (<em>blueprint</em>) de una casa. El plano define las características (número de ventanas, tipo de techo) y las funcionalidades (sistema eléctrico, drenaje), pero no es una casa en sí misma. El <strong>objeto</strong> es la instancia física construida a partir de ese plano. Ustedes pueden construir múltiples casas (objetos) a partir de un único plano (clase), y cada una tendrá su propia identidad, aunque compartan la misma estructura básica.</p>
+            
+            <p>Desde la perspectiva del <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong>, este concepto de "instanciación" debe ser abordado mediante el aprendizaje constructivista. No basta con que el estudiante memorice la sintaxis; debe "construir" mentalmente la relación entre el tipo de dato abstracto y la entidad en memoria. El cuaderno sugiere que la mejor forma de asimilar esto es mediante la identificación de objetos en el entorno real de los estudiantes, aplicando la técnica de modelado antes de la codificación.</p>
+
+            <h3>3.2 Atributos y Funciones Miembro: El Contrato de Comportamiento</h3>
+            <p>Una clase en C++ encapsula datos y funciones. <strong>O'Reilly</strong>, en su texto <em>Practical C++ Programming</em>, enfatiza que la robustez de un sistema depende de cuán bien hayamos definido estas fronteras lógicas. Los datos se denominan <strong>miembros de datos</strong> (o atributos) y las funciones que operan sobre ellos se llaman <strong>funciones miembro</strong> (o métodos). Según <strong>O'Reilly</strong>, una clase bien diseñada es aquella que presenta una interfaz clara y oculta su complejidad interna.</p>
+
+            <p>En este punto, el <strong>Cuaderno de notebookLM sobre UX UI</strong> aporta una visión crítica: la interfaz de una clase (sus funciones públicas) es, en esencia, la "interfaz de usuario" para el desarrollador que la utiliza. Una mala disposición de los métodos o nombres ambiguos aumentan la <span class="abbr" data-title="Carga Cognitiva: Cantidad de esfuerzo mental utilizado en la memoria de trabajo">Carga Cognitiva</span> del programador. Aplicar principios de UX al diseño de clases significa crear métodos que sean "descubribles" y cuya función sea predecible, reduciendo la fricción en el mantenimiento del código.</p>
+
+            <h3>3.3 Encapsulamiento y Ocultamiento de Datos</h3>
+            <p>Uno de los principios más destacados en el PDF de <strong>Deitel</strong> es el <strong>encapsulamiento</strong>. Al declarar los miembros de datos como <code>private</code>, impedimos que funciones externas a la clase los manipulen arbitrariamente. Esto protege la integridad del objeto. Por ejemplo, si tenemos una clase <code>CuentaBancaria</code>, el atributo <code>saldo</code> no debería ser modificado directamente desde fuera; en su lugar, se utilizan funciones miembro <code>depositar</code> o <code>retirar</code> que validan la operación.</p>
+            
+            <p><strong>O'Reilly</strong> complementa esta idea señalando que el ocultamiento de información permite cambiar la implementación interna de una clase sin afectar a quienes la usan. Esta "independencia de implementación" es lo que permite que los sistemas de software crezcan y se vuelvan escalables. En el desarrollo web profesional, como se menciona en el <strong>Cuaderno de notebookLM sobre desarrollo web</strong>, este aislamiento de responsabilidades es análogo a la separación entre el <em>backend</em> y el <em>frontend</em>; cada componente confía en el contrato de la interfaz sin necesitar conocer los detalles técnicos del otro.</p>
+
+            <h3>3.4 Implementación Práctica: Constructores y Setters/Getters</h3>
+            <p>Para garantizar que un objeto nazca en un estado válido, utilizamos <strong>constructores</strong>. Según <strong>Deitel</strong>, el constructor es una función miembro especial que se ejecuta automáticamente cuando se crea el objeto. Es el lugar ideal para inicializar los atributos. Si no definimos uno, C++ proporciona un constructor predeterminado, pero <strong>O'Reilly</strong> advierte que depender de esto puede llevar a errores de lógica si los datos no se inicializan correctamente.</p>
+
+            <p>Para interactuar con los datos privados, la práctica estándar en C++ (y recomendada exhaustivamente por Deitel) es el uso de funciones <strong>set</strong> (mutadores) y <strong>get</strong> (accesores). Estas funciones actúan como guardianes. Por ejemplo, una función <code>setHora(int h)</code> puede verificar que el valor de <code>h</code> esté entre 0 y 23 antes de asignarlo. Esta validación es crucial para evitar que el software entre en estados inconsistentes.</p>
+
+            <h3>3.5 Reflexión para la Ingeniería: El objeto como entidad autónoma</h3>
+            <p>El <strong>Cuaderno de notebookLM sobre educación</strong> subraya que el aprendizaje de la POO requiere que los futuros ingenieros pasen de una mentalidad de "resolver problemas" a una de "diseñar sistemas". Al modelar una entidad, no solo estamos escribiendo código; estamos definiendo un lenguaje propio para el problema que intentamos resolver. La clase es el contrato que garantiza que los objetos interactúen de forma segura y eficiente.</p>
+
+            <p>Finalmente, integrando la visión del <strong>Cuaderno sobre desarrollo web</strong> y el texto de <strong>O'Reilly</strong>, debemos entender que el diseño de objetos es la base de las arquitecturas limpias. En un entorno web, donde los datos fluyen constantemente entre diferentes capas, tener clases bien estructuradas facilita la <span class="abbr" data-title="Serialización: Proceso de convertir un objeto en un formato que pueda ser almacenado o transmitido">Serialización</span> y el manejo de estados complejos. La robustez técnica de C++ unida a un diseño orientado a objetos sólido permite crear aplicaciones que no solo funcionan, sino que son legibles, mantenibles y profesionalmente impecables.</p>
+
             <button class="ref-btn" onclick="showRef('3')">Referencia Bibliográfica</button>
         </section>
 
         <!-- 3.1 -->
-        <section id="sec31">
-            <h2><span class="icon">🔍</span>3.1 Introducción</h2>
-            <p>Tradicionalmente, la programación se centraba en las funciones (hacer cosas). Sin embargo, a medida que los sistemas crecieron en complejidad, este enfoque se volvió ingobernable. Basado en el texto de <strong>Deitel</strong>, la transición hacia los objetos permite gestionar la complejidad dividiendo el software en unidades que tienen sentido en el mundo real.</p>
+		<section id="sec31">
+            <h2><span class="icon">🔍</span>3.1 Introducción a la Evolución del Paradigma</h2>
+            
+            <p>Tradicionalmente, la programación se centraba en las funciones (el "hacer cosas"). Este enfoque, conocido como programación estructurada o procedimental, permitía una descomposición algorítmica clara pero presentaba limitaciones severas ante el escalamiento masivo. Según el texto de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), a medida que los sistemas crecieron en complejidad durante las décadas de 1970 y 1980, este enfoque se volvió ingobernable, dando lugar a lo que se denominó la "crisis del software". La transición hacia los objetos permite gestionar esta complejidad dividiendo el software en unidades que tienen sentido en el mundo real, permitiendo que el desarrollador deje de pensar en términos de "instrucciones de máquina" para pensar en términos de "entidades de dominio".</p>
+            
             <div class="timeline">
                 <div class="timeline-event">
                     <span class="date">1970s</span>
-                    <p>Dominio de la programación estructurada (C, Pascal). Enfoque en algoritmos.</p>
+                    <p><strong>Dominio de la programación estructurada:</strong> Lenguajes como C y Pascal definieron una era. Según <strong>O'Reilly</strong> (<em>Practical C++ Programming</em>), el enfoque estaba estrictamente en los algoritmos y la manipulación directa de estructuras de datos globales. Sin embargo, la falta de ocultamiento de información provocaba que cualquier cambio en la estructura de los datos tuviera un efecto dominó catastrófico en todo el sistema. Esta vulnerabilidad es la que la POO vendría a subsanar mediante el encapsulamiento.</p>
                 </div>
                 <div class="timeline-event">
                     <span class="date">1980s</span>
-                    <p>Nacimiento de C++ por Bjarne Stroustrup. Introducción de la clase como "C con Clases".</p>
+                    <p><strong>El nacimiento de C++ y "C con Clases":</strong> Bjarne Stroustrup, en los Laboratorios Bell, buscó combinar la eficiencia de C con las capacidades de abstracción de Simula. <strong>Deitel</strong> señala que este hito no fue solo una mejora sintáctica, sino una revolución semántica. La introducción de la clase permitió crear Tipos de Datos Abstractos (<span class="abbr" data-title="ADT: Abstract Data Types. Tipos de datos definidos por el usuario que encapsulan datos y operaciones">ADT</span>) que protegen su estado interno.</p>
                 </div>
                 <div class="timeline-event">
-                    <span class="date">1990s - Hoy</span>
-                    <p>Estandarización de la POO. El objeto se vuelve el estándar de la industria.</p>
+                    <span class="date">1990s - 1998</span>
+                    <p><strong>Estandarización y Madurez:</strong> Con la publicación del primer estándar ISO/IEC en 1998, C++ se consolidó como el estándar industrial. Según el <strong>Cuaderno de notebookLM sobre desarrollo web</strong>, este periodo es crucial porque la POO permitió la creación de bibliotecas de software reutilizables, lo que hoy conocemos como <em>frameworks</em>. La industria pasó de escribir software desde cero a ensamblar componentes robustos y probados.</p>
+                </div>
+                <div class="timeline-event">
+                    <span class="date">Siglo XXI</span>
+                    <p><strong>C++ Moderno:</strong> Los estándares C++11, C++14, C++17 y posteriores han refinado el lenguaje. El <strong>Cuaderno de notebookLM sobre desarrollo web</strong> destaca que, aunque han surgido lenguajes de más alto nivel, C++ sigue siendo la columna vertebral de motores de búsqueda, navegadores y sistemas donde el rendimiento es crítico, demostrando que la abstracción de objetos no tiene por qué sacrificar la velocidad.</p>
                 </div>
             </div>
-            <p>En Argentina, la enseñanza universitaria prioriza este enfoque porque facilita el mantenimiento y la reutilización de código en equipos de desarrollo grandes. Ustedes verán que aprender C++ les da el control del <span class="abbr" data-title="Bajo Nivel: Lenguajes que tienen mayor control sobre el hardware y la memoria">bajo nivel</span> con la elegancia de la abstracción de objetos.</p>
+
+            <h3>3.1.1 La Crisis del Software y el Cambio de Mentalidad</h3>
+            <p>La necesidad de la Programación Orientada a Objetos (<span class="abbr" data-title="POO: Paradigma que organiza el diseño de software en torno a datos u objetos, en lugar de funciones y lógica">POO</span>) surge de una necesidad técnica pero también humana. Basado en el <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong>, el aprendizaje de la POO requiere una reconfiguración de los esquemas mentales del estudiante. En la programación estructurada, el flujo es lineal; en la POO, el flujo es una red de mensajes entre objetos autónomos.</p>
+            
+            <p><strong>O'Reilly</strong> advierte que muchos programadores cometen el error de usar C++ como si fuera "C con esteroides", ignorando las ventajas del diseño orientado a objetos. Para evitar esto, la formación en ingeniería debe enfatizar el <strong>Modelado</strong>. Como ingenieros, deben ser capaces de abstraer las características esenciales de un objeto (atributos) y sus comportamientos (métodos) antes de tocar una sola línea de código. Este enfoque es lo que garantiza que el software sea extensible. Si el modelo es sólido, agregar una nueva funcionalidad no requiere reescribir el sistema, sino simplemente añadir o extender clases existentes.</p>
+
+            <h3>3.1.2 El Control de Bajo Nivel y la Elegancia de la Abstracción</h3>
+            <p>Una de las mayores fortalezas de C++, resaltada tanto por <strong>Deitel</strong> como por el <strong>Cuaderno de desarrollo web</strong>, es su naturaleza híbrida. A diferencia de lenguajes como Java o Python, C++ permite el control absoluto del <span class="abbr" data-title="Bajo Nivel: Capacidad de interactuar directamente con la memoria del sistema y los registros del procesador">bajo nivel</span> (gestión manual de memoria, punteros, operaciones de bits). Sin embargo, gracias a las clases, este control se puede "envolver" en abstracciones elegantes.</p>
+            
+            <p>Desde la perspectiva del <strong>Cuaderno de notebookLM sobre UX UI</strong>, existe una analogía poderosa entre el diseño de una interfaz de usuario y el diseño de una clase. Así como una interfaz debe ser intuitiva para el usuario final, una clase debe ser "utilizable" para el programador. El principio de <span class="abbr" data-title="Affordance: Propiedad de un objeto que sugiere cómo debe ser usado">affordance</span> en el diseño se traduce en la programación como una interfaz de clase (sus métodos públicos) que sugiere claramente su propósito. Un buen programador de C++ diseña clases que son difíciles de usar de forma incorrecta.</p>
+
+            <h3>3.1.3 Contexto Académico en Argentina: La Relevancia de C++</h3>
+            <p>En Argentina, la enseñanza universitaria en facultades de ingeniería (como la UTN o la UBA) prioriza el estudio de C++ precisamente por esta dualidad. El mercado laboral local, que exporta servicios de software de alta complejidad, valora al profesional que comprende qué sucede en la memoria mientras diseña arquitecturas de alto nivel. Aprender C++ no es solo aprender un lenguaje; es aprender cómo funciona la computación moderna.</p>
+            
+            <p>El <strong>Cuaderno de notebookLM sobre educación</strong> sugiere que el uso de C++ fomenta un "aprendizaje profundo". Al enfrentarse a conceptos como la gestión de memoria dentro de un objeto, el estudiante desarrolla una comprensión sistémica que los lenguajes de alto nivel a menudo ocultan. Ustedes verán que dominar esta sección 3.1 les permitirá no solo escribir código eficiente, sino comprender la infraestructura de los sistemas operativos, los motores de bases de datos y los videojuegos de última generación, donde C++ sigue siendo el rey indiscutido.</p>
+
+            <p>En conclusión, la transición de las funciones a los objetos es el paso de la artesanía de código a la ingeniería de software. Al segmentar la realidad en objetos, como propone <strong>Deitel</strong>, creamos sistemas más robustos, fáciles de testear y, sobre todo, mantenibles en el tiempo, una cualidad indispensable en el mundo del desarrollo profesional actual.</p>
+
             <button class="ref-btn" onclick="showRef('3.1')">Referencia Bibliográfica</button>
         </section>
 
         <!-- 3.2 -->
-        <section id="sec32">
+		<section id="sec32">
             <h2><span class="icon">📦</span>3.2 Clases, objetos, funciones miembro y miembros de datos</h2>
-            <p>Imaginen un automóvil. Un plano de ingeniería del auto no es el auto en sí, sino las instrucciones para crearlo. Ese plano es la <strong>Clase</strong>. El auto que manejás por la Av. Rivadavia es el <strong>Objeto</strong> (una instancia).</p>
-            <p><strong>Componentes clave según Deitel:</strong></p>
+            
+            <p>Para comprender la arquitectura de un sistema moderno, debemos interiorizar la dualidad entre lo abstracto y lo concreto. Imaginen un automóvil: un plano de ingeniería detallado no es el vehículo en sí, sino un conjunto de especificaciones técnicas y lógicas para su creación. En términos de programación, ese plano es la <strong>Clase</strong>. El auto físico que ustedes conducen por la Av. Rivadavia, con un número de chasis único y una posición específica en el espacio, es el <strong>Objeto</strong> (una instancia tangible de la clase).</p>
+
+            <p>Según el PDF de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), una clase funciona como un nuevo tipo de dato definido por el usuario. Mientras que los tipos básicos (como <code>int</code> o <code>float</code>) son atómicos, las clases son componentes de software reutilizables que agrupan complejidad. Esta capacidad de empaquetar datos y funciones es lo que conocemos como <span class="abbr" data-title="Encapsulamiento: Proceso de agrupar datos y métodos que operan sobre esos datos en una sola unidad">encapsulamiento</span>.</p>
+
+            <h3>3.2.1 Anatomía de la Clase: Estado y Comportamiento</h3>
+            <p>La estructura interna de una clase se divide en dos pilares fundamentales que definen la naturaleza de cualquier entidad modelada:</p>
             <ul>
-                <li><strong>Miembros de Datos (Atributos):</strong> Representan el estado (ej. cantidad de nafta, color).</li>
-                <li><strong>Funciones Miembro (Métodos):</strong> Representan el comportamiento (ej. acelerar, frenar).</li>
+                <li><strong>Miembros de Datos (Atributos):</strong> Representan el <strong>estado</strong> del objeto. Basado en el PDF de <strong>O'Reilly</strong> (<em>Practical C++ Programming</em>), los atributos son variables que pertenecen a la clase. Siguiendo el ejemplo del automóvil, estos incluirían la cantidad de combustible, la velocidad actual y el color. Es crucial notar que cada objeto mantiene su propia copia de estos datos; si un auto se queda sin nafta, el resto de los objetos de la misma clase no se ven afectados.</li>
+                <li><strong>Funciones Miembro (Métodos):</strong> Representan el <strong>comportamiento</strong> o las capacidades del objeto. Son las acciones que el objeto puede realizar, como <code>acelerar()</code>, <code>frenar()</code> o <code>virar()</code>. Deitel enfatiza que estas funciones son las encargadas de manipular los miembros de datos, asegurando que el estado del objeto cambie de manera controlada y predecible.</li>
             </ul>
+
             <div class="diagram">
-                <div class="box">Clase: CuentaBancaria<br><small>(El Molde)</small></div>
-                <div class="arrow">⬇ Instanciación</div>
-                <div class="box">Objeto: miCuenta<br><small>(Entidad en Memoria)</small></div>
+                <div class="box">
+                    <strong>Clase: CuentaBancaria</strong><br>
+                    <small>Atributos: saldo, titular</small><br>
+                    <small>Métodos: depositar(), retirar()</small><br>
+                    <em>(El Molde Lógico)</em>
+                </div>
+                <div class="arrow">⬇ Instanciación (Reserva de Memoria)</div>
+                <div class="box">
+                    <strong>Objeto: cuentaDeJuan</strong><br>
+                    <small>saldo: $50.000</small><br>
+                    <small>ID: 0x4f2a1</small><br>
+                    <em>(Entidad Viva en RAM)</em>
+                </div>
             </div>
-            <p>Es vital recordar que los objetos poseen <strong>identidad</strong>, <strong>estado</strong> y <strong>comportamiento</strong>. Ustedes manipularán estos objetos invocando sus funciones miembro a través del operador punto (<code>.</code>).</p>
+
+            <h3>3.2.2 El Enfoque de Ingeniería: Identidad y Contratos</h3>
+            <p>Ustedes, como ingenieros, deben ver la clase como un <strong>contrato de comportamiento</strong>. El <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong> sugiere que la comprensión de este concepto se facilita mediante el "modelado mental activo". No se trata solo de escribir código, sino de identificar las responsabilidades de cada objeto. En el diseño de software, si una función miembro no está alineada con la responsabilidad de la clase, se rompe la <span class="abbr" data-title="Cohesión: Medida de qué tan estrechamente relacionadas están las responsabilidades de un módulo">cohesión</span>, un error común que <strong>O'Reilly</strong> advierte en programadores inexpertos.</p>
+
+            <p>Además, cada objeto posee una <strong>identidad</strong> única. Dos objetos pueden tener exactamente los mismos valores en sus atributos (por ejemplo, dos cuentas bancarias con $0 de saldo), pero siguen siendo entidades distintas en la memoria del sistema. El acceso a estas entidades se realiza mediante el operador punto (<code>.</code>), que actúa como el puente de comunicación entre el controlador del sistema y la interfaz del objeto.</p>
+
+            <h3>3.2.3 La Perspectiva de Diseño: UX/UI y Desarrollo Web</h3>
+            <p>Integrando el <strong>Cuaderno de notebookLM sobre UX UI</strong>, podemos afirmar que los nombres de las funciones miembro y la visibilidad de los datos conforman la "API interna" del sistema. Un buen diseño de clase debe seguir principios de usabilidad para el desarrollador: las funciones deben ser autodescriptivas. Si un ingeniero de C++ diseña una clase <code>Motor</code> con una función miembro llamada <code>x1()</code> en lugar de <code>iniciarIgnicion()</code>, está aumentando la carga cognitiva y dificultando el mantenimiento.</p>
+            
+            <p>Desde la óptica del <strong>Cuaderno de notebookLM sobre desarrollo web</strong>, la importancia de las clases radica en la modularidad. En sistemas web complejos, los objetos actúan como contenedores de lógica de negocio que pueden ser testeados de forma aislada. La separación de "lo que un objeto hace" (interfaz pública) de "cómo lo hace" (implementación privada) es el corazón de lo que <strong>Deitel</strong> llama el ocultamiento de información (<em>information hiding</em>). Esto permite que, por ejemplo, podamos cambiar la fórmula de cálculo de intereses en una clase <code>Prestamo</code> sin que el resto de la aplicación web sufra modificaciones, siempre y cuando el nombre de la función y sus parámetros permanezcan constantes.</p>
+
+            <h3>3.2.4 Implementación y Ciclo de Vida</h3>
+            <p>Para que un objeto sea útil, debe ser inicializado correctamente. <strong>Deitel</strong> explica que las clases suelen incluir funciones miembro especiales denominadas <strong>constructores</strong>, cuya misión es establecer los valores iniciales de los miembros de datos al momento de la creación (instanciación). Sin una inicialización adecuada, los miembros de datos podrían contener valores residuales de la memoria ("basura"), un riesgo de seguridad y estabilidad que <strong>O'Reilly</strong> destaca como crítico en aplicaciones industriales.</p>
+
+            <p>Finalmente, es vital entender que la interacción con los objetos no es caótica. En C++, el programador tiene el control total sobre cuándo un objeto nace y cuándo muere (liberación de memoria). Esta responsabilidad técnica, combinada con la elegancia de la abstracción de objetos, es lo que permite que C++ sea el lenguaje preferido para sistemas donde el rendimiento y la organización lógica son no-negociables. Como futuros profesionales, su objetivo es diseñar clases que no solo funcionen, sino que modelen el mundo real con precisión, facilitando la colaboración en equipos de desarrollo a gran escala.</p>
+
             <button class="ref-btn" onclick="showRef('3.2')">Referencia Bibliográfica</button>
         </section>
 
         <!-- 3.3 -->
-        <section id="sec33">
+		<section id="sec33">
             <h2><span class="icon">📋</span>3.3 Generalidades acerca de los ejemplos del capítulo</h2>
-            <p>A lo largo de este estudio, utilizaremos ejemplos incrementales. Empezaremos con una clase simple <code>LibroCalificaciones</code> que solo imprime un mensaje, y la evolucionaremos hasta convertirla en un sistema robusto con validación y persistencia de datos. Este método pedagógico, mencionado en el cuaderno de <strong>Metodologías Activas</strong>, busca que ustedes vean la necesidad de cada nueva característica antes de aprenderla.</p>
+            
+            <p>A lo largo de este estudio, utilizaremos una metodología de <strong>aprendizaje incremental</strong>. En lugar de presentar una clase completa y compleja desde el primer momento, iniciaremos con una estructura minimalista: la clase <code>LibroCalificaciones</code>. Esta evolucionará desde una simple función que imprime un mensaje de bienvenida hasta convertirse en un sistema robusto con validación de datos, miembros privados y una clara separación entre la interfaz y la implementación. Según el <strong>PDF de Deitel</strong> (<em>C++ Cómo Programar</em>), este enfoque permite que el estudiante asimile los conceptos de la Programación Orientada a Objetos (<span class="abbr" data-title="POO: Paradigma de programación basado en objetos que contienen datos y comportamientos">POO</span>) de manera orgánica, evitando la sobrecarga informativa.</p>
+
+            <h3>3.3.1 Fundamentación Pedagógica: El Andamiaje Cognitivo</h3>
+            <p>Este método pedagógico encuentra su respaldo en el <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong>. Se basa en la teoría del <em>andamiaje</em> (scaffolding), donde el docente (o el material didáctico) proporciona apoyos temporales que se retiran a medida que el estudiante gana autonomía. Al empezar con un ejemplo que solo "imprime un mensaje", el alumno se concentra exclusivamente en la sintaxis de definición de una clase y la invocación de una función miembro, sin distraerse con la lógica de negocio compleja o la gestión de memoria.</p>
+            
+            <p>Ustedes verán que cada nueva iteración del ejemplo responde a una necesidad técnica específica. El cuaderno de <strong>Metodologías Activas</strong> destaca que este "conflicto cognitivo" —es decir, presentar un problema antes de la solución— es vital para un aprendizaje significativo. Por ejemplo, al notar que cualquier parte del programa puede alterar el nombre del curso de forma indebida, surge naturalmente la necesidad de implementar modificadores de acceso <code>private</code> y funciones de validación, transformando el aprendizaje en un proceso de descubrimiento de ingeniería.</p>
+
+            <h3>3.3.2 Evolución Técnica según Deitel y O'Reilly</h3>
+            <p>De acuerdo con el <strong>PDF de Deitel</strong>, la evolución de la clase <code>LibroCalificaciones</code> seguirá un camino crítico de profesionalización:</p>
+            <ul>
+                <li><strong>Fase 1: Definición Básica.</strong> Se introducen las palabras clave <code>class</code> y <code>public</code>. El objetivo es entender que una clase es un contenedor de comportamientos.</li>
+                <li><strong>Fase 2: Paso de Parámetros.</strong> Se dota a las funciones miembro de la capacidad de recibir información externa, permitiendo que un objeto sea dinámico y responda a datos variables.</li>
+                <li><strong>Fase 3: Miembros de Datos y Encapsulamiento.</strong> Aquí es donde, según <strong>O'Reilly</strong> (<em>Practical C++ Programming</em>), el software empieza a ser "práctico". Se añaden atributos para mantener el estado del objeto y se discute por qué los datos deben estar protegidos del acceso directo.</li>
+                <li><strong>Fase 4: Constructores.</strong> Se enseña cómo garantizar que cada objeto de la clase <code>LibroCalificaciones</code> nazca con un estado válido, eliminando la posibilidad de trabajar con datos "basura" o nulos.</li>
+            </ul>
+
+            <p><strong>O'Reilly</strong> complementa este análisis señalando que la robustez del software no reside solo en que el código funcione, sino en su capacidad para resistir errores del usuario. Por ello, el ejemplo final del capítulo incorpora la validación de entrada, asegurando que el nombre del curso no supere una longitud determinada, lo que previene errores de desbordamiento o inconsistencias en la presentación de datos.</p>
+
+            <h3>3.3.3 La Perspectiva de UX/UI para Desarrolladores</h3>
+            <p>Un aspecto a menudo ignorado en la enseñanza técnica es la <span class="abbr" data-title="Developer Experience: La sensación y facilidad de uso que experimenta un programador al interactuar con una biblioteca o API">DX</span> (Developer Experience). Basado en el <strong>Cuaderno de notebookLM sobre UX UI</strong>, la forma en que diseñamos nuestras clases es una forma de diseño de interfaz. Los ejemplos del capítulo han sido cuidadosamente seleccionados para mostrar nombres de funciones claros (como <code>establecerNombreCurso</code> en lugar de <code>setN</code>) y estructuras predecibles.</p>
+            
+            <p>La aplicación de principios de UX al código reduce la carga cognitiva. Cuando ustedes estudien el <code>LibroCalificaciones</code>, no solo estarán aprendiendo C++; estarán aprendiendo a diseñar componentes de software que otros programadores podrán entender y usar sin necesidad de leer toda la documentación interna. El cuaderno de <strong>UX UI</strong> enfatiza que la consistencia en los nombres y la jerarquía de las funciones miembro son claves para la mantenibilidad de sistemas a gran escala.</p>
+
+            <h3>3.3.4 Conexión con el Desarrollo Web Moderno</h3>
+            <p>Aunque el ejemplo del <code>LibroCalificaciones</code> se ejecuta en una consola, los principios que se enseñan son la base del <strong>desarrollo web profesional</strong>. El <strong>Cuaderno de notebookLM sobre desarrollo web</strong> menciona que la estructura de una clase en C++ es conceptualmente idéntica a los componentes en frameworks modernos como React o Angular, donde los "miembros de datos" equivalen al <em>estado</em> (state) y las "funciones miembro" a los <em>manejadores de eventos</em> (handlers).</p>
+            
+            <p>La separación de la interfaz (el archivo <code>.h</code>) y la implementación (el archivo <code>.cpp</code>), que se aborda hacia el final del capítulo, es un precursor directo de la arquitectura de microservicios y el desarrollo basado en módulos que domina la web hoy en día. Comprender cómo C++ gestiona estas fronteras lógicas les dará una ventaja competitiva única, permitiéndoles escribir código <em>backend</em> de alta eficiencia o motores de renderizado web con una base arquitectónica sólida.</p>
+
+            <h3>3.3.5 Resumen de Objetivos de Ingeniería</h3>
+            <p>En conclusión, los ejemplos de este capítulo no son meros fragmentos de código, sino un simulacro de desarrollo profesional. Como futuros ingenieros, su tarea es observar cómo la clase <code>LibroCalificaciones</code> pasa de ser un juguete académico a una pieza de ingeniería reutilizable. Siguiendo los consejos de <strong>Deitel</strong> y <strong>O'Reilly</strong>, buscaremos siempre la máxima cohesión y el mínimo acoplamiento, principios que garantizan que el software sea escalable y fácil de depurar.</p>
+
+            <div class="note-box">
+                <strong>💡 Recomendación del Cuaderno de Metodologías Activas:</strong> No pasen al siguiente ejemplo hasta que hayan podido explicarle a un compañero (o a ustedes mismos) por qué la versión anterior de la clase era insuficiente para un sistema real. La reflexión sobre la limitación es lo que fija el conocimiento técnico.
+            </div>
+
             <button class="ref-btn" onclick="showRef('3.3')">Referencia Bibliográfica</button>
         </section>
 
         <!-- 3.4 -->
-        <section id="sec34">
+		<section id="sec34">
             <h2><span class="icon">✍️</span>3.4 Definición de una clase con una función miembro</h2>
-            <p>La sintaxis es fundamental. En C++, definimos una clase usando la palabra reservada <code>class</code>. Por defecto, los miembros son privados, por lo que debemos usar la etiqueta <code>public:</code> para que nuestras funciones sean accesibles desde fuera de la clase.</p>
+            
+            <p>La precisión sintáctica en C++ no es una mera convención estética, sino un requisito técnico para la construcción de sistemas robustos. Según el PDF de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), la definición de una clase comienza con la palabra reservada <code>class</code>, seguida del nombre de la clase en estilo <em>PascalCase</em> (comenzando con mayúscula), lo cual es una práctica estándar en la industria para diferenciar los tipos definidos por el usuario de las variables locales.</p>
+
+            <p>Una clase es, en esencia, un nuevo tipo de dato. Al definir <code>LibroCalificaciones</code>, no estamos creando un dato concreto, sino describiendo un nuevo modelo de datos que el compilador debe entender. El cuerpo de la clase se delimita por llaves (<code>{ }</code>). Dentro de estas llaves, se definen los miembros que darán forma al objeto. Es aquí donde el diseño de software se cruza con la ingeniería: debemos decidir qué partes de nuestra entidad serán visibles al mundo exterior y cuáles permanecerán ocultas.</p>
+
             <div class="code-block">
-<pre>class LibroCalificaciones {
+<pre>// Definición de la clase según los estándares de Deitel y O'Reilly
+class LibroCalificaciones {
 public:
-    void mostrarMensaje() {
-        cout << "Bienvenido al curso de C++!" << endl;
-    }
-};</pre>
+    // Función miembro que representa un comportamiento del objeto
+    void mostrarMensaje() const {
+        // El uso de cout y endl requiere la biblioteca iostream
+        std::cout << "Bienvenido al curso de C++!" << std::endl;
+    } // Fin de la función mostrarMensaje
+}; // El punto y coma es OBLIGATORIO aquí</pre>
             </div>
-            <p>Ustedes notarán que las funciones definidas dentro de una clase tienen acceso implícito a todos sus miembros. <strong>Deitel</strong> resalta que el punto y coma (<code>;</code>) al finalizar la llave de cierre de la clase es obligatorio y suele ser un error común en los exámenes parciales.</p>
+
+            <h3>3.4.1 El especificador de acceso <code>public:</code></h3>
+            <p>Por defecto, C++ adopta una postura conservadora respecto a la seguridad: todos los miembros de una <code>class</code> son privados (<code>private</code>) si no se especifica lo contrario. Esto significa que no son accesibles desde funciones externas, como <code>main</code>. Para permitir que otros componentes del sistema interactúen con nuestro objeto, debemos utilizar la etiqueta <code>public:</code>.</p>
+            
+            <p>Basado en el PDF de <strong>O'Reilly</strong> (<em>Practical C++ Programming</em>), el uso correcto de los especificadores de acceso es la primera línea de defensa contra errores de lógica. Un error común de los estudiantes es olvidar la etiqueta <code>public:</code>, lo que resulta en un error de compilación que indica que la función "es inaccesible". Desde la perspectiva del <strong>Cuaderno de notebookLM sobre UX UI</strong>, este aislamiento (encapsulamiento) es fundamental para reducir el "ruido" en la interfaz de programación; un desarrollador solo debería ver aquello que realmente necesita usar para cumplir su tarea.</p>
+
+            <h3>3.4.2 Anatomía de la Función Miembro</h3>
+            <p>La función <code>mostrarMensaje</code> dentro de nuestra clase es lo que <strong>Deitel</strong> denomina una "función miembro". A diferencia de las funciones globales de C, estas funciones están intrínsecamente ligadas a la identidad de la clase. Poseen un tipo de retorno (en este caso <code>void</code>, indicando que no devuelve valor) y un cuerpo de función donde se ejecuta la lógica.</p>
+
+            <p>Un detalle técnico avanzado, mencionado por <strong>O'Reilly</strong>, es que las funciones miembro tienen acceso implícito a todos los demás miembros de la clase (datos y otras funciones). Esto crea un entorno de ejecución cohesivo. En el <strong>Cuaderno de notebookLM sobre desarrollo web</strong>, este concepto se compara con los métodos de clase en JavaScript moderno o los componentes de React, donde el comportamiento está encapsulado junto con la lógica de renderizado, permitiendo una modularidad que facilita enormemente el mantenimiento del código a largo plazo.</p>
+
+            <h3>3.4.3 El "Error del Punto y Coma" y la Pedagogía del Error</h3>
+            <p>Uno de los puntos más críticos señalados por <strong>Deitel</strong> es la necesidad del punto y coma (<code>;</code>) después de la llave de cierre de la clase. Técnicamente, esto se debe a que una definición de clase en C++ es una sentencia de declaración de tipo. Omitir este carácter es uno de los errores más frecuentes en los exámenes parciales y en la práctica profesional inicial.</p>
+            
+            <p>El <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong> sugiere abordar este error común no solo como un fallo de memoria, sino como una oportunidad de "aprendizaje basado en la depuración". Se recomienda que los alumnos provoquen el error intencionalmente para reconocer los mensajes crípticos del compilador. Comprender el "porqué" de la sintaxis —en este caso, que C++ permite declarar variables inmediatamente después de la definición de la clase, de ahí la necesidad de cerrar la sentencia— fija el conocimiento de manera mucho más efectiva que la simple repetición.</p>
+
+            <h3>3.4.4 Perspectiva de Diseño: La Clase como Interfaz de Usuario</h3>
+            <p>Integrando el <strong>Cuaderno de notebookLM sobre UX UI</strong>, debemos ver la definición de una clase como el diseño de una experiencia para el programador (<em>Developer Experience</em>). La etiqueta <code>public:</code> define la <span class="abbr" data-title="Superficie de Ataque/Uso: Conjunto de puntos en los que un usuario o sistema puede interactuar">superficie de uso</span> de nuestra clase. Un buen ingeniero de software diseña clases con interfaces públicas pequeñas y claras.</p>
+            
+            <p>Si la interfaz pública es demasiado extensa, la carga cognitiva del desarrollador aumenta, incrementando la probabilidad de errores. Por ello, <strong>O'Reilly</strong> enfatiza que solo las funciones esenciales para el comportamiento externo deben ser públicas. Todo lo relacionado con el "cómo" se hace el trabajo (detalles de implementación) debe permanecer oculto, siguiendo el principio de diseño de "menor sorpresa".</p>
+
+            <h3>3.4.5 Relevancia en la Ingeniería de Software Moderna</h3>
+            <p>La definición de clases en C++ sienta las bases para arquitecturas escalables. Según el <strong>Cuaderno de notebookLM sobre desarrollo web</strong>, este enfoque orientado a componentes es lo que permite que equipos de cientos de personas trabajen en el mismo proyecto sin interferir entre sí. Al definir contratos claros a través de funciones miembro públicas, aseguramos que los cambios internos en una clase no rompan el funcionamiento del resto del ecosistema web o de la aplicación.</p>
+            
+            <p>Ustedes, como futuros profesionales, deben dominar esta sintaxis no como un ejercicio de caligrafía de código, sino como la herramienta fundamental para crear abstracciones poderosas. Como dice <strong>Deitel</strong>, dominar la definición de una clase es el primer paso para dejar de ser un "escritor de instrucciones" y convertirse en un "arquitecto de sistemas". La elegancia de C++ reside en su capacidad para ofrecer este nivel de abstracción sin sacrificar un ápice de rendimiento, permitiendo que funciones miembro como <code>mostrarMensaje</code> se ejecuten con una eficiencia cercana al código de bajo nivel.</p>
+
+            <div class="note-box">
+                <strong>💡 Nota Académica:</strong> Recuerden que en C++ moderno, si una función miembro no modifica el estado del objeto, es una excelente práctica marcarla como <code>const</code>, como se muestra en el bloque de código superior. Esto ayuda al compilador a optimizar el código y a otros programadores a entender que la función es "de solo lectura".
+            </div>
+
             <button class="ref-btn" onclick="showRef('3.4')">Referencia Bibliográfica</button>
         </section>
 
         <!-- 3.5 -->
-        <section id="sec35">
+		<section id="sec35">
             <h2><span class="icon">📥</span>3.5 Definición de una función miembro con un parámetro</h2>
-            <p>Para que nuestras clases sean dinámicas, deben recibir información. Esto se logra mediante parámetros en las funciones. Basado en el libro de <strong>Deitel</strong>, el paso de parámetros permite que un solo objeto se comporte de manera diferente según la entrada recibida.</p>
+            
+            <p>Para que nuestras clases dejen de ser estructuras estáticas y se conviertan en entidades dinámicas y útiles, deben poseer la capacidad de recibir información del mundo exterior. Este proceso de comunicación se facilita a través de los <strong>parámetros</strong> de las funciones miembro. Basado en el libro de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), el paso de parámetros es el mecanismo que permite que un solo objeto se comporte de manera diferencial según la entrada recibida, permitiendo la personalización del estado del objeto en tiempo de ejecución.</p>
+
+            <p>En el paradigma de la Programación Orientada a Objetos (<span class="abbr" data-title="POO: Paradigma de programación basado en objetos que contienen datos y comportamientos">POO</span>), una función miembro con parámetros actúa como una interfaz de entrada. Mientras que en la sección anterior vimos funciones que simplemente ejecutaban una acción fija, aquí introducimos la noción de "datos de entrada" que alimentan la lógica interna de la clase. Esta distinción es fundamental para la ingeniería de software: pasamos de scripts lineales a componentes interactivos.</p>
+
             <div class="code-block">
-<pre>void mostrarMensaje(string nombreCurso) {
-    cout << "Bienvenido al curso: " << nombreCurso << "!" << endl;
-}</pre>
+<pre>// Implementación técnica basada en estándares de Deitel
+#include &lt;iostream&gt;
+#include &lt;string&gt; // Necesario para el tipo de dato string
+
+class LibroCalificaciones {
+public:
+    // Función miembro que recibe un parámetro de tipo string
+    // El parámetro 'nombreCurso' actúa como una variable local de la función
+    void mostrarMensaje(std::string nombreCurso) {
+        std::cout << "Bienvenido al curso: " << nombreCurso << "!" << std::endl;
+    } 
+};</pre>
             </div>
-            <p>Aquí introducimos la biblioteca <code>&lt;string&gt;</code>. Es importante que ustedes incluyan esta cabecera para manejar cadenas de texto de forma segura, evitando los problemas de los antiguos arreglos de caracteres de C.</p>
+
+            <h3>3.5.1 La importancia de la biblioteca <code>&lt;string&gt;</code></h3>
+            <p>En el código anterior, introducimos una herramienta poderosa: la clase <code>std::string</code>. Según <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, el manejo de texto es una de las áreas donde más errores se cometían en el lenguaje C tradicional debido al uso de arreglos de caracteres terminados en nulo (<code>char*</code>). El PDF de <strong>O'Reilly</strong> enfatiza que los objetos <code>string</code> de C++ eliminan gran parte del peligro de los <span class="abbr" data-title="Buffer Overflow: Error de software que ocurre cuando se escriben más datos en un bloque de memoria de los que este puede retener">desbordamientos de búfer</span>, ya que gestionan su propio tamaño y memoria de forma automática.</p>
+            
+            <p>Ustedes, como futuros profesionales, deben acostumbrarse a incluir la cabecera <code>&lt;string&gt;</code> siempre que necesiten manipular texto. <strong>Deitel</strong> señala que <code>string</code> no es un tipo de dato básico (como <code>int</code> o <code>double</code>), sino una clase de la Biblioteca Estándar, lo que significa que el parámetro <code>nombreCurso</code> es, en realidad, un objeto que se pasa a la función.</p>
+
+            <h3>3.5.2 Parámetros vs. Argumentos: Claridad Terminológica</h3>
+            <p>Es común que en los exámenes y en el ámbito profesional se confundan estos términos. El <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong> sugiere un enfoque constructivista para diferenciar estos conceptos:</p>
+            <ul>
+                <li><strong>Parámetro:</strong> Es el marcador de posición definido en la declaración de la función (en nuestro caso, <code>nombreCurso</code>). Es el "molde" que espera un valor.</li>
+                <li><strong>Argumento:</strong> Es el valor real que se envía a la función en el momento de la llamada (por ejemplo, <code>"Programacion I"</code>).</li>
+            </ul>
+            <p>Esta distinción es vital para entender el flujo de datos. Desde el punto de vista del <strong>Cuaderno sobre desarrollo web</strong>, esta transferencia es análoga a la manera en que una API recibe parámetros en una petición <code>POST</code> o <code>GET</code>; el servidor define qué espera (parámetro) y el cliente envía el dato concreto (argumento).</p>
+
+            <h3>3.5.3 Perspectiva de Diseño: UX para Desarrolladores</h3>
+            <p>El diseño de los parámetros de una función no es solo una decisión técnica, sino también una decisión de <strong>experiencia de usuario (UX)</strong> para el programador que utilizará nuestra clase. Según el <strong>Cuaderno de notebookLM sobre UX UI</strong>, el nombre de un parámetro debe ser semánticamente rico. Un nombre como <code>string s</code> es pobre, mientras que <code>string nombreCurso</code> comunica inmediatamente qué tipo de información se espera.</p>
+            
+            <p>Además, el cuaderno de UX UI resalta la importancia de la <span class="abbr" data-title="Carga Cognitiva: Cantidad de esfuerzo mental que el cerebro utiliza para procesar información">Carga Cognitiva</span>. Si una función requiere demasiados parámetros, el desarrollador que la invoque tendrá más probabilidades de cometer errores en el orden o en el tipo de los datos. La recomendación académica es mantener las funciones miembro con la menor cantidad de parámetros posible, agrupando datos relacionados en objetos si es necesario.</p>
+
+            <h3>3.5.4 Metodologías Activas: Aprendizaje por Descubrimiento</h3>
+            <p>El <strong>Cuaderno de notebookLM sobre educación</strong> propone que, para dominar el uso de parámetros, los estudiantes realicen ejercicios de "Ingeniería Inversa". En lugar de copiar el código, se les pide identificar qué datos necesita un objeto (como un <code>Termostato</code> o una <code>CamaraSeguridad</code>) para cumplir su función. Al identificar que un termostato necesita un parámetro <code>temperaturaDeseada</code> para funcionar, el alumno entiende la utilidad real del parámetro antes de enfrentarse a la sintaxis <code>void establecerTemperatura(int temp)</code>.</p>
+
+            <h3>3.5.5 Robustez y Buenas Prácticas según O'Reilly</h3>
+            <p>En el PDF de <strong>O'Reilly</strong> se menciona un detalle técnico crucial para el rendimiento: cuando pasamos un objeto <code>string</code> como parámetro de la forma <code>void funcion(string s)</code>, se crea una copia completa de la cadena de texto en la memoria. Para aplicaciones industriales de alto rendimiento, <strong>O'Reilly</strong> sugiere el uso de referencias constantes (<code>const string&</code>), un tema que profundizaremos en secciones avanzadas pero que ya deben tener en su radar de ingeniería. El paso por valor es aceptable para el aprendizaje inicial, pero la optimización es la marca de un programador senior.</p>
+            
+            <p>En conclusión, dotar a las funciones miembro de parámetros es el primer paso hacia la creación de software modular y flexible. Como indica <strong>Deitel</strong>, esto permite que la clase <code>LibroCalificaciones</code> no sea solo un letrero estático, sino un componente capaz de representar y gestionar la información de cualquier curso dentro de una institución educativa, facilitando la reutilización del código y la escalabilidad del sistema.</p>
+
             <button class="ref-btn" onclick="showRef('3.5')">Referencia Bibliográfica</button>
         </section>
 
         <!-- 3.6 -->
-        <section id="sec36">
+		<section id="sec36">
             <h2><span class="icon">🛡️</span>3.6 Miembros de datos, funciones establecer y funciones obtener</h2>
-            <p>Este es el principio del <strong>Encapsulamiento</strong>. Los datos deben ser <code>private</code> (privados). Para acceder a ellos, usamos funciones públicas conocidas como <strong>Getters</strong> (obtener) y <strong>Setters</strong> (establecer).</p>
+            
+            <p>En el núcleo de la ingeniería de software de calidad reside el principio del <strong>Encapsulamiento</strong>, también conocido en el ámbito académico como <strong>Ocultamiento de Información</strong> (<em>Information Hiding</em>). Según el PDF de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), una de las reglas de oro del diseño orientado a objetos es que los datos de una clase deben mantenerse ocultos para el mundo exterior. Para lograr esto, declaramos los miembros de datos bajo el especificador de acceso <code>private</code>. Sin embargo, un objeto que no permite interactuar con su estado es inútil; por ello, proporcionamos "puertas de enlace" controladas denominadas funciones <strong>Establecer</strong> (<em>Setters</em>) y <strong>Obtener</strong> (<em>Getters</em>).</p>
+
+            <p>Desde la perspectiva del <strong>Cuaderno de notebookLM sobre UX UI</strong>, estas funciones no son solo código, sino la interfaz de usuario del programador. Un diseño de clase que expone sus variables internas directamente rompe el principio de <span class="abbr" data-title="Encapsulamiento: Mecanismo que agrupa los datos y el código que los manipula, protegiéndolos de interferencias externas">abstracción</span>, obligando al usuario de la clase a conocer detalles de implementación que no deberían ser su preocupación. La "usabilidad" de una clase depende de que sus funciones <code>set</code> y <code>get</code> sean intuitivas y seguras.</p>
+
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
-                            <th>Concepto</th>
-                            <th>Propósito</th>
-                            <th>Acceso</th>
+                            <th>Concepto Técnico</th>
+                            <th>Propósito en la Arquitectura</th>
+                            <th>Acceso (Scope)</th>
+                            <th>Visión de Ingeniería</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Atributo</td>
-                            <td>Almacenar datos (estado).</td>
-                            <td>Privado (private)</td>
+                            <td><strong>Miembro de Datos</strong></td>
+                            <td>Almacenar el estado interno del objeto (ej. saldo, nombre).</td>
+                            <td><code>private</code></td>
+                            <td>Protege la integridad; evita la manipulación accidental de la memoria.</td>
                         </tr>
                         <tr>
-                            <td>Setter (Establecer)</td>
-                            <td>Modificar el valor con validación.</td>
-                            <td>Público (public)</td>
+                            <td><strong>Función Establecer (Setter)</strong></td>
+                            <td>Modificar el valor de un atributo bajo reglas de negocio específicas.</td>
+                            <td><code>public</code></td>
+                            <td>Actúa como un filtro de validación (Guardia de entrada).</td>
                         </tr>
                         <tr>
-                            <td>Getter (Obtener)</td>
-                            <td>Retornar el valor de forma controlada.</td>
-                            <td>Público (public)</td>
+                            <td><strong>Función Obtener (Getter)</strong></td>
+                            <td>Retornar el valor de un atributo de forma segura (lectura).</td>
+                            <td><code>public</code></td>
+                            <td>Proporciona una vista del estado sin permitir su alteración directa.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <p>En nuestro país, solemos llamar a esto "ocultamiento de información". Esto evita que un programador externo "rompa" el estado interno del objeto asignando valores imposibles (ej. una nota de -5).</p>
+
+            <h3>3.6.1 La Validación: El Guardia de Seguridad del Objeto</h3>
+            <p>Basado en el PDF de <strong>Deitel</strong>, la principal ventaja de utilizar una función "establecer" en lugar de permitir el acceso directo a una variable es la <strong>validación</strong>. Imagine una clase <code>Estudiante</code> con un miembro de datos <code>nota</code>. Si el atributo fuera público, cualquier programador externo podría asignar un valor de <code>-100</code> o <code>999</code>, rompiendo la lógica del sistema. Al usar un <em>Setter</em>, podemos implementar una estructura de control:</p>
+            
+            <div class="code-block">
+<pre>void establecerNota(int valorNota) {
+    if (valorNota >= 0 && valorNota <= 10) {
+        nota = valorNota; // El dato es válido, se asigna.
+    } else {
+        // Lógica de error o asignación por defecto.
+        cout << "Error: Nota inválida." << endl;
+    }
+}</pre>
+            </div>
+
+            <p><strong>O'Reilly</strong> (<em>Practical C++ Programming</em>) complementa este punto señalando que el software profesional debe ser "defensivo". Un objeto debe ser responsable de su propio estado. Si permitimos que agentes externos modifiquen los datos sin supervisión, el proceso de <span class="abbr" data-title="Depuración: Proceso de identificar y corregir errores en el código fuente">debugging</span> se vuelve exponencialmente más difícil, ya que no sabremos qué parte del programa corrompió el dato. Con los <em>Setters</em>, tenemos un único punto de entrada donde podemos colocar puntos de interrupción (<em>breakpoints</em>) para rastrear cambios.</p>
+
+            <h3>3.6.2 Getters y la Inmutabilidad Percibida</h3>
+            <p>Las funciones "obtener" permiten que otros objetos consulten el estado necesario para realizar sus tareas sin riesgo de modificarlo. De acuerdo con el <strong>Cuaderno de notebookLM sobre desarrollo web</strong>, este concepto es análogo a las respuestas de una API de solo lectura. En el desarrollo web moderno, la predictibilidad del estado es fundamental. Si una función <code>obtenerSaldo()</code> simplemente devuelve el valor, garantizamos que la lógica de renderizado visual no afectará accidentalmente la lógica financiera del <em>backend</em>.</p>
+
+            <p>Además, <strong>Deitel</strong> sugiere que las funciones obtener deben declararse como <code>const</code> cuando sea posible. Esto le indica al compilador y a otros programadores que la función promete no modificar el objeto, una característica de seguridad avanzada de C++ que refuerza la robustez del sistema.</p>
+
+            <h3>3.6.3 Perspectiva Pedagógica: Educación y Metodologías Activas</h3>
+            <p>El <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong> advierte sobre el peligro de enseñar estos conceptos como "código repetitivo" (<em>boilerplate</em>). Muchos estudiantes ven los Getters y Setters como una molestia sintáctica. La metodología activa propone que el estudiante se enfrente primero a un sistema que falla debido a datos inconsistentes (por ejemplo, un simulador de cajero automático que permite saldos negativos) para que, por descubrimiento, comprenda la necesidad del encapsulamiento.</p>
+            
+            <p>Ustedes, como ingenieros, deben evitar crear Getters y Setters de forma automática para cada variable sin pensar. El cuaderno de educación enfatiza el diseño crítico: ¿Realmente este dato debe ser modificado desde fuera? ¿Es necesario que el mundo exterior conozca este valor? A veces, el mejor Getter es aquel que no existe, manteniendo el objeto como una verdadera "caja negra" que solo se comunica mediante comportamientos de alto nivel.</p>
+
+            <h3>3.6.4 El Impacto en el Mantenimiento y la Evolución</h3>
+            <p>Finalmente, tanto <strong>O'Reilly</strong> como los cuadernos de <strong>Desarrollo Web</strong> coinciden en que el encapsulamiento facilita la evolución del software. Si en el futuro decidimos cambiar cómo se almacena un dato (por ejemplo, cambiar la nota de un <code>int</code> a un <code>float</code> o almacenarla en una base de datos remota), solo tendremos que modificar las funciones miembro internas de la clase. El resto del código que utiliza <code>obtenerNota()</code> seguirá funcionando sin cambios, ya que la interfaz pública permanece estable. Esta es la esencia de la arquitectura de software profesional: minimizar el impacto del cambio.</p>
+            
+            <p>En Argentina, la formación de ingenieros en sistemas destaca esta capacidad de abstracción. Comprender que una clase no es un simple contenedor de variables, sino una entidad autónoma con reglas propias, es lo que diferencia a un "codificador" de un arquitecto de software capaz de liderar proyectos de gran escala.</p>
+
             <button class="ref-btn" onclick="showRef('3.6')">Referencia Bibliográfica</button>
         </section>
 
         <!-- 3.7 -->
-        <section id="sec37">
+		<section id="sec37">
             <h2><span class="icon">🆕</span>3.7 Inicialización de objetos mediante constructores</h2>
-            <p>Un <strong>constructor</strong> es una función miembro especial que se ejecuta automáticamente cuando se crea un objeto. No tiene tipo de retorno y debe llamarse igual que la clase. Según <strong>Deitel</strong>, el propósito primordial es asegurar que el objeto nazca en un estado válido.</p>
+            
+            <p>En el ciclo de vida de cualquier entidad de software, el momento de su creación es crítico. Un <strong>constructor</strong> es una función miembro especial que se ejecuta automáticamente en el preciso instante en que se crea un objeto (instanciación). Según el PDF de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), el propósito primordial y fundamental de un constructor es asegurar que el objeto nazca en un <strong>estado válido</strong>, inicializando sus miembros de datos con valores coherentes antes de que cualquier otra parte del programa intente interactuar con él.</p>
+
+            <p>Desde una perspectiva técnica, el constructor presenta características únicas que lo distinguen de cualquier otra función miembro: debe tener exactamente el mismo nombre que la clase y, lo más importante, <strong>no posee tipo de retorno</strong> (ni siquiera <code>void</code>). Esta ausencia de tipo de retorno se debe a que el compilador invoca al constructor de manera implícita para configurar la memoria recién reservada para el objeto, no para devolver un resultado al llamador.</p>
+
             <div class="code-block">
-<pre>class LibroCalificaciones {
+<pre>// Implementación robusta siguiendo principios de Deitel y O'Reilly
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+class LibroCalificaciones {
 public:
-    // Constructor
-    LibroCalificaciones(string nombre) {
-        establecerNombreCurso(nombre);
+    // Constructor con parámetro para inicialización personalizada
+    // Se recomienda usar el constructor para invocar a las funciones establecer (setters)
+    LibroCalificaciones(std::string nombre) {
+        establecerNombreCurso(nombre); // Reutilizamos lógica de validación
     }
+
+    void establecerNombreCurso(std::string nombre) {
+        // Aquí iría la validación lógica según O'Reilly
+        if (nombre.length() <= 25) {
+            nombreCurso = nombre;
+        } else {
+            nombreCurso = nombre.substr(0, 25);
+            std::cout << "Advertencia: Nombre limitado a 25 caracteres." << std::endl;
+        }
+    }
+
+    std::string obtenerNombreCurso() const {
+        return nombreCurso;
+    }
+
 private:
-    string nombreCurso;
+    std::string nombreCurso; // Miembro de datos privado
 };</pre>
             </div>
-            <p>Si no definís un constructor, el compilador genera uno predeterminado, pero es una buena práctica (y exigencia académica) definirlo nosotros para evitar "valores basura" en memoria.</p>
+
+            <h3>3.7.1 El Problema de los "Valores Basura" y la Seguridad</h3>
+            <p>Basado en el PDF de <strong>O'Reilly</strong> (<em>Practical C++ Programming</em>), la importancia de definir constructores propios radica en la prevención de estados indeterminados. En C++, las variables que no se inicializan explícitamente contienen lo que se conoce como <span class="abbr" data-title="Valores Basura: Datos residuales que quedan en una dirección de memoria tras su uso anterior">valores basura</span>. Trabajar con un objeto cuyos atributos no han sido definidos es una fuente inagotable de errores lógicos y vulnerabilidades de seguridad.</p>
+            
+            <p>Ustedes, como ingenieros, deben comprender que el constructor es su primera línea de defensa en la <strong>programación defensiva</strong>. <strong>O'Reilly</strong> enfatiza que un objeto debe ser autosuficiente: no debería ser responsabilidad del usuario de la clase acordarse de llamar a una función de "inicio" después de crear el objeto. El constructor garantiza que esta inicialización sea atómica y obligatoria.</p>
+
+            <h3>3.7.2 Constructores Predeterminados y Sobrecarga</h3>
+            <p>Si ustedes no definen un constructor en su clase, el compilador de C++ generará automáticamente un <strong>constructor predeterminado</strong> que no recibe argumentos. Sin embargo, en el momento en que ustedes definen cualquier constructor (como el que recibe un <code>string</code>), el compilador deja de proporcionar el predeterminado. Esto es una exigencia académica común: deben ser conscientes de cómo sus decisiones de diseño afectan la forma en que los objetos pueden ser creados.</p>
+
+            <p>Siguiendo la teoría de <strong>Deitel</strong>, es posible aplicar la <strong>sobrecarga de constructores</strong>. Esto permite que una clase tenga múltiples "puntos de entrada". Podríamos tener un constructor sin parámetros que asigne un nombre por defecto ("Sin nombre") y otro que acepte un parámetro específico. Desde el <strong>Cuaderno de notebookLM sobre UX UI</strong>, esto se traduce en una mejora en la <span class="abbr" data-title="Affordance: La cualidad de un objeto que sugiere cómo debe ser usado">affordance</span> de nuestra clase: proporcionamos flexibilidad al desarrollador para instanciar objetos de la manera que mejor se adapte a su flujo de trabajo, manteniendo siempre la predictibilidad del sistema.</p>
+
+            <h3>3.7.3 Metodologías Activas: El "Nacimiento" del Objeto</h3>
+            <p>El <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong> propone una analogía poderosa para facilitar el aprendizaje constructivista: el constructor es como el acta de nacimiento de un ciudadano. Un ciudadano no puede existir en el sistema legal sin ciertos datos básicos (nombre, fecha, lugar). De la misma manera, un objeto <code>LibroCalificaciones</code> no debería existir en nuestro sistema educativo sin un nombre de curso asignado.</p>
+            
+            <p>La metodología activa sugiere que los estudiantes realicen un ejercicio de "diseño por contrato". Antes de codificar el constructor, deben definir: ¿Qué es lo mínimo que mi objeto necesita para ser considerado 'válido'? Esta reflexión previa evita el error común de crear clases "vacías" que luego requieren múltiples llamadas a funciones <code>set</code> para funcionar correctamente. Este enfoque fomenta un aprendizaje basado en la resolución de problemas de arquitectura de software.</p>
+
+            <h3>3.7.4 Relación con el Desarrollo Web y Ciclos de Vida</h3>
+            <p>Aunque estamos estudiando C++, el concepto de inicialización es universal. El <strong>Cuaderno de notebookLM sobre desarrollo web</strong> establece un paralelismo directo con los componentes de <em>frontend</em> modernos. En frameworks como React o Angular, el constructor (o los hooks de inicialización como <code>ngOnInit</code>) cumplen la misma función: configurar el estado inicial del componente antes de que sea renderizado en el navegador.</p>
+            
+            <p>Comprender los constructores en C++ les da una ventaja competitiva en la web, ya que les enseña a pensar en el <strong>ciclo de vida</strong> de los componentes. Un componente que no se inicializa correctamente provocará errores de "undefined" en la interfaz de usuario, lo cual es el equivalente web a los "valores basura" de C++. La rigurosidad que aprenden aquí se traduce en aplicaciones web más estables y profesionales.</p>
+
+            <h3>3.7.5 La Lista de Inicialización de Miembros: Una Buena Práctica</h3>
+            <p>Un detalle técnico avanzado, resaltado tanto por <strong>Deitel</strong> como por <strong>O'Reilly</strong>, es el uso de la <strong>lista de inicialización de miembros</strong>. En lugar de asignar valores dentro del cuerpo de las llaves, C++ permite inicializar los atributos antes de que el cuerpo del constructor se ejecute. Esto es no solo más eficiente en términos de rendimiento, sino que en algunos casos (como con miembros constantes o referencias) es la única forma legal de hacerlo.</p>
+            
+            <div class="code-block">
+<pre>// Ejemplo de lista de inicialización (Best Practice)
+LibroCalificaciones(std::string nombre) 
+    : nombreCurso(nombre) // Inicialización directa
+{
+    // El cuerpo puede quedar vacío o usarse para validaciones extra
+}</pre>
+            </div>
+
+            <p>En conclusión, el dominio de los constructores separa al programador novato del ingeniero de software. Como futuros profesionales, su meta es diseñar sistemas donde los objetos sean ciudadanos responsables que nunca entren en escena sin estar debidamente preparados. El constructor es el guardián de esa integridad, asegurando que la complejidad de sus sistemas se mantenga bajo control desde el primer byte de existencia de cada objeto.</p>
+
+            <div class="note-box">
+                <strong>💡 Nota de Ingeniería:</strong> Un error frecuente en exámenes es intentar llamar al constructor explícitamente sobre un objeto ya existente. Recuerden: el constructor solo se ejecuta <strong>una vez</strong> durante la creación. Para cambiar el estado después, deben usar funciones <code>set</code>.
+            </div>
+
             <button class="ref-btn" onclick="showRef('3.7')">Referencia Bibliográfica</button>
         </section>
 
         <!-- 3.8 -->
-        <section id="sec38">
+		<section id="sec38">
             <h2><span class="icon">📁</span>3.8 Colocar una clase en un archivo separado para fines de reutilización</h2>
-            <p>En el desarrollo industrial, no ponemos todo en el <code>main.cpp</code>. Dividimos el código en archivos de cabecera (<code>.h</code>) y archivos de implementación. Esto facilita la reutilización. Ustedes pueden crear una clase <code>Cuenta</code> una vez y usarla en cien proyectos diferentes simplemente incluyendo el archivo.</p>
-            <p><strong>Directiva de Preprocesador:</strong> Usamos <code>#include "MiClase.h"</code>. Noten las comillas: indican al compilador que busque en nuestra carpeta de proyecto, no en las librerías estándar del sistema.</p>
+            
+            <p>En el desarrollo de software industrial y profesional, la organización del código es tan crítica como su lógica interna. Siguiendo las directrices del PDF de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), no es una práctica aceptable colocar todas las definiciones en el archivo <code>main.cpp</code>. En su lugar, dividimos el software en unidades modulares: archivos de cabecera (interfaz) y archivos de código fuente (implementación). Este enfoque no solo facilita la <strong>reutilización de código</strong>, sino que permite que los sistemas escalen de manera sostenible, permitiendo que un equipo de ingenieros trabaje simultáneamente en diferentes módulos sin interferencias.</p>
+
+            <h3>3.8.1 La Arquitectura de la Separación: Interfaz vs. Implementación</h3>
+            <p>De acuerdo con <strong>O'Reilly</strong> (<em>Practical C++ Programming</em>), la separación física de los archivos refleja una separación lógica de responsabilidades. Esta estructura se divide tradicionalmente en dos componentes:</p>
+            <ul>
+                <li><strong>El Archivo de Cabecera (<code>.h</code> o <code>.hpp</code>):</strong> Contiene la <strong>definición de la clase</strong>. Actúa como el "qué" hace la clase. Es el contrato que el resto del programa ve. Según el <strong>Cuaderno de notebookLM sobre UX UI</strong>, un archivo de cabecera bien diseñado debe ser una pieza de comunicación clara; debe mostrar los métodos públicos de manera que su uso sea autoevidente, reduciendo la <span class="abbr" data-title="Carga Cognitiva: Cantidad de esfuerzo mental utilizado en la memoria de trabajo">carga cognitiva</span> del desarrollador que lo integra.</li>
+                <li><strong>El Archivo de Implementación (<code>.cpp</code>):</strong> Contiene las definiciones detalladas de las funciones miembro. Es el "cómo" se realizan las tareas. Al ocultar estos detalles en un archivo separado, aplicamos el principio de <strong>encapsulamiento</strong> a nivel de sistema de archivos, protegiendo la propiedad intelectual y evitando que cambios menores en la lógica requieran recompilar todo el proyecto.</li>
+            </ul>
+
+            <div class="note-box">
+                <strong>💡 Perspectiva de Diseño (DX):</strong> El <strong>Cuaderno de UX UI</strong> introduce el concepto de <em>Developer Experience</em> (DX). Un archivo <code>.h</code> saturado de comentarios innecesarios o lógica mezclada ensucia el <span class="abbr" data-title="Modelo Mental: Representación interna que una persona tiene sobre cómo funciona algo">modelo mental</span> del programador. La elegancia en la separación de archivos es una forma de diseño de interfaz para colegas ingenieros.
+            </div>
+
+            <h3>3.8.2 Directivas del Preprocesador y Guardas de Inclusión</h3>
+            <p>Para integrar estos archivos, utilizamos la directiva <code>#include</code>. Es vital notar la diferencia sintáctica: usamos <code>#include &lt;iostream&gt;</code> (con paréntesis angulares) para bibliotecas estándar del compilador, pero empleamos <code>#include "LibroCalificaciones.h"</code> (con comillas) para nuestros propios archivos. Como señala <strong>Deitel</strong>, las comillas le indican al preprocesador que inicie la búsqueda en el directorio local del proyecto.</p>
+            
+            <p>Un problema técnico recurrente mencionado por <strong>O'Reilly</strong> es la "doble inclusión". Si dos archivos incluyen la misma cabecera, el compilador verá dos definiciones de la misma clase y arrojará un error. Para evitar esto, es obligatorio el uso de las <strong>guardas de preprocesador</strong>:</p>
+
+            <div class="code-block">
+<pre>// Estructura estándar recomendada por O'Reilly y Deitel
+#ifndef LIBROCALIFICACIONES_H
+#define LIBROCALIFICACIONES_H
+
+#include &lt;string&gt;
+
+class LibroCalificaciones {
+    // Definición de la clase...
+};
+
+#endif</pre>
+            </div>
+
+            <h3>3.8.3 Conexión con el Desarrollo Web y la Modularidad Moderna</h3>
+            <p>El <strong>Cuaderno de notebookLM sobre desarrollo web</strong> establece un paralelismo directo entre esta práctica de C++ y el sistema de módulos de JavaScript (ESM). En el desarrollo web moderno, dividimos la lógica en archivos <code>.js</code> o <code>.ts</code> independientes que luego se importan donde se necesitan. La filosofía es la misma: crear componentes atómicos, testeables y reutilizables.</p>
+            
+            <p>En el ámbito web, esta modularidad permite la carga bajo demanda y mejora el rendimiento. En C++, la separación permite la <strong>compilación independiente</strong>: si solo modificamos el archivo <code>.cpp</code> de una clase, no necesitamos recompilar el resto del sistema, solo vincularlo (<em>linking</em>) nuevamente. Esta eficiencia es lo que permite a C++ dominar en entornos de alto rendimiento como motores de navegadores o infraestructuras de servidores críticos.</p>
+
+            <h3>3.8.4 Metodologías Activas y Pensamiento Sistémico</h3>
+            <p>Desde el <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong>, el ejercicio de separar una clase en archivos distintos se considera un paso fundamental hacia el <strong>pensamiento sistémico</strong>. Los estudiantes suelen percibir esto inicialmente como una complicación innecesaria (un "obstáculo pedagógico"). Sin embargo, la metodología activa propone que el alumno intente reutilizar una clase que está "atrapada" en un archivo <code>main.cpp</code> de otro proyecto.</p>
+            
+            <p>Al enfrentarse a la tarea de copiar y pegar código (y los errores que esto conlleva), el estudiante descubre por sí mismo la necesidad de la modularización. Este es un ejemplo de <strong>aprendizaje basado en problemas</strong> (ABP). La capacidad de ver el software como un conjunto de piezas de LEGO que se ensamblan es la marca de un ingeniero capacitado para el trabajo en equipo y la producción industrial de software en Argentina y el mundo.</p>
+
+            <h3>3.8.5 El Proceso de Construcción (Build Process)</h3>
+            <p>Finalmente, es crucial entender que el compilador no "lee" los archivos de forma aislada por arte de magia. Como explica <strong>Deitel</strong>, cada archivo <code>.cpp</code> se compila en un archivo objeto (<code>.obj</code> o <code>.o</code>). Luego, una herramienta llamada <strong>enlazador</strong> (<em>linker</em>) une todos estos fragmentos junto con las librerías del sistema para generar el ejecutable final. Ustedes, como futuros profesionales, deben dominar este flujo de trabajo para diagnosticar errores de vinculación, que son comunes cuando declaramos una función en el <code>.h</code> pero olvidamos definirla en el <code>.cpp</code>.</p>
+
+            <div class="diagram">
+                <div class="box">main.cpp<br><small>(Lógica del programa)</small></div>
+                <div class="arrow">⬇ #include "Clase.h"</div>
+                <div class="box">Clase.h<br><small>(Interfaz / Contrato)</small></div>
+                <div class="arrow">⬆ Implementa</div>
+                <div class="box">Clase.cpp<br><small>(Detalles técnicos)</small></div>
+            </div>
+
+            <p>En conclusión, colocar una clase en un archivo separado no es solo una cuestión de orden; es una decisión de diseño que impacta en la velocidad de desarrollo, la facilidad de mantenimiento y la claridad del sistema. Siguiendo los principios de <strong>Deitel</strong> y la practicidad de <strong>O'Reilly</strong>, estamos construyendo cimientos sólidos para cualquier aplicación de ingeniería, desde una simple herramienta de consola hasta un motor gráfico complejo o un sistema de gestión web de alto tráfico.</p>
+
             <button class="ref-btn" onclick="showRef('3.8')">Referencia Bibliográfica</button>
         </section>
 
         <!-- 3.9 -->
-        <section id="sec39">
+		<section id="sec39">
             <h2><span class="icon">🔌</span>3.9 Separar la interfaz de la implementación</h2>
-            <p>La <strong>interfaz</strong> le dice al usuario <em>qué</em> hace la clase (está en el <code>.h</code>). La <strong>implementación</strong> dice <em>cómo</em> lo hace (está en el <code>.cpp</code>). Basado en <strong>O'Reilly</strong>, esto permite cambiar la lógica interna sin que los usuarios de la clase tengan que cambiar su código.</p>
+            
+            <p>La culminación del diseño profesional en C++ se alcanza mediante la separación estricta de la <strong>interfaz</strong> y la <strong>implementación</strong>. Este principio, pilar de la ingeniería de software moderna, establece que la interfaz le dice al usuario (o a otros desarrolladores) <em>qué</em> hace la clase, mientras que la implementación describe <em>cómo</em> lo hace. Basado en el texto de <strong>O'Reilly</strong> (<em>Practical C++ Programming</em>), esta distinción es lo que permite que el software sea verdaderamente robusto: permite cambiar la lógica interna de un módulo sin que los usuarios de la clase (el código cliente) tengan que modificar o siquiera conocer esos cambios.</p>
+
             <div class="diagram">
-                <div class="box">Archivo .h<br><small>Declaraciones (Firma)</small></div>
-                <div class="arrow">➕</div>
-                <div class="box">Archivo .cpp<br><small>Definiciones (Lógica)</small></div>
+                <div class="box">
+                    <strong>Archivo de Cabecera (.h)</strong><br>
+                    <small>La Interfaz (El "Qué")</small><br>
+                    <hr>
+                    <small>Prototipos, Firmas y Atributos</small>
+                </div>
+                <div class="arrow">↔️ Desacoplamiento ↔️</div>
+                <div class="box">
+                    <strong>Archivo de Fuente (.cpp)</strong><br>
+                    <small>La Implementación (El "Cómo")</small><br>
+                    <hr>
+                    <small>Lógica de algoritmos y cálculos</small>
+                </div>
             </div>
-            <p>Ustedes deben usar el operador de resolución de ámbito (<code>::</code>) en el archivo <code>.cpp</code> para vincular las funciones a su clase correspondiente.</p>
+
+            <h3>3.9.1 El Contrato de la Interfaz (.h)</h3>
+            <p>Según el PDF de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), el archivo de cabecera es el "contrato" de la clase. En él se declaran los prototipos de las funciones miembro y los miembros de datos. Desde la perspectiva del <strong>Cuaderno de notebookLM sobre UX UI</strong>, la interfaz de una clase debe tratarse como un diseño orientado al usuario (en este caso, el desarrollador). Una interfaz clara tiene una alta <span class="abbr" data-title="Affordance: Propiedad de un objeto que sugiere cómo debe ser usado">affordance</span>: al leer el archivo <code>.h</code>, el programador debería entender inmediatamente cómo interactuar con el objeto sin necesidad de navegar por cientos de líneas de lógica compleja.</p>
+            
+            <p><strong>Deitel</strong> resalta que ocultar la implementación en un archivo separado promueve la reutilización de software en forma de <strong>objetos binarios</strong>. En la industria, una empresa puede proporcionar el archivo de cabecera (para que el cliente sepa qué funciones llamar) y el archivo objeto ya compilado, protegiendo así su propiedad intelectual (el código fuente de la implementación) mientras permite que otros integren su tecnología.</p>
+
+            <h3>3.9.2 El Operador de Resolución de Ámbito (<code>::</code>)</h3>
+            <p>Para que la separación sea efectiva, el archivo de implementación (<code>.cpp</code>) debe "reclamar" las funciones que pertenecen a la clase definida en la cabecera. Aquí es donde entra en juego el <strong>Operador de Resolución de Ámbito</strong> (<code>::</code>). Como explica <strong>O'Reilly</strong>, este operador vincula el nombre de la función miembro con el nombre de la clase, indicando al compilador que dicha función no es una función global, sino que tiene acceso a los miembros privados de la entidad correspondiente.</p>
+
+            <div class="code-block">
+<pre>// Ejemplo de implementación técnica profesional
+#include "LibroCalificaciones.h" // Incluimos la interfaz
+#include &lt;iostream&gt;
+
+using namespace std;
+
+// El operador :: vincula la función a la clase
+void LibroCalificaciones::mostrarMensaje() const {
+    cout << "Bienvenido al curso: " << obtenerNombreCurso() << "!" << endl;
+}</pre>
+            </div>
+
+            <h3>3.9.3 Perspectiva de Desarrollo Web: Microservicios y Componentes</h3>
+            <p>El <strong>Cuaderno de notebookLM sobre desarrollo web</strong> establece una analogía fascinante: separar la interfaz de la implementación en C++ es el precursor ideológico de la arquitectura de <strong>Microservicios</strong> y el desarrollo basado en componentes (como en React). En la web, el <em>frontend</em> consume una API (interfaz) sin saber si el <em>backend</em> está escrito en Node.js, Python o C++ (implementación). Esta abstracción permite que el equipo de <em>backend</em> optimice sus algoritmos o cambie su base de datos sin romper la experiencia del usuario en el navegador.</p>
+            
+            <p>Ustedes, como ingenieros, deben ver el archivo <code>.h</code> como la documentación técnica de su API y el <code>.cpp</code> como el motor oculto. Si diseñan sus clases de esta manera, están facilitando la creación de sistemas distribuidos y escalables, reduciendo el acoplamiento y aumentando la estabilidad del ecosistema de software completo.</p>
+
+            <h3>3.9.4 Metodologías Activas: El Andamiaje de la Complejidad</h3>
+            <p>Desde el punto de vista del <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong>, la enseñanza de esta separación debe ser gradual. El cuaderno sugiere que el "salto" de un solo archivo a múltiples archivos representa una <span class="abbr" data-title="Carga Cognitiva Externa: Esfuerzo mental impuesto por la forma en que se presenta la información">Carga Cognitiva Externa</span> considerable. Por ello, se recomienda la técnica de <em>andamiaje</em> (scaffolding): primero consolidar la lógica en un solo archivo y luego realizar una refactorización guiada hacia la separación física.</p>
+            
+            <p>Esta práctica fomenta el <strong>aprendizaje significativo</strong> al obligar al estudiante a reflexionar sobre la visibilidad. ¿Qué funciones deben ser públicas en el <code>.h</code> y cuáles deben ser funciones de utilidad privadas en el <code>.cpp</code>? Esta toma de decisiones es la esencia del diseño de ingeniería y lo que diferencia a un programador de un arquitecto de sistemas.</p>
+
+            <h3>3.9.5 Ventajas de Mantenimiento y Compilación</h3>
+            <p>Finalmente, <strong>Deitel</strong> y <strong>O'Reilly</strong> coinciden en una ventaja técnica fundamental: la <strong>velocidad de compilación</strong>. En proyectos masivos, si cambiamos la implementación de una función en el archivo <code>.cpp</code>, solo es necesario recompilar ese archivo específico y luego volver a enlazarlo (<em>link</em>). Si todo estuviera en un único archivo de cabecera, cada pequeño cambio obligaría a recompilar todas las partes del proyecto que incluyen esa clase, lo que en sistemas industriales podría tomar horas.</p>
+
+            <p>Como futuros ingenieros en Argentina, dominar esta separación les permitirá integrarse en equipos de desarrollo internacionales, donde los estándares de código exigen una modularidad absoluta. La elegancia de C++ reside en que nos da el control para decidir exactamente qué queremos exponer y qué queremos proteger, garantizando que nuestro software no solo funcione hoy, sino que sea capaz de evolucionar mañana sin colapsar bajo su propia complejidad.</p>
+
+            <div class="note-box">
+                <strong>💡 Regla de Oro de O'Reilly:</strong> "Nunca pongas código ejecutable en un archivo de cabecera a menos que sea una función inline o una plantilla. El <code>.h</code> es para declaraciones, el <code>.cpp</code> es para la acción".
+            </div>
+
             <button class="ref-btn" onclick="showRef('3.9')">Referencia Bibliográfica</button>
         </section>
 
         <!-- 3.10 -->
-        <section id="sec310">
+		<section id="sec310">
             <h2><span class="icon">✅</span>3.10 Validación de datos mediante funciones establecer</h2>
-            <p>La validación es el guardián de la integridad. No basta con recibir un valor; hay que verificarlo. Según <strong>Deitel</strong>, el setter es el lugar ideal para aplicar lógica de negocio. Si el valor es inválido, podemos rechazarlo o asignar un valor predeterminado.</p>
+            
+            <p>En la ingeniería de software, la <strong>validación de datos</strong> no es una tarea secundaria, sino el guardián fundamental de la integridad de un sistema. No basta con que un objeto reciba un valor; es imperativo verificar que dicho valor sea coherente con las reglas de negocio y los límites físicos de la memoria. Según el PDF de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), la función establecer (<em>setter</em>) es el lugar ideal y arquitectónicamente correcto para aplicar esta lógica. El objetivo es que el objeto mantenga siempre un "estado consistente", impidiendo que datos erróneos se propaguen por el resto de la aplicación.</p>
+
+            <p>Ustedes deben comprender que un objeto es una entidad autónoma responsable de su propia salud. Si permitimos que un objeto entre en un estado inválido (por ejemplo, una fecha como 31 de febrero o una calificación de 150 sobre 100), estamos sembrando la semilla de un fallo sistémico que será extremadamente difícil de depurar en etapas posteriores. Deitel denomina a esto "verificación de validez" y la considera una de las ventajas primordiales del <span class="abbr" data-title="Encapsulamiento: Agrupamiento de datos y métodos que protege el estado interno de un objeto">encapsulamiento</span>.</p>
+
             <div class="code-block">
-<pre>void establecerNombreCurso(string nombre) {
+<pre>// Implementación técnica de validación profesional
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+void LibroCalificaciones::establecerNombreCurso(std::string nombre) {
+    // La validación protege la integridad del objeto
     if (nombre.length() <= 25) {
-        nombreCurso = nombre;
+        nombreCurso = nombre; // El dato es válido y se asigna
     } else {
-        nombreCurso = nombre.substr(0, 25); // Recorta
-        cout << "Nombre excedia los 25 caracteres. Se recorto." << endl;
+        // Estrategia de sanitización sugerida por Deitel y O'Reilly
+        nombreCurso = nombre.substr(0, 25); // Se recortan los caracteres excedentes
+        
+        // El feedback es crucial para el desarrollador (UX de código)
+        std::cerr << "ADVERTENCIA: El nombre '" << nombre 
+                  << "' excede el limite de 25 caracteres.\n"
+                  << "Se ha truncado a: " << nombreCurso << std::endl;
     }
 }</pre>
             </div>
+
+            <h3>3.10.1 Programación Defensiva y el Enfoque Práctico de O'Reilly</h3>
+            <p>Basado en el PDF de <strong>O'Reilly</strong> (<em>Practical C++ Programming</em>), la validación dentro de los <em>setters</em> es la piedra angular de la <strong>programación defensiva</strong>. O'Reilly argumenta que el software profesional debe estar diseñado bajo la premisa de que "si algo puede salir mal, saldrá mal". Por lo tanto, el código no solo debe manejar el flujo feliz de los datos, sino prever activamente las entradas incorrectas o malintencionadas.</p>
+            
+            <p>En el ejemplo del <code>LibroCalificaciones</code>, el uso de la función <code>substr(0, 25)</code> es una técnica de <strong>sanitización</strong>. A diferencia de una validación que simplemente rechaza el dato, la sanitización intenta "curar" la entrada para que sea aceptable. Sin embargo, O'Reilly advierte que esta decisión debe ser comunicada. Silenciar un error de truncamiento puede llevar a que un usuario se pregunte por qué su curso de "Programación de Sistemas Empotrados en C++" ahora se llama "Programación de Sistemas Em", generando confusión y errores de UX.</p>
+
+            <h3>3.10.2 UX de Código: El Feedback al Programador</h3>
+            <p>Integrando el <strong>Cuaderno de notebookLM sobre UX UI</strong>, debemos entender que el programador que utiliza nuestra clase es nuestro "usuario". Cuando una validación falla, la forma en que el sistema responde define la <span class="abbr" data-title="Developer Experience: Facilidad con la que un desarrollador puede trabajar con una API o librería">DX (Developer Experience)</span>. El cuaderno resalta que un error silencioso es el peor enemigo del diseño. Si una clase rechaza un valor sin dar una señal clara, el desarrollador experimentará una alta <span class="abbr" data-title="Carga Cognitiva: Esfuerzo mental requerido para comprender y operar un sistema">carga cognitiva</span> intentando adivinar por qué el objeto no se actualiza.</p>
+            
+            <p>Por ello, en el código superior se utiliza <code>std::cerr</code> (flujo de error estándar). Según el cuaderno de UX UI, los mensajes de error deben ser:</p>
+            <ul>
+                <li><strong>Descriptivos:</strong> Indicar exactamente qué regla se rompió.</li>
+                <li><strong>Accionables:</strong> Sugerir cómo corregir el dato (ej. "máximo 25 caracteres").</li>
+                <li><strong>Ubicables:</strong> Facilitar la identificación de en qué parte del código ocurrió la falla.</li>
+            </ul>
+
+            <h3>3.10.3 Perspectiva de Desarrollo Web: Validación de Capas</h3>
+            <p>Desde la óptica del <strong>Cuaderno de notebookLM sobre desarrollo web</strong>, la lógica de validación en las clases de C++ es análoga a la validación en el <em>backend</em> de una aplicación web. El cuaderno enfatiza que no se debe confiar nunca en los datos provenientes del cliente (el <em>frontend</em>). Así como un formulario web puede ser "saltado" por un atacante, un objeto en C++ puede recibir datos de fuentes no seguras (archivos, red, entrada de usuario).</p>
+            
+            <p>La validación en el <em>setter</em> actúa como la última línea de defensa. En el desarrollo web profesional, esto se conoce como la aplicación de "reglas de negocio". Si una regla dicta que el nombre de un curso no debe ser demasiado largo para evitar problemas de visualización en la base de datos o en la interfaz, el <em>setter</em> es quien garantiza que esa restricción se cumpla de manera centralizada. Si el día de mañana la restricción cambia de 25 a 50 caracteres, solo modificaremos un archivo (la clase), no cada lugar donde se pide el nombre al usuario.</p>
+
+            <h3>3.10.4 Metodologías Activas: Aprender a través del "Fallo Controlado"</h3>
+            <p>El <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong> sugiere que la validación es un concepto ideal para el aprendizaje por descubrimiento. En lugar de simplemente explicar la teoría, se propone que los estudiantes intenten "romper" sus propios programas. Al ingresar un nombre de 100 caracteres y observar cómo el programa se comporta mal (o se corta), el alumno comprende la necesidad de la validación no como una regla arbitraria del profesor, sino como una necesidad de ingeniería.</p>
+            
+            <p>La metodología activa fomenta el <strong>pensamiento crítico</strong>: el estudiante debe decidir qué estrategia es mejor. ¿Debo usar <code>substr</code> para recortar? ¿Debo lanzar una excepción? ¿Debo dejar el valor anterior si el nuevo es inválido? Estas no son preguntas técnicas, sino decisiones de diseño. El cuaderno de educación recalca que estas discusiones en clase son las que forman la mentalidad del futuro ingeniero, quien entiende que programar es, ante todo, tomar decisiones fundamentadas.</p>
+
+            <h3>3.10.5 Integridad de Datos y Robustez Sistémica</h3>
+            <p>Para concluir, la validación en funciones establecer, como proponen <strong>Deitel</strong> y <strong>O'Reilly</strong>, es lo que transforma un conjunto de variables en un componente de software industrial. Al encapsular la validación, estamos protegiendo al sistema de la entropía. Un sistema con clases que se validan a sí mismas es un sistema robusto, fácil de testear y, lo más importante, predecible.</p>
+            
+            <p>En Argentina, la formación de ingenieros destaca esta responsabilidad ética del programador: el código debe ser sólido. Ustedes verán que, a medida que sus proyectos crezcan en complejidad, agradecerán haber invertido tiempo en estas pequeñas "cerraduras de seguridad" en cada una de sus clases. El <code>LibroCalificaciones</code> es solo el comienzo; en sistemas reales de control industrial, finanzas o salud, una validación fallida en un <em>setter</em> puede ser la diferencia entre un sistema exitoso y un desastre tecnológico catastrófico.</p>
+
             <button class="ref-btn" onclick="showRef('3.10')">Referencia Bibliográfica</button>
         </section>
 
         <!-- 3.11 -->
-        <section id="sec311">
-            <h2><span class="icon">🏧</span>3.11 (Opcional) Ejemplo práctico: identificación de las clases en el ATM</h2>
-            <p>En ingeniería de software, usamos la técnica de <strong>identificación de sustantivos</strong>. Tomamos el requerimiento del cliente (ej. "El usuario retira dinero del cajero usando su tarjeta") y buscamos los nombres:</p>
-            <ul>
-                <li><strong>Sustantivos:</strong> Cajero, Usuario, Dinero, Tarjeta, Cuenta. (Candidatos a ser <strong>Clases</strong>).</li>
-                <li><strong>Verbos:</strong> Retirar, Validar, Consultar. (Candidatos a ser <strong>Funciones Miembro</strong>).</li>
-            </ul>
-            <p>Este proceso es el primer paso para crear un diagrama <span class="abbr" data-title="UML: Lenguaje Unificado de Modelado, usado para visualizar el diseño de sistemas">UML</span> profesional.</p>
-            <button class="ref-btn" onclick="showRef('3.11')">Referencia Bibliográfica</button>
-        </section>
+		<section id="sec311">
+		<h2><span class="icon">🏧</span>3.11 (Opcional) Ejemplo práctico: identificación de las clases en el ATM</h2>
+
+        <p>En la ingeniería de software, la transición del lenguaje natural al código es uno de los desafíos más críticos. Según el PDF de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), el proceso de diseño comienza con un análisis detallado de los requerimientos para identificar las entidades que compondrán el sistema. Una técnica fundamental para este fin es la <strong>identificación de sustantivos</strong>. Imaginemos que el cliente nos entrega el siguiente requerimiento: <em>"Un usuario se acerca al cajero automático, introduce su tarjeta, el sistema valida su identidad y luego el usuario retira dinero de su cuenta consultando el saldo disponible"</em>.</p>
+
+        <h3>3.11.1 Análisis Lingüístico y Modelado de Clases</h3>
+        <p>Bajo la metodología de <strong>Deitel</strong>, el primer paso es extraer los sustantivos y verbos del relato. Los sustantivos representan los candidatos a ser <strong>Clases</strong>, mientras que los verbos sugieren las <strong>Funciones Miembro</strong>. Este proceso no es automático; requiere un juicio de ingeniería para filtrar qué entidades son relevantes para el dominio del problema.</p>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Categoría Gramatical</th>
+                        <th>Candidatos Identificados</th>
+                        <th>Rol en la <span class="abbr" data-title="POO: Programación Orientada a Objetos">POO</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Sustantivos</strong></td>
+                        <td>Cajero (ATM), Usuario, Tarjeta, Cuenta, Dinero, Pantalla, Teclado.</td>
+                        <td><strong>Clases:</strong> Representan las entidades con estado y comportamiento.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Verbos</strong></td>
+                        <td>Retirar, Validar, Consultar, Introducir, Dispensar.</td>
+                        <td><strong>Funciones Miembro:</strong> Definen las acciones que los objetos pueden realizar.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>3.11.2 La Perspectiva de Diseño Industrial (O'Reilly)</h3>
+        <p><strong>O'Reilly</strong> (<em>Practical C++ Programming</em>) complementa este enfoque señalando que el diseño de un sistema como un ATM debe ser modular y resistente a fallos. No basta con identificar la clase <code>Cajero</code>; debemos pensar en la <strong>composición</strong>. Un <code>ATM</code> no <em>es</em> una <code>Pantalla</code>, sino que <em>tiene</em> una <code>Pantalla</code> y <em>tiene</em> un <code>Dispensador</code>. Esta distinción es vital para la reutilización: si el banco decide cambiar el modelo de pantalla por uno táctil, solo deberíamos modificar la clase <code>Pantalla</code>, manteniendo intacta la lógica de la clase <code>Cajero</code>.</p>
+
+        <p>Ustedes, como futuros profesionales, deben evitar la creación de "clases Dios" (clases que hacen todo). <strong>O'Reilly</strong> advierte que la robustez proviene de distribuir responsabilidades. Por ejemplo, la validación del PIN no debería ser responsabilidad de la clase <code>Teclado</code>, sino de la clase <code>BaseDeDatosBanco</code> o de la entidad <code>Cuenta</code>.</p>
+
+        <h3>3.11.3 Metodologías Activas: El Modelado como Proceso Social</h3>
+        <p>El <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong> sugiere que la identificación de clases en un ATM es un escenario ideal para el <strong>Aprendizaje Basado en Problemas (ABP)</strong>. En lugar de recibir la solución terminada, la metodología activa propone que ustedes realicen una "simulación de roles". Al actuar como las diferentes piezas del cajero, los estudiantes descubren qué información necesita cada objeto para cumplir su función. Esta técnica de <em>andamiaje cognitivo</em> facilita la comprensión de conceptos abstractos como la <span class="abbr" data-title="Encapsulación: Ocultamiento de la complejidad interna de un objeto">encapsulación</span>.</p>
+        
+        <p>En las universidades argentinas, este ejercicio suele acompañarse de debates sobre la <strong>cohesión</strong>. Si la clase <code>Cajero</code> intenta manejar la impresión del recibo y la validación de la tarjeta al mismo tiempo, estamos ante una baja cohesión. El cuaderno de educación resalta que el aprendizaje significativo ocurre cuando el alumno comprende que una clase bien diseñada debe tener una única responsabilidad clara.</p>
+
+        <h3>3.11.4 UX/UI en el Diseño de Sistemas Críticos</h3>
+        <p>Integrando el <strong>Cuaderno de notebookLM sobre UX UI</strong>, debemos recordar que un ATM es, ante todo, una interfaz humana. Las clases <code>Pantalla</code> y <code>Teclado</code> no son solo periféricos; son los puntos de contacto que determinan la <span class="abbr" data-title="Carga Cognitiva: Esfuerzo mental requerido para completar una tarea">carga cognitiva</span> del usuario. Un diseño de software deficiente en estas clases puede inducir a errores costosos (ej. retirar una cantidad de dinero equivocada).</p>
+        
+        <p>Desde la UX, cada función miembro como <code>mostrarMenu()</code> debe estar diseñada pensando en la claridad y la accesibilidad. Si el sistema de software tarda demasiado en procesar un comando (debido a una mala implementación de las funciones miembro en el <em>backend</em>), la experiencia del usuario se degrada. El cuaderno de UX UI enfatiza que el diseño orientado a objetos debe facilitar un flujo de interacción fluido y libre de ambigüedades.</p>
+
+        <h3>3.11.5 Paralelismo con el Desarrollo Web Moderno</h3>
+        <p>Aunque el ATM es un dispositivo físico, su arquitectura de software es la base de las aplicaciones web transaccionales. El <strong>Cuaderno de notebookLM sobre desarrollo web</strong> menciona que las clases identificadas en este ejemplo (<code>Usuario</code>, <code>Cuenta</code>, <code>Transaccion</code>) son las mismas que encontramos en el <em>backend</em> de un <em>home banking</em> o una billetera virtual. La separación entre la interfaz (el cajero) y la lógica de negocio (el servidor del banco) es un precursor directo del modelo Cliente-Servidor que domina la web actual.</p>
+        
+        <p>Comprender cómo C++ gestiona estos objetos a bajo nivel les da una ventaja competitiva única para optimizar procesos críticos de concurrencia y seguridad en la nube, donde miles de "objetos ATM" virtuales interactúan simultáneamente con una base de datos centralizada.</p>
+
+        <h3>3.11.6 Hacia el Diagrama UML Profesional</h3>
+        <p>Finalmente, este análisis de sustantivos y verbos se vuelca en un diagrama <span class="abbr" data-title="UML: Unified Modeling Language. Estándar visual para especificar sistemas de software">UML</span>. <strong>Deitel</strong> explica que el UML es el lenguaje universal de los ingenieros de software. En un diagrama de clases, verán cajas que representan sus sustantivos, con sus atributos (datos) en la parte superior y sus funciones miembro (verbos) en la inferior, conectadas por líneas que indican cómo interactúan.</p>
+
+        <div class="code-block">
+
+
+<pre>// Pseudo-código de la estructura identificada
+class CajeroAutomatico {
+public:
+void ejecutar(); // Función principal (Verbo)
+private:
+Pantalla pantalla;       // Composición (Sustantivo)
+Teclado teclado;         // Composición (Sustantivo)
+DispensadorEfectivo dispensador; // Composición
+};</pre>
+
+        </div>
+
+        <p>En conclusión, el ejemplo del ATM no es solo una curiosidad académica; es el laboratorio donde se forja el criterio del ingeniero. Al separar correctamente las clases y sus funciones, como proponen <strong>Deitel</strong> y <strong>O'Reilly</strong>, estamos creando un sistema escalable, seguro y fácil de mantener, pilares indiscutibles de la ingeniería de software profesional.</p>
+
+        <button class="ref-btn" onclick="showRef('3.11')">Referencia Bibliográfica</button>
+    </section>
+	
+	
 
         <!-- 3.12 -->
-        <section id="sec312">
-            <h2><span class="icon">🏁</span>3.12 Repaso</h2>
-            <p>Hemos cubierto los pilares de la construcción de clases en C++. Recuerden: la clase es el molde, el objeto es la realidad. Protejan sus datos, validen sus entradas y separen su código para que sea escalable. Ustedes tienen ahora las herramientas para empezar a construir sistemas complejos.</p>
-            <p><strong>Actividad sugerida:</strong> Intentá implementar una clase <code>Alumno</code> con atributos para <code>legajo</code> y <code>promedio</code>, asegurándote que el promedio no pueda ser mayor a 10.</p>
-            <button class="ref-btn" onclick="showRef('3.12')">Referencia Bibliográfica</button>
-        </section>
+<section id="sec311">
+<h2><span class="icon">🏧</span>3.11 (Opcional) Ejemplo práctico: identificación de las clases en el ATM</h2>
+
+<p>En la ingeniería de software, la transición del lenguaje natural al código es uno de los desafíos más críticos. Según el PDF de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), el proceso de diseño comienza con un análisis detallado de los requerimientos para identificar las entidades que compondrán el sistema. Una técnica fundamental para este fin es la <strong>identificación de sustantivos</strong>. Imaginemos que el cliente nos entrega el siguiente requerimiento: <em>"Un usuario se acerca al cajero automático, introduce su tarjeta, el sistema valida su identidad y luego el usuario retira dinero de su cuenta consultando el saldo disponible"</em>.</p>
+
+<h3>3.11.1 Análisis Lingüístico y Modelado de Clases</h3>
+<p>Bajo la metodología de <strong>Deitel</strong>, el primer paso es extraer los sustantivos y verbos del relato. Los sustantivos representan los candidatos a ser <strong>Clases</strong>, mientras que los verbos sugieren las <strong>Funciones Miembro</strong>. Este proceso no es automático; requiere un juicio de ingeniería para filtrar qué entidades son relevantes para el dominio del problema.</p>
+
+<div class="table-responsive">
+    <table>
+        <thead>
+            <tr>
+                <th>Categoría Gramatical</th>
+                <th>Candidatos Identificados</th>
+                <th>Rol en la <span class="abbr" data-title="POO: Programación Orientada a Objetos">POO</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Sustantivos</strong></td>
+                <td>Cajero (ATM), Usuario, Tarjeta, Cuenta, Dinero, Pantalla, Teclado.</td>
+                <td><strong>Clases:</strong> Representan las entidades con estado y comportamiento.</td>
+            </tr>
+            <tr>
+                <td><strong>Verbos</strong></td>
+                <td>Retirar, Validar, Consultar, Introducir, Dispensar.</td>
+                <td><strong>Funciones Miembro:</strong> Definen las acciones que los objetos pueden realizar.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h3>3.11.2 La Perspectiva de Diseño Industrial (O'Reilly)</h3>
+<p><strong>O'Reilly</strong> (<em>Practical C++ Programming</em>) complementa este enfoque señalando que el diseño de un sistema como un ATM debe ser modular y resistente a fallos. No basta con identificar la clase <code>Cajero</code>; debemos pensar en la <strong>composición</strong>. Un <code>ATM</code> no <em>es</em> una <code>Pantalla</code>, sino que <em>tiene</em> una <code>Pantalla</code> y <em>tiene</em> un <code>Dispensador</code>. Esta distinción es vital para la reutilización: si el banco decide cambiar el modelo de pantalla por uno táctil, solo deberíamos modificar la clase <code>Pantalla</code>, manteniendo intacta la lógica de la clase <code>Cajero</code>.</p>
+
+<p>Ustedes, como futuros profesionales, deben evitar la creación de "clases Dios" (clases que hacen todo). <strong>O'Reilly</strong> advierte que la robustez proviene de distribuir responsabilidades. Por ejemplo, la validación del PIN no debería ser responsabilidad de la clase <code>Teclado</code>, sino de la clase <code>BaseDeDatosBanco</code> o de la entidad <code>Cuenta</code>.</p>
+
+<h3>3.11.3 Metodologías Activas: El Modelado como Proceso Social</h3>
+<p>El <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong> sugiere que la identificación de clases en un ATM es un escenario ideal para el <strong>Aprendizaje Basado en Problemas (ABP)</strong>. En lugar de recibir la solución terminada, la metodología activa propone que ustedes realicen una "simulación de roles". Al actuar como las diferentes piezas del cajero, los estudiantes descubren qué información necesita cada objeto para cumplir su función. Esta técnica de <em>andamiaje cognitivo</em> facilita la comprensión de conceptos abstractos como la <span class="abbr" data-title="Encapsulación: Ocultamiento de la complejidad interna de un objeto">encapsulación</span>.</p>
+
+<p>En las universidades argentinas, este ejercicio suele acompañarse de debates sobre la <strong>cohesión</strong>. Si la clase <code>Cajero</code> intenta manejar la impresión del recibo y la validación de la tarjeta al mismo tiempo, estamos ante una baja cohesión. El cuaderno de educación resalta que el aprendizaje significativo ocurre cuando el alumno comprende que una clase bien diseñada debe tener una única responsabilidad clara.</p>
+
+<h3>3.11.4 UX/UI en el Diseño de Sistemas Críticos</h3>
+<p>Integrando el <strong>Cuaderno de notebookLM sobre UX UI</strong>, debemos recordar que un ATM es, ante todo, una interfaz humana. Las clases <code>Pantalla</code> y <code>Teclado</code> no son solo periféricos; son los puntos de contacto que determinan la <span class="abbr" data-title="Carga Cognitiva: Esfuerzo mental requerido para completar una tarea">carga cognitiva</span> del usuario. Un diseño de software deficiente en estas clases puede inducir a errores costosos (ej. retirar una cantidad de dinero equivocada).</p>
+
+<p>Desde la UX, cada función miembro como <code>mostrarMenu()</code> debe estar diseñada pensando en la claridad y la accesibilidad. Si el sistema de software tarda demasiado en procesar un comando (debido a una mala implementación de las funciones miembro en el <em>backend</em>), la experiencia del usuario se degrada. El cuaderno de UX UI enfatiza que el diseño orientado a objetos debe facilitar un flujo de interacción fluido y libre de ambigüedades.</p>
+
+<h3>3.11.5 Paralelismo con el Desarrollo Web Moderno</h3>
+<p>Aunque el ATM es un dispositivo físico, su arquitectura de software es la base de las aplicaciones web transaccionales. El <strong>Cuaderno de notebookLM sobre desarrollo web</strong> menciona que las clases identificadas en este ejemplo (<code>Usuario</code>, <code>Cuenta</code>, <code>Transaccion</code>) son las mismas que encontramos en el <em>backend</em> de un <em>home banking</em> o una billetera virtual. La separación entre la interfaz (el cajero) y la lógica de negocio (el servidor del banco) es un precursor directo del modelo Cliente-Servidor que domina la web actual.</p>
+
+<p>Comprender cómo C++ gestiona estos objetos a bajo nivel les da una ventaja competitiva única para optimizar procesos críticos de concurrencia y seguridad en la nube, donde miles de "objetos ATM" virtuales interactúan simultáneamente con una base de datos centralizada.</p>
+
+<h3>3.11.6 Hacia el Diagrama UML Profesional</h3>
+<p>Finalmente, este análisis de sustantivos y verbos se vuelca en un diagrama <span class="abbr" data-title="UML: Unified Modeling Language. Estándar visual para especificar sistemas de software">UML</span>. <strong>Deitel</strong> explica que el UML es el lenguaje universal de los ingenieros de software. En un diagrama de clases, verán cajas que representan sus sustantivos, con sus atributos (datos) en la parte superior y sus funciones miembro (verbos) en la inferior, conectadas por líneas que indican cómo interactúan.</p>
+
+<div class="code-block">
+    <pre>// Pseudo-código de la estructura identificada
+
+
+class CajeroAutomatico {
+public:
+void ejecutar(); // Función principal (Verbo)
+private:
+Pantalla pantalla;       // Composición (Sustantivo)
+Teclado teclado;         // Composición (Sustantivo)
+DispensadorEfectivo dispensador; // Composición
+};</pre>
+</div>
+
+<p>En conclusión, el ejemplo del ATM no es solo una curiosidad académica; es el laboratorio donde se forja el criterio del ingeniero. Al separar correctamente las clases y sus funciones, como proponen <strong>Deitel</strong> y <strong>O'Reilly</strong>, estamos creando un sistema escalable, seguro y fácil de mantener, pilares indiscutibles de la ingeniería de software profesional.</p>
+
+<button class="ref-btn" onclick="showRef('3.11')">Referencia Bibliográfica</button>
+
+
+</section>
+
+<section id="sec312">
+<h2><span class="icon">🏁</span>3.12 Repaso Integral y Síntesis del Capítulo</h2>
+
+<p>Hemos recorrido los fundamentos de la construcción de clases en C++, transitando desde la sintaxis básica hasta la arquitectura modular de nivel industrial. Según el PDF de <strong>Deitel</strong> (<em>C++ Cómo Programar</em>), este capítulo constituye el cimiento sobre el cual se erige todo el desarrollo de software moderno. La Programación Orientada a Objetos (<span class="abbr" data-title="POO: Paradigma de programación basado en objetos que contienen datos y comportamientos">POO</span>) no es solo una forma de organizar código, sino una metodología para modelar la realidad mediante entidades autónomas que poseen estado y comportamiento.</p>
+
+<h3>3.12.1 Pilares de la Ingeniería de Objetos</h3>
+<p>A modo de síntesis, es imperativo que ustedes, como futuros ingenieros, retengan los tres conceptos fundamentales que hemos explorado:</p>
+<ul>
+    <li><strong>La Clase como Tipo de Dato Abstracto (ADT):</strong> Siguiendo a <strong>Deitel</strong>, una clase es un molde que define un nuevo tipo de dato. Es el "plano" que especifica qué datos (atributos) y qué acciones (funciones miembro) tendrá cada objeto instanciado.</li>
+    <li><strong>Encapsulamiento y Ocultamiento:</strong> <strong>O'Reilly</strong> (<em>Practical C++ Programming</em>) destaca que la robustez sistémica se logra protegiendo el estado interno del objeto mediante el modificador <code>private</code>. El acceso a estos datos debe estar estrictamente mediado por funciones <code>public</code> (Getters y Setters), lo que garantiza la integridad y facilita la depuración.</li>
+    <li><strong>El Contrato de Interfaz:</strong> La separación entre el archivo de cabecera (<code>.h</code>) y el de implementación (<code>.cpp</code>) permite que el software sea escalable. Ustedes definen un contrato de comportamiento que el resto del sistema utiliza, permitiendo que la lógica interna evolucione sin romper las dependencias externas.</li>
+</ul>
+
+<p>Desde la perspectiva del <strong>Cuaderno de notebookLM sobre UX UI</strong>, este diseño de clases debe entenderse como la creación de una "interfaz para desarrolladores" (DX). Una clase bien diseñada minimiza la <span class="abbr" data-title="Carga Cognitiva: Cantidad de esfuerzo mental utilizado en la memoria de trabajo">carga cognitiva</span>; sus funciones miembro son autodescriptivas y su comportamiento es predecible, lo que reduce la fricción en el mantenimiento a largo plazo.</p>
+
+<h3>3.12.2 Conexión Profesional: Del Aula a la Industria</h3>
+<p>El <strong>Cuaderno de notebookLM sobre desarrollo web</strong> subraya que los principios de modularidad y validación de datos que hemos estudiado en C++ son idénticos a los aplicados en el desarrollo de microservicios y componentes web modernos (como React o Angular). Aprender a validar una entrada en un <em>Setter</em> de C++ les da la disciplina necesaria para implementar lógicas de negocio seguras en cualquier capa de un sistema distribuido, donde la confianza en los datos externos nunca debe ser absoluta.</p>
+
+<p>Asimismo, el <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong> nos recuerda que el aprendizaje de la ingeniería es un proceso constructivo. No basta con memorizar la sintaxis de un constructor; es necesario comprender <em>por qué</em> un objeto no debe nacer en un estado "basura". La educación de ingeniería en Argentina prioriza este <strong>pensamiento crítico</strong>: la capacidad de evaluar compensaciones entre rendimiento, legibilidad y seguridad.</p>
+
+<h3>3.12.3 Desafío de Ingeniería: Implementación de la Clase Alumno</h3>
+<p>Para consolidar estos conocimientos de manera activa, se propone la siguiente actividad práctica que simula un requerimiento académico real. Deberán diseñar una clase que cumpla con estándares profesionales de validación y encapsulamiento.</p>
+
+<div class="code-block">
+    <pre>// Requerimiento Académico Profesional
+
+
+class Alumno {
+public:
+// Constructor que garantiza estado inicial válido
+Alumno(int idLegajo, double notaInicial) {
+establecerLegajo(idLegajo);
+establecerPromedio(notaInicial);
+}
+
+// Setter con validación de negocio (Deitel)
+void establecerPromedio(double valor) {
+    if (valor >= 0.0 && valor <= 10.0) {
+        promedio = valor;
+    } else {
+        promedio = 0.0; // Estado seguro por defecto
+        std::cerr << "Error: Promedio fuera de rango [0-10]." << std::endl;
+    }
+}
+
+// Getter marcado como const (O'Reilly)
+double obtenerPromedio() const {
+    return promedio;
+}
+
+void establecerLegajo(int id) {
+    legajo = (id > 0) ? id : 0;
+}
+
+
+private:
+int legajo;      // Atributo protegido
+double promedio; // Atributo protegido (Invariante de la clase)
+};</pre>
+</div>
+
+<p><strong>Análisis del Desafío:</strong> Noten cómo el constructor delega la responsabilidad a las funciones <code>establecer</code>. Esto, como señala <strong>O'Reilly</strong>, evita la duplicación de código de validación y asegura que las reglas de negocio se apliquen tanto en la creación como en la modificación del objeto. Además, el uso de <code>const</code> en los <em>Getters</em> es una marca de excelencia técnica, informando al compilador que la función es de solo lectura.</p>
+
+<h3>3.12.4 Reflexión Final</h3>
+<p>Ustedes tienen ahora las herramientas para dejar de ser "codificadores" y empezar a ser "arquitectos de sistemas". La elegancia de C++ reside en su capacidad para ofrecer un control total del hardware con la abstracción poderosa de los objetos. Como concluye <strong>Deitel</strong>, dominar las clases es el primer paso para construir sistemas complejos, desde motores de búsqueda hasta simuladores industriales o plataformas web de alto tráfico.</p>
+
+<p>Recuerden la premisa del <strong>Cuaderno de Metodologías Activas</strong>: el conocimiento se fija mediante la práctica y la reflexión sobre el error. No teman a los fallos de compilación; cada error de resolución de ámbito (<code>::</code>) o de punto y coma (<code>;</code>) es una lección de precisión que los acerca a la maestría profesional. Han completado la introducción a los objetos; el resto del curso expandirá estas fronteras hacia la herencia, el polimorfismo y las plantillas.</p>
+
+<button class="ref-btn" onclick="showRef('3.12')">Referencia Bibliográfica</button>
+
+
+</section>
+
 
         <footer style="border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 5rem; text-align: center; color: var(--text-secondary);">
             <p>&copy; 2024 - Herramienta Didáctica Universitaria para C++.</p>
@@ -576,28 +1227,35 @@ private:
         localStorage.setItem('theme', newTheme);
     });
 
-    // --- Navegación Activa (Intersection Observer) ---
+// --- Navegación Activa (Intersection Observer Optimizado) ---
     const sections = document.querySelectorAll('section');
-    const navItems = document.querySelectorAll('.nav-links a');
+    const navLinks = document.querySelectorAll('.nav-links a');
 
-    const observerOptions = {
-        threshold: 0.3
+    // Ajustamos las opciones para manejar secciones muy largas
+    const obsOptions = { 
+        threshold: 0, // Se activa en cuanto entra el primer píxel
+        rootMargin: "-20% 0px -70% 0px" // Banda de detección en la parte superior (donde se lee)
     };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
+            // Eliminamos la restricción del ratio (0.1) para que funcione con textos largos
             if (entry.isIntersecting) {
-                navItems.forEach(item => {
-                    item.classList.remove('active');
-                    if (item.getAttribute('href').substring(1) === entry.target.id) {
-                        item.classList.add('active');
-                    }
-                });
+                const activeId = entry.target.getAttribute('id');
+                const activeLink = document.querySelector(`.nav-links a[href="#${activeId}"]`);
+                
+                if (activeLink) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    activeLink.classList.add('active');
+                    
+                    // UX: Asegurar que el menú lateral haga scroll si el enlace queda fuera de vista
+                    activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
             }
         });
-    }, observerOptions);
+    }, obsOptions);
 
-    sections.forEach(sec => observer.observe(sec));
+    sections.forEach(s => observer.observe(s));
 
     // Cierre de modal al hacer clic fuera
     window.onclick = (e) => {
