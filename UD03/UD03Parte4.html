@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Guía Universitaria C++ - Arreglos y Vectores. Basada en Deitel y O'Reilly.">
+    <title>Unidad Didáctica 03 - Arreglos y Vectores - Parte 4</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Roboto+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #fdfdfd;
+            --bg-secondary: #f4f4f4;
+            --bg-paper: #ffffff;
+            --text-primary: #212121;
+            --text-secondary: #5f6368;
+            --accent: #1a73e8; /* Azul académico solicitado */
+            --accent-hover: #1557b0;
+            --code-bg: #f8f9fa;
+            --border: #dadce0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --success: #1e8e3e;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-paper: #242424;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --accent: #8ab4f8;
+            --accent-hover: #aecbfa;
+            --code-bg: #2d2e31;
+            --border: #3c4043;
+            --shadow: 0 4px 12px rgba(0,0,0,0.5);
+            --success: #81c995;
+        }
+
+        * { box-sizing: border-box; transition: background-color 0.3s ease, color 0.3s ease; }
+        body { font-family: 'Merriweather', serif; background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.8; margin: 0; scroll-behavior: smooth; }
+
+        h1, h2, h3, h4 { font-family: 'Roboto', sans-serif; }
+        h1 { font-weight: 700; font-size: 2rem; text-align: center; margin: 2rem 0; color: var(--accent); }
+        h1 a { text-decoration: none; color: inherit; }
+        h2 { border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-top: 3rem; font-size: 1.6rem; color: var(--accent); }
+        h3 { color: var(--text-primary); border-left: 4px solid var(--accent); padding-left: 1rem; margin-top: 2rem; }
+        
+        .app-container { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
+
+        aside { 
+            background-color: var(--bg-secondary); 
+            border-right: 1px solid var(--border); 
+            height: 100vh; 
+            position: sticky; 
+            top: 0; 
+            overflow-y: auto; 
+            padding: 1.5rem; 
+        }
+
+        .nav-links { list-style: none; padding: 0; }
+        .nav-links a { 
+            text-decoration: none; 
+            color: var(--text-secondary); 
+            font-size: 0.85rem; 
+            display: block; 
+            padding: 0.7rem; 
+            border-radius: 6px; 
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active { background: var(--accent); color: white; padding-left: 1.2rem; }
+
+        main { padding: 2rem 5%; max-width: 1100px; margin: 0 auto; }
+        section { 
+            background: var(--bg-paper); 
+            padding: 2.5rem; 
+            border-radius: 12px; 
+            margin-bottom: 4rem; 
+            box-shadow: var(--shadow); 
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        code { font-family: 'Roboto Mono', monospace; background: var(--code-bg); padding: 0.2rem 0.4rem; border-radius: 4px; color: var(--accent); }
+        pre { background: var(--code-bg); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent); overflow-x: auto; margin: 1.5rem 0; }
+
+        .abbr { border-bottom: 1px dotted var(--accent); cursor: help; color: var(--accent); font-weight: 600; position: relative; }
+        .abbr:hover::after {
+            content: attr(data-title);
+            position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%);
+            background: #323336; color: white; padding: 0.6rem 1rem; border-radius: 4px;
+            font-size: 0.8rem; width: 240px; z-index: 10; text-align: center;
+        }
+
+        .mem-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 2rem 0; }
+        .mem-cell { border: 1px solid var(--border); padding: 1rem; text-align: center; background: var(--bg-secondary); border-radius: 4px; }
+        .mem-cell.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+        .table-res { overflow-x: auto; margin: 2rem 0; border-radius: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; border: 1px solid var(--border); text-align: left; }
+        th { background: var(--bg-secondary); color: var(--accent); text-transform: uppercase; font-size: 0.8rem; }
+
+        .theme-toggle { position: fixed; bottom: 2rem; right: 2rem; width: 55px; height: 55px; border-radius: 50%; background: var(--accent); color: white; border: none; cursor: pointer; z-index: 100; font-size: 1.3rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .modal-content { background: var(--bg-paper); padding: 2.5rem; border-radius: 12px; max-width: 600px; width: 90%; position: relative; }
+
+        .practice-box { border-left: 5px solid var(--accent); background: rgba(26, 115, 232, 0.03); padding: 1.5rem; margin: 2rem 0; border-radius: 0 8px 8px 0; }
+
+        @media (max-width: 1024px) { .app-container { grid-template-columns: 1fr; } aside { display: none; } }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <aside>
+        <h2 style="font-size: 1.1rem; border: none; margin-bottom: 2rem; color: var(--accent);">UNIDAD DIDÁCTICA 03</h2>
+        <ul class="nav-links">
+            <li><a href="#sec-7-1">7.1 Introducción</a></li>
+            <li><a href="#sec-7-2">7.2 Arreglos</a></li>
+            <li><a href="#sec-7-3">7.3 Declaración y Creación</a></li>
+            <li><a href="#sec-7-4">7.4 Ejemplos de Uso</a></li>
+            <li><a href="#sec-7-5">7.5 Paso a Funciones</a></li>
+            <li><a href="#sec-7-6">7.6 Caso LibroCalificaciones (1D)</a></li>
+            <li><a href="#sec-7-7">7.7 Búsqueda Lineal</a></li>
+            <li><a href="#sec-7-8">7.8 Ordenamiento Inserción</a></li>
+            <li><a href="#sec-7-9">7.9 Multidimensionales</a></li>
+            <li><a href="#sec-7-10">7.10 Caso LibroCalificaciones (2D)</a></li>
+            <li><a href="#sec-7-11">7.11 Plantilla vector STL</a></li>
+            <li><a href="#sec-7-12">7.12 Ingeniería: Sistema ATM</a></li>
+            <li><a href="#sec-7-13">7.13 Repaso y Objetos</a></li>
+        </ul>
+    </aside>
+
+    <main>
+        <header id="home">
+            <h1><a href="#home">Unidad Didáctica 03 - Arreglos y Vectores - Parte 4</a></h1>
+            <p style="text-align: center; font-style: italic; color: var(--text-secondary);">"El dominio de las estructuras de datos contiguas es el primer paso hacia la optimización de sistemas de alto rendimiento."</p>
+        </header>
+
+<section id="sec-7-1">
+            <span>🚀</span>
+            <h2>7.1 Introducción - Arreglos y vectores</h2>
+            
+            <p>En el trayecto de tu formación en el desarrollo de software de nivel universitario, tarde o temprano te vas a encontrar con un límite fundamental: la ineficiencia de gestionar datos mediante variables escalares aisladas. Imaginate que tenés que procesar las calificaciones de mil estudiantes o los registros de transacciones de un sistema bancario; declarar mil variables individuales sería un error de arquitectura imperdonable. Para resolver esto, el lenguaje C++ nos provee estructuras de datos potentes: los <strong>arreglos</strong> (arrays) y los <strong>vectores</strong>.</p>
+
+            <p>Según el texto fundamental de <strong>Deitel (6ta Edición)</strong>, los arreglos son colecciones de ubicaciones de memoria contiguas que almacenan elementos del mismo tipo. Una vez que un arreglo se crea, su tamaño permanece fijo durante toda la ejecución del programa. Esta naturaleza estática es, según el <strong>Cuaderno de NotebookLM sobre UX UI</strong>, una espada de doble filo: por un lado, ofrece una predictibilidad absoluta en términos de consumo de recursos y latencia, pero por otro, limita la adaptabilidad de la interfaz ante un flujo de datos dinámico o impredecible.</p>
+
+            <h3>La Filosofía del Almacenamiento Contiguo</h3>
+            <p>Desde la perspectiva técnica de <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, debés comprender que un arreglo no es solo una "lista", sino un bloque físico ininterrumpido en la <span class="abbr" data-title="RAM: Random Access Memory. Memoria de acceso volátil donde el procesador lee y escribe datos de forma directa.">RAM</span>. Esta contigüidad es lo que permite que el acceso a cualquier elemento sea extremadamente veloz, ya que el compilador calcula la dirección de memoria exacta sumando un desplazamiento (offset) a la dirección base. Sin embargo, O'Reilly advierte que C++ no realiza una comprobación automática de límites (bounds checking), lo que implica que, como futuro ingeniero, tenés la responsabilidad ética y técnica de asegurar que tu código no intente acceder a un <span class="abbr" data-title="Índice: Valor numérico entero que representa la posición de un elemento dentro de la colección, comenzando siempre desde cero (0).">índice</span> inexistente, lo cual derivaría en una corrupción de memoria o un cierre inesperado de la aplicación.</p>
+
+            <div class="practice-box">
+                <strong>Análisis de Metodologías Activas:</strong>
+                <p>De acuerdo con el <strong>Cuaderno de NotebookLM sobre Educación</strong>, el aprendizaje de los arreglos debe abordarse bajo el principio de "andamiaje". No basta con entender la sintaxis; debés construir un modelo mental de cómo los datos se alinean en la memoria. Notá que el primer elemento es siempre el <code>0</code>. Si declarás un arreglo de 10 posiciones, la última es la <code>9</code>. Este concepto, aunque parece simple, es la fuente del error lógico más común en la industria: el error de "desfase por uno" (off-by-one error).</p>
+            </div>
+
+            <h3>Evolución hacia la Plantilla de Clase Vector</h3>
+            <p>Como alternativa moderna a los arreglos tradicionales de estilo C, la <span class="abbr" data-title="STL: Standard Template Library. Biblioteca de C++ que ofrece contenedores, iteradores y algoritmos de alta eficiencia.">STL</span> introduce la plantilla de clase <code>vector</code>. A diferencia de los arreglos estáticos, los vectores permiten una gestión dinámica del tamaño. Según el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, el uso de vectores es análogo al manejo de arreglos dinámicos en lenguajes de alto nivel como JavaScript, pero con la potencia y el control de bajo nivel que solo C++ puede ofrecer. Un <code>vector</code> puede crecer o achicarse automáticamente según la necesidad de la aplicación, liberando al desarrollador de la gestión manual del espacio, aunque esto introduce una pequeña penalización en la <strong>latencia</strong> cuando el contenedor decide reasignar memoria para expandirse.</p>
+
+            <div class="table-res">
+                <table>
+                    <caption>Tabla Comparativa: Estructuras Estáticas vs. Dinámicas</caption>
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Arreglos (Deitel/O'Reilly)</th>
+                            <th>Vectores (STL)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Tamaño</strong></td>
+                            <td>Fijo al momento de la compilación o creación.</td>
+                            <td>Dinámico; crece según la demanda del programa.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rendimiento</strong></td>
+                            <td>Máximo; acceso directo por dirección base.</td>
+                            <td>Muy alto, pero con sobrecarga mínima por redimensionamiento.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Seguridad</strong></td>
+                            <td>Nula; el programador gestiona los límites.</td>
+                            <td>Alta; permite el uso de funciones como <code>.at()</code> con validación.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Uso de Memoria</strong></td>
+                            <td>Eficiente y predecible (Stack).</td>
+                            <td>Flexible; utiliza el almacenamiento dinámico (Heap).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Impacto en la Experiencia de Usuario (UX)</h3>
+            <p>El <strong>Cuaderno de NotebookLM sobre UX UI</strong> resalta un punto vital: la estructura de datos que elijas detrás de escena dicta la fluidez de la interfaz. Si utilizás un arreglo estático de tamaño insuficiente, el sistema podría fallar cuando el usuario intente cargar más información de la prevista, rompiendo la confianza en la herramienta. Por el contrario, un vector garantiza que la aplicación no "toque techo", aunque debés ser consciente de que una gestión ineficiente de vectores grandes puede causar micro-tirones (stuttering) en la interfaz debido a las reasignaciones de memoria. La ingeniería de software consiste en equilibrar esta <strong>predictibilidad</strong> del arreglo con la <strong>flexibilidad</strong> del vector.</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-date">Arreglos Tradicionales</span>
+                    <p>Heredados de C, priorizan la cercanía absoluta al hardware y la velocidad de acceso lineal. Ideales para sistemas embebidos y firmware.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">Vectores STL (C++ Moderno)</span>
+                    <p>Introducen la abstracción de objetos para manejar colecciones. Proporcionan métodos integrados para inserción, eliminación y búsqueda, elevando el nivel de seguridad del código.</p>
+                </div>
+            </div>
+
+            <p>En conclusión, dominar arreglos y vectores no es solo aprender a listar datos; es entender cómo se organiza la información en los circuitos de la computadora. En las secciones siguientes, desglosaremos la sintaxis exacta de declaración, los algoritmos de búsqueda y las técnicas avanzadas de manipulación multidimensional, basándonos siempre en los estándares de <strong>Deitel</strong> y las advertencias prácticas de <strong>O'Reilly</strong>.</p>
+            
+            <button class="btn-ref" onclick="openRef('ref-deitel-7-1')">Ref: Deitel p. 254 | O'Reilly Cap. 7 | NotebookLM UX-Web-Edu</button>
+        </section>
+
+<section id="sec-7-2">
+            <span>🏗️</span>
+            <h2>7.2 Arreglos: Estructura, Arquitectura de Memoria y Gestión de Índices</h2>
+            
+            <p>Desde una perspectiva de ingeniería, un arreglo (también conocido como <em>array</em>) representa la forma más elemental y eficiente de organizar colecciones de datos en la memoria de una computadora. De acuerdo con el texto fundamental de <strong>Deitel</strong>, un arreglo es un grupo de ubicaciones de memoria contiguas, todas las cuales tienen el mismo nombre y el mismo tipo de dato. Esta característica de "homogeneidad" es lo que permite que el sistema operativo y el hardware gestionen estos datos con una velocidad de acceso constante, independientemente de si estamos consultando el primer elemento o el último.</p>
+
+            <p>Para comprender la potencia de esta estructura, tenés que visualizar la memoria <span class="abbr" data-title="RAM: Random Access Memory. Memoria de acceso aleatorio donde la CPU busca datos e instrucciones de forma inmediata.">RAM</span> no como una nube abstracta, sino como una grilla física de celdas numeradas. Cuando declarás un arreglo, C++ le ordena al sistema operativo que reserve un "bloque" ininterrumpido de estas celdas. Como señala el cuaderno de <strong>NotebookLM sobre Educación</strong>, este es un concepto clave de <em>andamiaje</em>: entender que el arreglo no es una lista dispersa, sino un bloque sólido de información donde no hay espacios vacíos entre elementos.</p>
+
+            
+
+            <h3>Arquitectura y Direccionamiento Base</h3>
+            <p>La eficiencia de los arreglos radica en un concepto matemático simple pero poderoso: el <strong>direccionamiento base más desplazamiento</strong>. Según <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, el nombre del arreglo funciona técnicamente como una etiqueta para la dirección de memoria del primer elemento (el índice 0). Para acceder a cualquier otro elemento, el procesador no necesita "recorrer" el arreglo desde el principio; simplemente realiza un cálculo aritmético instantáneo: <code>Dirección_Destino = Dirección_Base + (Índice * Tamaño_del_Dato)</code>.</p>
+
+            <p>Esta capacidad de <span class="abbr" data-title="Acceso Aleatorio: Capacidad de acceder a cualquier posición de una estructura de datos en un tiempo constante (O(1)), sin importar su ubicación.">acceso aleatorio</span> es lo que diferencia a los arreglos de otras estructuras como las listas enlazadas. Sin embargo, esta velocidad conlleva una rigidez arquitectónica: el tamaño del arreglo debe definirse en tiempo de compilación o al momento de su creación, y no puede modificarse. Desde el punto de vista del <strong>Desarrollo Web</strong> y la escalabilidad, esto implica que debés prever con exactitud el volumen de datos para evitar el desperdicio de memoria o, peor aún, el agotamiento de la misma.</p>
+
+            <div class="mem-grid">
+                <div class="mem-box header">Nombre: v[0]</div>
+                <div class="mem-box header">v[1]</div>
+                <div class="mem-box header">v[2]</div>
+                <div class="mem-box header">v[3]</div>
+                <div class="mem-box header">v[4]</div>
+                <div class="mem-box">Dirección: 0x100</div>
+                <div class="mem-box">0x104</div>
+                <div class="mem-box">0x108</div>
+                <div class="mem-box">0x10C</div>
+                <div class="mem-box">0x110</div>
+                <div class="mem-box">Valor: -45</div>
+                <div class="mem-box">6</div>
+                <div class="mem-box">0</div>
+                <div class="mem-box">72</div>
+                <div class="mem-box">1543</div>
+            </div>
+
+            <h3>La Responsabilidad del Programador: El "Bounds Checking"</h3>
+            <p>Uno de los puntos más críticos y discutidos tanto por <strong>Deitel</strong> como por <strong>O'Reilly</strong> es la ausencia de verificación automática de límites en C++. A diferencia de lenguajes como Java o Python, C++ no detendrá el programa si intentás acceder al índice 15 de un arreglo de 10 elementos. El compilador "confía" ciegamente en vos. Si calculás un índice fuera de rango, el programa accederá a lo que sea que haya en esa dirección de memoria, lo cual puede resultar en:</p>
+            <ul>
+                <li><strong>Corrupción de datos:</strong> Estás escribiendo sobre variables que no pertenecen al arreglo.</li>
+                <li><strong>Resultados impredecibles:</strong> Leés valores "basura" que alteran la lógica del algoritmo.</li>
+                <li><strong>Violación de segmentación (Segmentation Fault):</strong> Intentás acceder a una zona de memoria protegida por el sistema operativo.</li>
+            </ul>
+
+            <p>Según el <strong>Cuaderno de NotebookLM sobre UX UI</strong>, este comportamiento técnico tiene un impacto directo en la seguridad y la robustez de la interfaz. Un <span class="abbr" data-title="Buffer Overflow: Error de software que ocurre cuando se escriben más datos en un bloque de memoria (buffer) de los que este puede retener.">desbordamiento de búfer</span> es una vulnerabilidad clásica que los atacantes usan para inyectar código malicioso. Por lo tanto, el diseño de la lógica de negocio debe incluir validaciones manuales rigurosas antes de cualquier operación de acceso a arreglos.</p>
+
+            <div class="practice-box">
+                <strong>💡 Metodología Activa - Reflexión Crítica:</strong>
+                <p>Acordate siempre de la regla del "Off-by-one" (error por uno). Dado que los arreglos en C++ son <strong>zero-indexed</strong> (basados en cero), un arreglo declarado como <code>int miArreglo[100]</code> tiene índices válidos desde el <code>0</code> hasta el <code>99</code>. El acceso a <code>miArreglo[100]</code> es un error lógico fatal. En tus actividades prácticas, siempre verificá los límites de tus ciclos <code>for</code>.</p>
+            </div>
+
+            <h3>Comparativa Técnica de Eficiencia</h3>
+            <p>Para un estudiante de nivel universitario, es vital entender cuándo el arreglo es la herramienta óptima. Basándonos en la teoría de estructuras de datos contenida en los manuales técnicos, podemos resumir su rendimiento en la siguiente tabla comparativa:</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operación</th>
+                            <th>Complejidad Arreglo</th>
+                            <th>Análisis de Rendimiento (UX)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Acceso por Índice</strong></td>
+                            <td>O(1) - Constante</td>
+                            <td>Instantáneo. Ideal para búsquedas frecuentes por posición.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Búsqueda de Valor</strong></td>
+                            <td>O(n) - Lineal</td>
+                            <td>Lento en arreglos grandes. Requiere recorrer cada celda.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inserción al inicio</strong></td>
+                            <td>O(n) - Muy lento</td>
+                            <td>Requiere desplazar todos los elementos existentes un lugar a la derecha.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Eliminación</strong></td>
+                            <td>O(n) - Lento</td>
+                            <td>Deja un "hueco" que debe ser llenado moviendo los elementos subsiguientes.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Mental Models: El Arreglo como un Sistema de Casilleros</h3>
+            <p>El cuaderno de <strong>Metodologías Activas</strong> sugiere el uso de metáforas espaciales para fijar el conocimiento. Pensá en el arreglo como un <em>pasillo de lockers</em> en una universidad. Todos los lockers tienen el mismo tamaño (el tipo de dato) y están pegados uno al otro (contigüidad). El número pintado en la puerta es el <strong>índice</strong>, pero lo que importa es que para llegar al locker 50, no tenés que abrir las 49 puertas anteriores; simplemente caminás directamente a la posición 50 porque sabés exactamente cuánto mide cada puerta y dónde empieza el pasillo.</p>
+
+            <p>Este modelo mental te ayudará a entender por qué no podés mezclar tipos de datos en un arreglo: si un locker fuera más grande que otro, el cálculo matemático de la dirección fallaría y el sistema se volvería ineficiente. La homogeneidad garantiza la velocidad.</p>
+
+            <h3>Consideraciones Finales de Ingeniería</h3>
+            <p>Finalmente, citando a <strong>O'Reilly</strong>, "un arreglo es un compromiso entre simplicidad y riesgo". Ofrece el rendimiento máximo que el hardware puede dar, pero requiere una disciplina mental absoluta por parte del desarrollador. En la era del desarrollo moderno, donde la <strong>seguridad del software</strong> es primordial, comprender los fundamentos de los arreglos te permitirá transitar con éxito hacia estructuras más seguras como la plantilla <code>std::vector</code>, entendiendo qué es lo que sucede "bajo el capó" de la computadora.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-7-2')">Referencia: Deitel Secc. 7.2 | O'Reilly Cap. 7: Arrays | Cuadernos NotebookLM</button>
+        </section>
+
+<section id="sec-7-3">
+            <span>✍️</span>
+            <h2>7.3 Declaración y creación de arreglos: Anatomía, Contratos de Memoria y Rigurosidad Técnica</h2>
+            
+            <p>La declaración de un arreglo en C++ no es un mero trámite sintáctico; representa un <strong>contrato vinculante</strong> con el compilador. En este acto, vos le estás indicando al sistema exactamente cuánta memoria debe reservar de manera contigua y qué tipo de entidades habitarán ese espacio. Según el texto fundamental de <strong>Deitel (6ta Edición)</strong>, para que el compilador pueda realizar esta reserva de recursos en la <span class="abbr" data-title="RAM: Random Access Memory. Memoria de acceso aleatorio donde se alojan las estructuras de datos durante la ejecución.">RAM</span>, necesita conocer dos parámetros inalienables al momento de la compilación: el tipo de dato y el tamaño de la colección.</p>
+
+            <p>Desde la perspectiva de la <strong>Ingeniería de Software</strong>, la sintaxis <code>tipo nombreArreglo[ tamaño ];</code> define la arquitectura de almacenamiento. Por ejemplo, al declarar <code>int calificaciones[ 10 ];</code>, el compilador multiplica el tamaño del tipo <code>int</code> (usualmente 4 bytes) por la cantidad especificada (10), garantizando un bloque sólido de 40 bytes ininterrumpidos. Como señala <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, este bloque es "sagrado" para el programa: ninguna otra variable podrá ocupar ese espacio mientras el arreglo esté en <span class="abbr" data-title="Scope: El ámbito o alcance de una variable que determina su visibilidad y tiempo de vida en el programa.">alcance</span>.</p>
+
+            
+
+            <h3>El Requisito de la Constante Entera: Una Perspectiva de Diseño</h3>
+            <p>Un punto de fricción común para el estudiante universitario es la restricción del tamaño. De acuerdo con <strong>O'Reilly</strong>, el tamaño del arreglo debe ser una <strong>expresión constante entera mayor a cero</strong>. ¿Por qué esta rigidez? Porque en los arreglos de asignación estática (aquellos que viven en el <em>stack</em>), el compilador debe saber exactamente cuánto espacio "talar" del bloque de memoria antes de que el programa se ejecute. </p>
+            
+            <p>Basado en el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, esta característica de tamaño fijo es lo que otorga a C++ su rendimiento legendario, pero también lo que exige una planificación minuciosa. Si declarás un arreglo demasiado pequeño, te enfrentás a un desbordamiento; si es demasiado grande, desperdiciás recursos críticos en el backend. La recomendación académica de <strong>Deitel</strong> es utilizar siempre variables calificadas como <code>const</code> para definir estos tamaños, lo que se conoce en la industria como una "Buena Práctica de Programación" para evitar los llamados <span class="abbr" data-title="Magic Numbers: Valores numéricos escritos directamente en el código sin explicación, lo que dificulta el mantenimiento.">números mágicos</span>.</p>
+
+            <div class="practice-box">
+                <strong>💡 Recomendación de Clean Code (O'Reilly):</strong>
+                <p>En lugar de escribir <code>int s[100];</code>, debés definir <code>const int tamanoArreglo = 100;</code> y luego <code>int s[ tamanoArreglo ];</code>. Si el día de mañana los requerimientos de tu sistema cambian (un escenario común según el <strong>Cuaderno de UX UI</strong>), solo vas a tener que modificar un único valor en la parte superior de tu código, asegurando la consistencia en toda la arquitectura del software.</p>
+            </div>
+
+            <h3>La Metafísica de la Memoria: El Problema de la "Basura"</h3>
+            <p>Uno de los conceptos más disruptivos para quienes vienen de lenguajes de alto nivel es la falta de inicialización automática. Según indica <strong>Deitel</strong>, si declarás un arreglo local sin una lista inicializadora, sus elementos contendrán <strong>datos residuales</strong>. Estos datos, frecuentemente llamados "basura", no son más que los restos binarios de lo que sea que haya estado ocupando esa dirección de memoria previamente. </p>
+            
+            <p>Desde la visión del <strong>Cuaderno de NotebookLM sobre Educación</strong>, este es un momento de aprendizaje crítico: debés visualizar el arreglo recién creado no como una caja vacía, sino como un casillero que aún tiene los papeles del dueño anterior. Utilizar estos valores sin limpiarlos (inicializarlos) es una de las fuentes más prolíficas de errores lógicos en sistemas embebidos y aplicaciones de alto rendimiento.</p>
+
+            
+
+            <h3>Relación entre Declaración y Experiencia de Usuario (UX)</h3>
+            <p>Podrías pensar que la declaración de una variable no tiene nada que ver con el usuario final, pero el <strong>Cuaderno de NotebookLM sobre UX UI</strong> contradice esta noción. La forma en que declarás y reservás memoria impacta en la <strong>latencia percibida</strong>. Una reserva masiva de arreglos estáticos innecesarios puede hacer que la aplicación tarde más en cargar o que agote la pila de memoria en dispositivos con recursos limitados (smartphones o IoT). </p>
+            
+            <p>La eficiencia en la creación de arreglos es, por lo tanto, una forma de <strong>respeto hacia el usuario</strong>: implica que estás utilizando la mínima cantidad de recursos de hardware necesarios para ofrecer la máxima velocidad de procesamiento. En el desarrollo web de alto tráfico, esta precisión en la declaración permite que los servidores manejen más peticiones simultáneas sin degradar el tiempo de respuesta.</p>
+
+            <div class="table-res">
+                <table>
+                    <caption>Reglas de Oro para la Creación de Arreglos</caption>
+                    <thead>
+                        <tr>
+                            <th>Regla</th>
+                            <th>Justificación Técnica (Deitel/O'Reilly)</th>
+                            <th>Impacto en el Desarrollo (NotebookLM)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Tipo Único</strong></td>
+                            <td>Garantiza que cada salto de memoria sea de tamaño uniforme.</td>
+                            <td>Permite acceso O(1), vital para la fluidez de la interfaz.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tamaño Constante</strong></td>
+                            <td>Necesario para la reserva de memoria en tiempo de compilación.</td>
+                            <td>Evita errores de reasignación costosa en ejecución.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inicialización</strong></td>
+                            <td>Evita el procesamiento de valores indeterminados ("basura").</td>
+                            <td>Asegura la predictibilidad y estabilidad del sistema web/app.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Uso de <code>const</code></strong></td>
+                            <td>Promueve la mantenibilidad y evita errores de escritura.</td>
+                            <td>Facilita el escalado y la refactorización del software.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Modelos Mentales: El Arreglo como Plano de Obra</h3>
+            <p>Siguiendo las <strong>Metodologías Activas</strong>, pensá en la declaración como el plano de un edificio. Cuando declarás <code>double ventas[31];</code>, le estás dando al constructor (el compilador) las especificaciones exactas para cimentar 31 unidades habitacionales idénticas. El constructor no puede empezar la obra si no sabe cuántas unidades son ni de qué material (tipo) están hechas. Una vez que el hormigón fragua (se compila y ejecuta), el tamaño del edificio no puede crecer ni achicarse; es una estructura sólida y permanente en el paisaje de la memoria de tu programa.</p>
+
+            <p>Esta analogía te permite comprender que, si bien los arreglos son estructuras rígidas, esa misma rigidez es la que les otorga su <strong>fortaleza estructural</strong>. En capítulos posteriores, veremos cómo las clases de la <span class="abbr" data-title="Biblioteca Estándar: Conjunto de herramientas y clases predefinidas en C++ para facilitar el desarrollo.">Standard Library</span> como <code>vector</code> actúan como edificios modulares, pero siempre sobre los cimientos fundamentales que aprendiste aquí acerca de la declaración y reserva de espacio contiguo.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-7-3')">Referencia: Deitel Secc. 7.3 | O'Reilly Cap. 7: Arreglos | Cuadernos NotebookLM (Edu - Web - UX)</button>
+        </section>
+
+<section id="sec-7-4">
+            <span>🛠️</span>
+            <h2>7.4 Ejemplos acerca del uso de los arreglos: Implementación y Casos de Estudio</h2>
+            <p>En esta sección exploraremos exhaustivamente cómo implementar los arreglos en escenarios académicos y profesionales reales. El dominio de estas estructuras no se limita a conocer su sintaxis, sino a comprender la eficiencia de los algoritmos que las manipulan. Según el texto fundamental de <strong>Deitel</strong>, la manipulación de arreglos constituye la base para el estudio posterior de estructuras de datos más complejas. Por su parte, los cuadernos de <strong>NotebookLM sobre Educación</strong> resaltan que el aprendizaje a través de ejemplos prácticos ("scaffolding") permite que vos, como estudiante universitario, construyas modelos mentales sólidos sobre cómo fluye la información en la memoria contigua de la computadora.</p>
+
+            <div class="practice-box">
+                <h3>7.4.1 Declaración de un arreglo y uso de un ciclo para inicializar los elementos</h3>
+                <p>La forma más robusta y escalable de preparar un arreglo es mediante el uso de estructuras de repetición. Según <strong>Deitel</strong>, inicializar un arreglo manualmente es propenso a errores humanos; en cambio, el uso de un ciclo <code>for</code> garantiza que cada posición de memoria sea visitada y establecida bajo una lógica controlada. </p>
+                <p>Desde la perspectiva de la <strong>Ingeniería de Software</strong>, este proceso tiene una complejidad temporal de <span class="abbr" data-title="O(n): Complejidad lineal donde el tiempo de ejecución crece proporcionalmente a la cantidad de elementos (n).">O(n)</span>. Notá que en C++, el índice debe comenzar estrictamente en cero y finalizar en <code>tamaño - 1</code>. Si intentás acceder a una posición fuera de este rango, el compilador no te va a advertir necesariamente, pero podrías corromper datos críticos en el segmento de memoria adyacente.</p>
+                <pre><code>// Inicialización sistemática
+int n[ 10 ]; // Declaración del espacio en el stack
+
+for ( int i = 0; i < 10; ++i ) {
+    n[ i ] = 0; // Se establece el valor inicial para evitar 'basura' de memoria
+}</code></pre>
+                <p>De acuerdo con <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, omitir este paso es un riesgo de seguridad, ya que los arreglos locales automáticos contienen valores residuales de ejecuciones previas de otras funciones.</p>
+            </div>
+
+            <div class="practice-box">
+                <h3>7.4.2 Inicialización de un arreglo mediante una lista inicializadora</h3>
+                <p>C++ provee una sintaxis abreviada extremadamente útil: la lista inicializadora entre llaves <code>{}</code>. Esta técnica es ideal cuando los datos son conocidos al momento de la compilación. Según <strong>Deitel</strong>, existe una regla fundamental de seguridad: si proporcionás una lista de valores más corta que el tamaño declarado del arreglo, C++ inicializará automáticamente los elementos restantes en cero.</p>
+                <p>Esto es una ventaja estratégica en el <strong>Desarrollo Web</strong> y de sistemas, donde asegurar que los buffers no contengan datos aleatorios es vital para la estabilidad. Sin embargo, <strong>O'Reilly</strong> advierte que si no especificás el tamaño entre los corchetes <code>[]</code>, el compilador deducirá el tamaño basándose exclusivamente en la cantidad de elementos en la lista, lo cual podría dificultar expansiones futuras del código.</p>
+                <pre><code>// Inicialización parcial: n[3] y n[4] se establecen en 0 automáticamente
+int n[ 5 ] = { 32, 27, 64 }; </code></pre>
+            </div>
+
+            <div class="practice-box">
+                <h3>7.4.3 Especificación del tamaño con variables constantes</h3>
+                <p>En el nivel universitario, debés evitar a toda costa el uso de "números mágicos" (literales numéricos sueltos en el código). Según <strong>Deitel</strong>, la técnica correcta es definir el tamaño del arreglo mediante una variable <code>const</code>. Esto facilita el mantenimiento: si el tamaño de tu estructura debe cambiar para adaptarse a nuevos requerimientos del sistema, solo tenés que modificar una única línea de código.</p>
+                <p>Desde el enfoque de <strong>UX UI</strong> del cuaderno de NotebookLM, la flexibilidad del software para actualizarse impacta en la experiencia del desarrollador y, eventualmente, en la capacidad del sistema para escalar ante el crecimiento de datos del usuario.</p>
+                <pre><code>const int tamanoArreglo = 10; // Definición de una constante inmutable
+int s[ tamanoArreglo ]; // Creación del arreglo basada en la constante</code></pre>
+            </div>
+
+            <div class="practice-box">
+                <h3>7.4.4 Suma de los elementos de un arreglo</h3>
+                <p>Muchos procesos de análisis de datos, como los reportes financieros en aplicaciones bancarias, requieren la acumulación de valores. El patrón estándar implica el uso de una variable acumuladora (generalmente llamada <code>total</code>) inicializada en cero. A medida que el ciclo recorre el arreglo, el valor de cada elemento se suma al acumulador. Según <strong>O'Reilly</strong>, es imperativo que el acumulador tenga un tipo de dato con suficiente capacidad (como <code>long</code> o <code>double</code>) para evitar desbordamientos aritméticos si el arreglo es muy extenso.</p>
+            </div>
+
+            <div class="practice-box">
+                <h3>7.4.5 Uso de gráficos de barra para mostrar datos</h3>
+                <p>La interpretación visual de los datos es una competencia esencial. Según el cuaderno de <strong>NotebookLM sobre UX UI</strong>, los seres humanos procesamos mejor la información gráfica que las tablas numéricas puras. En C++ clásico, podemos generar gráficos de barra en la consola imprimiendo una cantidad de asteriscos <code>*</code> proporcional al valor almacenado en cada celda del arreglo.</p>
+                <p>Esta técnica, mencionada en <strong>Deitel</strong>, requiere ciclos anidados: el ciclo externo recorre el arreglo y el ciclo interno imprime los caracteres. Este es un ejercicio excelente de <strong>Metodologías Activas</strong> para comprender la relación entre los datos crudos y su representación visual en la capa de presentación.</p>
+            </div>
+
+            <div class="practice-box">
+                <h3>7.4.6 Uso de los elementos de un arreglo como contadores</h3>
+                <p>Un uso avanzado y sumamente eficiente de los arreglos es utilizarlos para contar frecuencias de eventos. Por ejemplo, si lanzás un dado 6000 veces, podés usar un arreglo de 7 elementos para contar cuántas veces aparece cada cara. El valor del dado funciona directamente como el índice del arreglo. Según <strong>Deitel</strong>, esto elimina la necesidad de estructuras condicionales <code>switch</code> o <code>if</code> masivas, optimizando drásticamente el rendimiento del software.</p>
+            </div>
+
+            <div class="practice-box">
+                <h3>7.4.7 Análisis de resultados de encuestas</h3>
+                <p>En este escenario, se utilizan dos arreglos: uno para almacenar las respuestas crudas de la encuesta y otro para sintetizar las frecuencias. De acuerdo con <strong>Deitel</strong>, este proceso es un ejemplo de <strong>procesamiento de datos por lotes</strong>. Es vital implementar una validación de rango; si un dato de la encuesta está fuera de los índices esperados, el programa intentará escribir en una zona de memoria inválida. La <strong>Ingeniería de Software</strong> exige que seas defensivo en tu codificación.</p>
+            </div>
+
+            <div class="practice-box">
+                <h3>7.4.8 Arreglos de caracteres: Almacenamiento y manipulación de cadenas</h3>
+                <p>Históricamente, C++ maneja las cadenas de texto como arreglos de tipo <code>char</code>. <strong>O'Reilly</strong> enfatiza un concepto crítico: toda cadena de estilo C debe terminar con el <span class="abbr" data-title="Carácter Nulo: Representado como '\0'. Es la marca de fin de cadena que utiliza C++ para saber dónde dejar de procesar memoria como texto.">carácter nulo ('\0')</span>. Si declarás un arreglo de 20 caracteres, solo podés guardar 19 caracteres legibles, ya que el último espacio está reservado para el terminador.</p>
+                <p>No comprender esto es la causa principal de los <strong>Buffer Overflows</strong> (desbordamientos de búfer), una vulnerabilidad de seguridad que permite a los atacantes inyectar código malicioso. Según el cuaderno de <strong>Desarrollo Web</strong>, aunque hoy usamos la clase <code>std::string</code> por seguridad, comprender el funcionamiento de los arreglos de caracteres es fundamental para interactuar con bibliotecas de bajo nivel y APIs del sistema operativo.</p>
+            </div>
+
+            <div class="practice-box">
+                <h3>7.4.9 Arreglos locales estáticos vs. arreglos locales automáticos</h3>
+                <p>El periodo de vida de un arreglo es un concepto de gestión de memoria avanzado. Según <strong>Deitel</strong>:
+                    <ul>
+                        <li><strong>Automáticos:</strong> Se crean al entrar a la función y se destruyen al salir. Sus valores se pierden.</li>
+                        <li><strong>Estáticos (static):</strong> Se crean una sola vez al inicio del programa y mantienen su valor incluso después de que la función termine.</li>
+                    </ul>
+                A diferencia de los arreglos automáticos, los arreglos declarados como <code>static</code> se inicializan automáticamente en cero si no proporcionás valores. Según <strong>O'Reilly</strong>, esto es útil para funciones que deben "recordar" estados previos o para optimizar el rendimiento evitando recreaciones costosas en la pila (<span class="abbr" data-title="Stack: Porción de memoria de acceso rápido dedicada a las variables locales y llamadas a funciones.">stack</span>).</p>
+            </div>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-7-4')">Referencia: Deitel Secc. 7.4.1 - 7.4.9 | O'Reilly Cap. 7: Arreglos | Cuadernos NotebookLM (UX-Web-Edu)</button>
+        </section>
+
+<section id="sec-7-5">
+            <span>🔗</span>
+            <h2>7.5 Paso de arreglos a funciones: Eficiencia, Punteros y Contratos de Inmutabilidad</h2>
+            
+            <p>En la arquitectura de software de alto nivel, la forma en que los datos se desplazan entre los módulos define no solo el rendimiento, sino también la estabilidad del sistema entero. Cuando te enfrentás a la tarea de pasar un arreglo a una función en C++, debés comprender que estás operando bajo una filosofía de diseño radicalmente distinta a la de las variables escalares. Según el texto fundamental de <strong>Deitel (6ta Edición)</strong>, a diferencia de los tipos simples que se pasan por valor (creando una copia local), los arreglos se pasan por <strong>referencia</strong> de forma predeterminada. Sin embargo, técnicamente lo que sucede es un fenómeno conocido como <span class="abbr" data-title="Array Decay: Proceso por el cual un arreglo se 'degrada' a un puntero a su primer elemento al ser pasado a una función.">decaimiento de arreglo a puntero</span>.</p>
+
+            <p>Desde la perspectiva técnica de <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, pasar la dirección de memoria del primer elemento (<code>&arreglo[0]</code>) es una decisión de ingeniería vital para el rendimiento. Imaginate el costo computacional de copiar un arreglo que contiene un millón de registros de una base de datos web cada vez que llamás a una función de ordenamiento; el sistema colapsaría por el uso excesivo del <span class="abbr" data-title="Stack: Porción de memoria de acceso rápido dedicada a las variables locales y llamadas a funciones.">stack</span> y la latencia se volvería inaceptable. Al pasar solo la dirección, el tiempo de transferencia es constante, sin importar si el arreglo tiene diez o diez millones de elementos.</p>
+
+            <h3>El Desafío de la Pérdida de Información: El Tamaño</h3>
+            <p>De acuerdo con el <strong>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</strong>, este es uno de los conceptos donde los estudiantes universitarios suelen tener más "disonancia cognitiva". Al pasar solo la dirección del primer elemento, la función receptora "pierde" la noción de cuántos elementos tiene el arreglo original. No podés usar el operador <code>sizeof</code> dentro de la función para determinar el tamaño, ya que este devolvería el tamaño del puntero, no del bloque de datos. </p>
+            
+            <p>Por esta razón, la <strong>Ingeniería de Software</strong> profesional exige que siempre pases el tamaño del arreglo como un argumento adicional. Según <strong>Deitel</strong>, omitir este parámetro es una invitación al desastre, ya que la función podría seguir leyendo memoria más allá de los límites del arreglo, accediendo a datos privados o causando una <span class="abbr" data-title="Violación de Segmentación: Error que ocurre cuando un programa intenta acceder a una posición de memoria que no le pertenece.">violación de segmentación</span>. Este diseño de interfaz es un ejemplo de <strong>transparencia técnica</strong>: obligás al programador a ser explícito sobre los límites de los datos.</p>
+
+            <div class="practice-box">
+                <h3>Implementación Profesional de la Interfaz</h3>
+                <p>Observá la sintaxis académica recomendada para definir una función que procesa colecciones. Notá el uso de los corchetes vacíos para indicar que se espera un arreglo de tamaño variable.</p>
+                <pre><code>// Prototipo de función académica
+void imprimirReporte( const int calificaciones[], int tamano ) {
+    for ( int i = 0; i < tamano; ++i ) {
+        std::cout << "Estudiante [" << i << "]: " << calificaciones[i] << std::endl;
+    }
+}</code></pre>
+                <p>Basado en el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, este patrón de diseño es análogo a la definición de <em>endpoints</em> en una API donde debés validar siempre los metadatos (el tamaño) antes de procesar el cuerpo del mensaje (los datos).</p>
+            </div>
+
+            <h3>Seguridad y el Calificador <code>const</code></h3>
+            <p>Dado que la función opera directamente sobre la memoria original, cualquier cambio realizado dentro de ella afectará permanentemente al arreglo en la función llamadora. Si bien esto permite la manipulación directa (útil para algoritmos de ordenamiento), representa un riesgo de seguridad crítico. Según <strong>O'Reilly</strong>, si una función solo necesita leer los datos (como para calcular un promedio o imprimir un gráfico), debés usar imperativamente el calificador <code>const</code>.</p>
+            
+            <p>El uso de <code>const</code> actúa como un <strong>contrato de inmutabilidad</strong>. Si intentás modificar un elemento de un arreglo marcado como constante, el compilador generará un error de sintaxis inmediatamente. Según el <strong>Cuaderno de NotebookLM sobre UX UI</strong>, el uso de <code>const</code> reduce la carga cognitiva del programador, ya que garantiza que el estado de los datos originales no será alterado por "efectos secundarios" imprevistos, mejorando la robustez y la predecibilidad del sistema entero.</p>
+
+            <div class="table-res">
+                <table>
+                    <caption>Matriz de Decisiones: Paso de Parámetros</caption>
+                    <thead>
+                        <tr>
+                            <th>Requerimiento del Sistema</th>
+                            <th>Técnica Recomendada (Deitel)</th>
+                            <th>Justificación de Ingeniería (O'Reilly)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Ordenamiento o Modificación</strong></td>
+                            <td>Paso por referencia directa (sin const).</td>
+                            <td>Permite el intercambio de elementos <em>in-place</em> para ahorrar memoria.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reportes, Búsqueda o Cálculo</strong></td>
+                            <td>Paso con calificador <code>const</code>.</td>
+                            <td>Previene la corrupción accidental de la fuente de verdad de los datos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Arreglos de gran escala</strong></td>
+                            <td>Paso por referencia con tamaño explícito.</td>
+                            <td>Evita la degradación del rendimiento por copias innecesarias.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Modelos Mentales: La Metáfora de la Dirección Postal</h3>
+            <p>Siguiendo las <strong>Metodologías Activas de NotebookLM</strong>, visualizá este proceso con la metáfora de una oficina. Pasar una variable por valor es como fotocopiar un documento de 500 páginas y enviarlo por correo; es lento y caro. Pasar un arreglo por referencia es como enviar simplemente un post-it con la dirección de la habitación donde está el documento original. La oficina receptora (la función) puede ir a esa habitación y leer o escribir en el documento original. El post-it (la dirección) es pequeño y rápido de enviar, pero debés decirle a la oficina cuántas páginas (tamaño) tiene el documento para que no sigan leyendo el aire cuando se acaben las hojas.</p>
+
+            <div class="practice-box" style="background: rgba(26, 115, 232, 0.05);">
+                <strong>🚩 Alerta de Ingeniería:</strong>
+                <p>Acordate que, aunque pasás el arreglo por referencia, los elementos individuales del arreglo se pasan por valor si los enviás uno a uno. Por ejemplo: <code>miFuncion( arreglo[5] )</code> pasa una copia del entero en la posición 5. Solo cuando pasás el nombre del arreglo sin subíndices, como en <code>miFuncion( arreglo )</code>, estás activando el paso por referencia de la colección completa.</p>
+            </div>
+
+            <p>En conclusión, el paso de arreglos a funciones es el punto donde la elegancia de la programación de alto nivel se encuentra con la cruda realidad del hardware. Como futuro profesional, tu capacidad para gestionar estos punteros implícitos, proteger los datos con <code>const</code> y documentar siempre el tamaño de las colecciones definirá la calidad industrial de tus desarrollos en C++. En la siguiente sección, veremos cómo este concepto se aplica en la clase <code>LibroCalificaciones</code> para encapsular la lógica de procesamiento de notas de manera segura y orientada a objetos.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-7-5')">Referencia: Deitel Secc. 7.5 | O'Reilly Cap. 9: Functions | Cuadernos NotebookLM (Educación - Web - UX)</button>
+        </section>
+<section id="sec-7-6">
+            <span>📊</span>
+            <h2>7.6 Ejemplo práctico: la clase LibroCalificaciones que usa un arreglo para almacenar las calificaciones</h2>
+            
+            <p>En el trayecto hacia la maestría en la Programación Orientada a Objetos (<span class="abbr" data-title="POO: Paradigma de programación basado en el concepto de 'objetos', los cuales contienen datos y código.">POO</span>), este caso de estudio representa un salto cualitativo fundamental. En versiones anteriores de la clase <code>LibroCalificaciones</code>, el procesamiento de las notas era efímero: usted ingresaba los datos, se procesaban y se perdían. En esta iteración arquitectónica, basada rigurosamente en el enfoque de <strong>Deitel</strong>, implementaremos un arreglo unidimensional como un <strong>miembro de datos privado</strong>. Este cambio no es cosmético; permite que el objeto mantenga un "estado" persistente, transformando a la clase en un contenedor inteligente que custodia la integridad de la información académica durante todo su ciclo de vida.</p>
+
+            <p>De acuerdo con el <strong>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</strong>, este ejercicio es el andamiaje perfecto para comprender la <strong>delegación de responsabilidades</strong>. En lugar de que la función <code>main</code> se ensucie con la lógica de cálculo, usted simplemente le pide al objeto: "dame el promedio" o "buscá el mínimo". Esta abstracción permite que usted se concentre en la resolución de problemas de alto nivel, dejando que la clase gestione los detalles técnicos del recorrido del arreglo.</p>
+
+            <div class="practice-box">
+                <h3>Arquitectura de Memoria y Encapsulamiento</h3>
+                <p>Al declarar el arreglo dentro de la sección <code>private</code> de la clase, estamos aplicando el principio de <strong>ocultamiento de información</strong>. Según <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, esto garantiza que ningún agente externo pueda modificar las notas accidentalmente sin pasar por los métodos de validación de la clase. Debés notar que el tamaño del arreglo se define mediante una constante estática, lo cual es una regla de oro para asegurar que el contrato de memoria sea inmutable y predecible desde el momento de la compilación.</p>
+                <pre><code>class LibroCalificaciones {
+public:
+    static const int estudiantes = 10; // Tamaño fijo y seguro
+    // ... métodos públicos ...
+private:
+    std::string nombreCurso;
+    int calificaciones[ estudiantes ]; // El arreglo como estado interno
+};</code></pre>
+            </div>
+
+            <h3>Procesamiento Estadístico: Algoritmos de Recorrido</h3>
+            <p>La verdadera potencia de esta clase reside en sus métodos de análisis. Basándonos en la lógica de <strong>Deitel</strong>, examinaremos tres funciones críticas que operan sobre el arreglo:</p>
+            
+            <ul>
+                <li><strong><code>obtenerMinimo()</code> y <code>obtenerMaximo()</code>:</strong> Estos métodos implementan un algoritmo de búsqueda clásico. Se inicializa una variable auxiliar con el primer elemento del arreglo y luego, mediante un ciclo <code>for</code>, se compara con los demás. Si se encuentra un valor menor (o mayor), se actualiza la variable. Es un proceso de complejidad lineal <span class="abbr" data-title="O(n): Complejidad donde el tiempo de ejecución es proporcional al número de elementos.">O(n)</span>, eficiente y directo.</li>
+                <li><strong><code>obtenerPromedio()</code>:</strong> Aquí se aplica la lógica del acumulador. El objeto recorre el arreglo sumando cada nota en una variable de tipo <code>double</code> para evitar errores de truncamiento. Según el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, el uso de tipos de punto flotante para promedios es vital para la precisión del backend, especialmente cuando estos datos alimentan interfaces de visualización en tiempo real.</li>
+            </ul>
+
+            <div class="table-res">
+                <table>
+                    <caption>Responsabilidades de la Clase LibroCalificaciones</caption>
+                    <thead>
+                        <tr>
+                            <th>Método Miembro</th>
+                            <th>Lógica del Algoritmo</th>
+                            <th>Impacto en la UX (NotebookLM)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>processGrades()</code></td>
+                            <td>Orquestador central de llamadas.</td>
+                            <td>Provee un punto de entrada claro al usuario.</td>
+                        </tr>
+                        <tr>
+                            <td><code>outputBarChart()</code></td>
+                            <td>Traducción de frecuencias a asteriscos.</td>
+                            <td>Mejora el modelo mental del usuario sobre la distribución.</td>
+                        </tr>
+                        <tr>
+                            <td><code>getMinimum()</code></td>
+                            <td>Búsqueda secuencial comparativa.</td>
+                            <td>Identifica puntos críticos de rendimiento académico.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Visualización y Feedback: El Método <code>imprimirGraficoBarras</code></h3>
+            <p>Desde la perspectiva del <strong>Cuaderno de NotebookLM sobre UX UI</strong>, la legibilidad es una forma de respeto al usuario. La clase <code>LibroCalificaciones</code> no se limita a escupir números; utiliza el método <code>imprimirGraficoBarras</code> para crear una jerarquía visual. Este método utiliza un arreglo de frecuencias para contar cuántos estudiantes cayeron en rangos de diez puntos (0-9, 10-19... 90-99, 100). </p>
+            
+            <p>Como indica <strong>Deitel</strong>, este proceso requiere ciclos anidados: el externo para recorrer los rangos y el interno para imprimir la cantidad de asteriscos correspondiente. Usted debe notar cómo la visualización transforma datos crudos en <strong>información accionable</strong>. Según las pautas de diseño, un gráfico de barras en consola es la forma más directa de proveer feedback inmediato sobre la salud pedagógica de un curso sin necesidad de bibliotecas gráficas externas pesadas.</p>
+
+            <div class="practice-box" style="background: rgba(26, 115, 232, 0.05);">
+                <strong>💡 Reflexión de Ingeniería:</strong>
+                <p>Acordate que, al usar arreglos como miembros de la clase, usted debe ser extremadamente cuidadoso con las funciones miembro que se declaran como <code>const</code>. Según <strong>O'Reilly</strong>, cualquier función que solo lea el arreglo (como <code>obtenerPromedio</code>) debe estar marcada como <code>const</code> para garantizar que no existan efectos secundarios no deseados en el estado del objeto. Esta es la diferencia entre un programador que "pica código" y un ingeniero que diseña sistemas robustos.</p>
+            </div>
+
+            <h3>Modelos Mentales: El Objeto como Archivista</h3>
+            <p>Siguiendo las <strong>Metodologías Activas</strong>, visualice a un objeto <code>LibroCalificaciones</code> no como un programa, sino como un archivista personal. El arreglo es su cajón de expedientes. Usted no entra al cajón a buscar las notas; usted le pregunta al archivista. Él sabe cómo están ordenadas, cómo sumarlas y cómo dibujarle un mapa de ellas. Esta separación entre la interfaz (lo que usted pide) y la implementación (cómo el archivista recorre el cajón) es el corazón de la computación moderna.</p>
+
+            <p>En conclusión, el desarrollo de esta clase bajo los estándares de <strong>Deitel</strong> le permite a usted dominar la persistencia de datos en memoria, la seguridad del encapsulamiento y la importancia de la visualización de datos para la experiencia del usuario. En la siguiente sección, profundizaremos en cómo buscar datos específicos dentro de estos contenedores mediante algoritmos de búsqueda lineal.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-7-6')">Referencia: Deitel Secc. 7.6 | O'Reilly Cap. 13: Classes and Objects | Cuadernos NotebookLM (UX - Edu - Web)</button>
+        </section>
+
+<section id="sec-7-7">
+            <span>🔍</span>
+            <h2>7.7 Búsqueda de datos en arreglos mediante la búsqueda lineal</h2>
+            
+            <p>En el ecosistema del desarrollo de software de nivel universitario, la capacidad de localizar información dentro de una estructura de datos es tan fundamental como la capacidad de almacenarla. De nada sirve tener un arreglo con miles de registros si no poseés un mecanismo eficiente para recuperar un dato específico. Según el texto fundamental de <strong>Deitel (6ta Edición)</strong>, la búsqueda lineal (también conocida como búsqueda secuencial) es el algoritmo más simple y directo para hallar un elemento en un arreglo, especialmente cuando los datos se encuentran desordenados o la colección es relativamente pequeña.</p>
+
+            <p>La lógica detrás de la búsqueda lineal es intuitiva y refleja el modo en que los seres humanos buscamos algo en una lista física: empezamos por el primer elemento y avanzamos uno por uno hasta encontrar lo que buscamos o llegar al final de la lista. De acuerdo con el <strong>Cuaderno de NotebookLM sobre Educación</strong>, este algoritmo es la base pedagógica perfecta para que comprendas la iteración controlada y el uso de banderas lógicas (flags) o valores de retorno sentinela.</p>
+
+            
+
+            <h3>Mecánica del Algoritmo y "Clave de Búsqueda"</h3>
+            <p>El proceso se centra en la comparación de cada elemento del arreglo con una <span class="abbr" data-title="Clave de Búsqueda (Search Key): El valor específico que el programa intenta localizar dentro de la estructura de datos.">llave de búsqueda</span>. Basado en el enfoque de <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, el algoritmo opera mediante un ciclo que recorre el arreglo desde el índice 0. En cada iteración, se evalúa una condición de igualdad. Si el elemento actual coincide con la llave, la función debe retornar inmediatamente la posición (el índice) del hallazgo. </p>
+            
+            <p>Si el ciclo finaliza y no se ha encontrado coincidencia alguna, la función retorna convencionalmente un valor de <strong>-1</strong>. Este valor es un "sentinela" que indica la ausencia del dato, ya que los índices de un arreglo en C++ son siempre no negativos. Acordate que, como señala <strong>Deitel</strong>, es una buena práctica de ingeniería pasar el arreglo a la función de búsqueda con el calificador <code>const</code>, asegurando que el proceso de búsqueda no altere accidentalmente los datos originales.</p>
+
+            <div class="practice-box">
+                <h3>Implementación Técnica de Referencia</h3>
+                <p>Observá el siguiente patrón de codificación académica. Notá la eficiencia del retorno temprano (early return) para optimizar el tiempo de ejecución una vez que se localiza el dato.</p>
+                <pre><code>int busquedaLineal( const int arreglo[], int llave, int tamano ) {
+    for ( int j = 0; j < tamano; ++j ) {
+        if ( arreglo[ j ] == llave ) { // Comparación de igualdad
+            return j; // Hallazgo: se retorna el índice inmediatamente
+        }
+    }
+    return -1; // No encontrado tras recorrer el arreglo completo
+}</code></pre>
+            </div>
+
+            <h3>Análisis de Complejidad y Rendimiento: La Perspectiva de O(n)</h3>
+            <p>Para un futuro ingeniero, entender el "cómo" funciona un algoritmo es solo la mitad del camino; la otra mitad es entender "cuán bien" funciona. En computación, esto lo medimos mediante la notación <strong>Big O</strong>. La búsqueda lineal tiene una complejidad temporal de <span class="abbr" data-title="O(n): Complejidad lineal. El tiempo de ejecución máximo aumenta en proporción directa al número de elementos (n) en el arreglo.">O(n)</span>.</p>
+            
+            <p>De acuerdo con <strong>O'Reilly</strong>, esto significa que en el peor de los casos (que el elemento no esté o sea el último), el programa deberá realizar <em>n</em> comparaciones. Si tenés un arreglo de un millón de elementos, realizarás un millón de operaciones. Basado en el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, esta linealidad es aceptable para colecciones pequeñas en el lado del cliente (frontend), pero puede volverse un cuello de botella inaceptable en el procesamiento de grandes volúmenes de datos en el servidor (backend).</p>
+
+            <div class="table-res">
+                <table>
+                    <caption>Análisis de Eficiencia: Búsqueda Lineal</caption>
+                    <thead>
+                        <tr>
+                            <th>Escenario</th>
+                            <th>Comparaciones Requeridas</th>
+                            <th>Análisis de Eficiencia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Mejor Caso</strong></td>
+                            <td>1 comparación</td>
+                            <td>El elemento se encuentra en el primer casillero (índice 0).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Peor Caso</strong></td>
+                            <td>n comparaciones</td>
+                            <td>El elemento es el último o no existe en el arreglo.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Caso Promedio</strong></td>
+                            <td>n / 2 comparaciones</td>
+                            <td>Estadísticamente, se encontrará a mitad del recorrido.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Impacto en la Experiencia de Usuario (UX UI)</h3>
+            <p>El <strong>Cuaderno de NotebookLM sobre UX UI</strong> resalta un punto que a menudo se ignora en la teoría pura: la latencia de búsqueda impacta en el modelo mental del usuario. Si un usuario está filtrando una lista de contactos o productos en una interfaz, y el sistema utiliza una búsqueda lineal ineficiente sobre miles de elementos, la interfaz podría "congelarse" o mostrar un retraso perceptible.</p>
+            
+            <p>Desde el diseño de interacción, si sabés que la búsqueda lineal tomará tiempo debido al tamaño del arreglo, debés implementar indicadores visuales de carga. Sin embargo, la recomendación de <strong>Deitel</strong> es que si el tiempo de búsqueda se vuelve un problema de UX, debés considerar ordenar el arreglo para utilizar algoritmos más avanzados como la búsqueda binaria, la cual veremos más adelante.</p>
+
+            <div class="practice-box" style="background: rgba(26, 115, 232, 0.05);">
+                <strong>💡 Reflexión sobre Metodologías Activas:</strong>
+                <p>Visualizá la búsqueda lineal como si estuvieras buscando una palabra específica en un libro de 500 páginas que no tiene índice. Empezás a leer desde la página 1, línea por línea. Es un proceso seguro pero agotador. En ingeniería, siempre buscamos minimizar el "agotamiento" del procesador. ¿Cuándo es justificable este esfuerzo? Cuando el libro (el arreglo) es tan cortito que no vale la pena fabricar un índice.</p>
+            </div>
+
+            <h3>Consideraciones de Escalabilidad en la Web</h3>
+            <p>Según el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, en aplicaciones modernas de tipo SPA (Single Page Applications), a menudo realizamos búsquedas lineales sobre arreglos de objetos JSON. C++ se destaca aquí por su velocidad bruta; sin embargo, debés ser consciente del impacto en la batería y los recursos en dispositivos móviles. La búsqueda lineal es "costosa" en términos energéticos si se realiza repetidamente sobre colecciones masivas.</p>
+            
+            <p>Para mitigar esto, <strong>O'Reilly</strong> sugiere que si las búsquedas son frecuentes, el costo inicial de <strong>ordenar el arreglo</strong> (operación que veremos en la sección 7.8) se amortiza rápidamente, permitiendo búsquedas mucho más veloces. Este es el pensamiento estratégico que define a un arquitecto de software: sacrificar un poco de tiempo ahora (ordenando) para ganar mucha velocidad después (buscando).</p>
+
+            <p>En conclusión, la búsqueda lineal es una herramienta confiable, sencilla de implementar y fundamental para cualquier programador de C++. Su simplicidad la hace resistente a errores, pero su falta de escalabilidad la limita a escenarios específicos. Entender sus límites te permitirá apreciar la elegancia de algoritmos más complejos y la importancia de la estructura de los datos en la resolución de problemas de ingeniería.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-7-7')">Referencia: Deitel Secc. 7.7 | O'Reilly Cap. 7: Búsquedas | Cuadernos NotebookLM (UX-Web-Edu)</button>
+        </section>
+
+<section id="sec-7-8"> <span>🔢</span> <h2>7.8 Ordenamiento de arreglos mediante el ordenamiento por inserción</h2>
+
+<p>En el ámbito de la ingeniería de software y las ciencias de la computación, la capacidad de organizar la información de manera eficiente es un requisito sine qua non para el desarrollo de sistemas robustos. El <strong>ordenamiento por inserción</strong> (<em>insertion sort</em>) representa uno de los algoritmos fundamentales que debés dominar no solo por su simplicidad, sino por su eficiencia en escenarios específicos. Según el texto de <strong>Deitel</strong>, este método es análogo a la forma en que una persona ordena una mano de cartas durante una partida: vas tomando una carta a la vez y la insertás en su posición correcta respecto a las que ya tenés ordenadas en la mano.</p>
+
+<p>Desde una perspectiva arquitectónica, este algoritmo opera bajo un esquema de <strong>ordenamiento "en el lugar"</strong> (<em>in-place</em>). Esto significa que no requiere una cantidad significativa de memoria adicional para realizar la tarea, lo cual es vital cuando trabajás en entornos de recursos limitados, como sistemas embebidos o aplicaciones críticas de bajo nivel. De acuerdo con el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, el uso eficiente de la memoria en el cliente es un factor determinante para la fluidez de las aplicaciones modernas, especialmente cuando manejás grandes volúmenes de datos en el <span class="abbr" data-title="Frontend: Capa de la aplicación que interactúa directamente con el usuario en el navegador.">frontend</span>.</p>
+
+<h3>Mecánica Detallada del Algoritmo</h3>
+<p>El algoritmo de inserción divide virtualmente el arreglo en dos partes: una sublista ya ordenada (que al principio solo contiene el primer elemento) y una sublista con los elementos restantes por procesar. El proceso, detallado minuciosamente por <strong>Deitel</strong>, sigue estos pasos iterativos:</p>
+
+<ol>
+    <li>Se toma el segundo elemento del arreglo (índice 1) como el primer elemento "a insertar".</li>
+    <li>Este elemento se compara con los elementos de la sublista ordenada (a su izquierda).</li>
+    <li>Mientras el elemento a insertar sea menor que el elemento comparado en la sublista ordenada, se desplazan los elementos mayores un lugar hacia la derecha (proceso de <em>shifting</em>).</li>
+    <li>Una vez encontrada la posición correcta (donde el elemento a la izquierda es menor o se llegó al inicio del arreglo), se inserta el valor.</li>
+    <li>Se repite el proceso para todos los elementos hasta el final del arreglo.</li>
+</ol>
+
+<div class="practice-box">
+    <strong>💡 Analogía Pedagógica (Cuaderno de Metodologías Activas):</strong>
+    <p>Imaginate que sos un bibliotecario ordenando un estante de libros por apellido. Tomás el segundo libro; si el apellido empieza con 'A' y el primero con 'M', movés el de 'M' a la derecha y ponés el de 'A' al principio. Luego tomás el tercero y buscás su lugar entre los dos primeros. Este "andamiaje" mental te permite entender que el esfuerzo de inserción disminuye si el estante ya está casi ordenado, un concepto técnico que definimos como <span class="abbr" data-title="Adaptatividad: Propiedad de un algoritmo cuya complejidad disminuye si los datos de entrada ya poseen cierto grado de orden.">adaptatividad</span>.</p>
+</div>
+
+<h3>Implementación Profesional en C++</h3>
+<p>Basado en los ejemplos de <strong>Deitel</strong> y las advertencias de <strong>O'Reilly</strong> sobre la claridad del código, a continuación se presenta una implementación típica utilizando tipos de datos genéricos conceptuales:</p>
+
+<pre><code>// Función para ordenar un arreglo mediante inserción
+void ordenarPorInsercion(int arreglo[], const int tamano) { int insertable; // Variable temporal para el valor actual int moverElemento; // Índice para buscar la posición de inserción
+
+// Recorremos desde el segundo elemento hasta el final
+for (int i = 1; i < tamano; ++i) {
+    insertable = arreglo[i]; // Almacenamos el elemento actual
+    moverElemento = i; // Iniciamos la búsqueda hacia la izquierda
+
+    // Desplazamos los elementos mayores hacia la derecha
+    while (moverElemento > 0 && arreglo[moverElemento - 1] > insertable) {
+        arreglo[moverElemento] = arreglo[moverElemento - 1];
+        --moverElemento;
+    } // fin de while
+
+    arreglo[moverElemento] = insertable; // Insertamos en el lugar correcto
+} // fin de for
+}</code></pre>
+
+<h3>Análisis de Complejidad y Eficiencia</h3>
+<p>Como futuro ingeniero, tenés que ser capaz de cuantificar el costo de tus decisiones algorítmicas. El ordenamiento por inserción tiene un perfil de rendimiento asimétrico que debés conocer profundamente:</p>
+
+<div class="table-res">
+    <table>
+        <thead>
+            <tr>
+                <th>Escenario</th>
+                <th>Notación Big O</th>
+                <th>Descripción Técnica</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Mejor Caso</strong></td>
+                <td>$O(n)$</td>
+                <td>Ocurre cuando el arreglo ya está ordenado. El ciclo interno no realiza desplazamientos.</td>
+            </tr>
+            <tr>
+                <td><strong>Peor Caso</strong></td>
+                <td>$O(n^2)$</td>
+                <td>Ocurre cuando el arreglo está en orden inverso. Se requiere el máximo número de comparaciones y movimientos.</td>
+            </tr>
+            <tr>
+                <td><strong>Caso Promedio</strong></td>
+                <td>$O(n^2)$</td>
+                <td>Para datos aleatorios, el número de comparaciones es cuadrático respecto al tamaño de la muestra.</td>
+            </tr>
+            <tr>
+                <td><strong>Espacio Extra</strong></td>
+                <td>$O(1)$</td>
+                <td>Es un algoritmo <em>in-place</em>; no consume memoria adicional proporcional a <em>n</em>.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<p>Según <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, la simplicidad de este algoritmo lo hace más rápido que el <em>Quicksort</em> o el <em>Merge Sort</em> para arreglos muy pequeños (generalmente menos de 15 o 20 elementos). Por este motivo, muchas implementaciones de bibliotecas estándar utilizan una técnica híbrida: usan un algoritmo rápido para dividir el problema y terminan el ordenamiento de los fragmentos pequeños con inserción.</p>
+
+<h3>Perspectiva de UX UI y Desarrollo Web</h3>
+<p>De acuerdo con el <strong>Cuaderno de NotebookLM sobre UX UI</strong>, la velocidad del algoritmo afecta directamente la <span class="abbr" data-title="Latencia Percibida: El tiempo que el usuario siente que debe esperar hasta que la aplicación responda a su acción.">latencia percibida</span>. Si intentás ordenar un arreglo masivo en el hilo principal del navegador usando inserción ($O(n^2)$), la interfaz de usuario se va a "congelar", degradando la experiencia. </p>
+
+<p>En el desarrollo web, si sabés que los datos que recibís del <span class="abbr" data-title="Backend: Parte del sistema que reside en el servidor y gestiona la lógica de negocio y base de datos.">backend</span> vienen "casi ordenados" (por ejemplo, una lista de mensajes por fecha donde solo unos pocos están fuera de lugar), la inserción es excepcionalmente eficiente. El cuaderno de <strong>Desarrollo Web</strong> sugiere que para optimizar el <span class="abbr" data-title="Rendering: Proceso de generar la imagen visual de la interfaz a partir del código.">renderizado</span>, debés evitar operaciones costosas durante los ciclos de refresco de pantalla.</p>
+
+<div class="practice-box" style="background: rgba(46, 125, 50, 0.05); border-left: 6px solid var(--success);">
+    <strong>✅ Ventaja Técnica: Estabilidad</strong>
+    <p>Una característica crucial mencionada por <strong>Deitel</strong> es que el ordenamiento por inserción es <strong>estable</strong>. Esto significa que si tenés dos elementos con el mismo valor (por ejemplo, dos estudiantes con la misma nota), el algoritmo mantendrá su orden relativo original. Esto es fundamental en bases de datos donde ya tenés un orden previo (por ejemplo, por nombre) y querés agregar un segundo criterio (por nota) sin romper el primero.</p>
+</div>
+
+<h3>Consideraciones Finales</h3>
+<p>En conclusión, el ordenamiento por inserción es una herramienta quirúrgica: lenta para grandes masas de datos desordenados, pero imbatible en eficiencia para colecciones pequeñas o casi ordenadas. Como estudiante, comprender este algoritmo te otorga la base para entender conceptos de <strong>complejidad temporal</strong> y <strong>gestión de memoria</strong> que aplicarás durante toda tu carrera profesional. Acordate siempre de evaluar la naturaleza de tus datos antes de elegir el algoritmo; en ingeniería, no siempre el martillo más grande es la mejor herramienta para el trabajo.</p>
+
+<button class="btn-ref" onclick="openRef('ref-deitel-7-8')">Referencia: Deitel Secc. 7.8 | O'Reilly Cap. 16: Sorting and Pointers | Cuadernos NotebookLM (UX-Web-Edu)</button>
+</section>
+
+<section id="sec-7-9">
+            <span>🧊</span>
+            <h2>7.9 Arreglos multidimensionales: Estructuras Complejas y Alocación en Memoria</h2>
+            
+            <p>En el transcurso de tu formación académica como desarrollador en C++, vas a descubrir que la realidad raras veces se ajusta a una sola dimensión. En el desarrollo de sistemas complejos, a menudo necesitás representar datos que poseen más de una dimensión, como una tabla de valores, una matriz de píxeles en procesamiento de imágenes o un mapa de coordenadas en un motor de videojuegos. Según el texto fundamental de <strong>Deitel</strong>, C++ permite crear arreglos con múltiples subíndices, lo que nos otorga una capacidad de abstracción superior para modelar problemas del mundo real.</p>
+            
+            <p>Un arreglo bidimensional (el tipo más común de arreglo multidimensional) se puede visualizar conceptualmente como una matriz compuesta por filas y columnas. Para identificar un elemento específico dentro de esta estructura, debés proporcionar dos índices: el primero identifica la fila del elemento y el segundo identifica la columna del mismo, siguiendo la notación <code>a[fila][columna]</code>. Es imperativo que comprendas que, aunque nosotros lo visualizamos como una grilla, la computadora lo procesa bajo una lógica estrictamente matemática y física.</p>
+
+            <div class="practice-box">
+                <h3>Arquitectura de Memoria y el "Orden Fila-Mayor"</h3>
+                <p>Desde la perspectiva técnica de <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, es vital que comprendas cómo se organizan estos datos en la memoria física. A pesar de que nuestra representación mental sea una tabla bidimensional, la memoria RAM es inherentemente lineal. Por lo tanto, C++ almacena los arreglos multidimensionales de forma contigua en una sola línea utilizando lo que se conoce como <strong>orden fila-mayor</strong> (row-major order).</p>
+                <p>Esto significa que los elementos de la primera fila se almacenan primero, seguidos inmediatamente por los elementos de la segunda fila, y así sucesivamente. Fijate que el acceso a <code>matriz[i][j]</code> implica un cálculo de desplazamiento interno (offset) que el compilador realiza automáticamente: <code>dirección_base + (i * cantidad_de_columnas + j) * tamaño_del_tipo</code>. Según el <strong>cuaderno de NotebookLM sobre UX UI</strong>, comprender este manejo eficiente de las estructuras es clave para representar grillas de datos en interfaces administrativas de alto rendimiento, evitando latencias innecesarias al recorrer la información.</p>
+            </div>
+
+            <div class="table-res">
+                <table>
+                    <caption>Representación Lógica de un Arreglo Bidimensional (3x4)</caption>
+                    <thead>
+                        <tr>
+                            <th>Identificador</th>
+                            <th>Columna 0</th>
+                            <th>Columna 1</th>
+                            <th>Columna 2</th>
+                            <th>Columna 3</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Fila 0</strong></td>
+                            <td>a[0][0]</td>
+                            <td>a[0][1]</td>
+                            <td>a[0][2]</td>
+                            <td>a[0][3]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fila 1</strong></td>
+                            <td>a[1][0]</td>
+                            <td>a[1][1]</td>
+                            <td>a[1][2]</td>
+                            <td>a[1][3]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fila 2</strong></td>
+                            <td>a[2][0]</td>
+                            <td>a[2][1]</td>
+                            <td>a[2][2]</td>
+                            <td>a[2][3]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Declaración e Inicialización Académica</h3>
+            <p>Para declarar un arreglo bidimensional, debés especificar el tipo de dato, el nombre y el tamaño de cada dimensión entre corchetes separados. Por ejemplo: <code>int b[2][2];</code> reserva espacio para cuatro enteros. Según <strong>Deitel</strong>, la inicialización puede ser explícita mediante listas de inicializadores anidadas, lo cual mejora drásticamente la legibilidad del código y reduce el margen de error durante la etapa de desarrollo.</p>
+            
+            <pre><code>// Inicialización clara y estructurada
+int b[2][2] = { { 1, 2 }, { 3, 4 } };
+
+// También es posible inicializar parcialmente
+int c[2][2] = { { 1 }, { 3, 4 } }; // c[0][1] se inicializa en 0 automáticamente</code></pre>
+
+            <p>Notá que, al igual que en los arreglos unidimensionales, si no proporcionás suficientes inicializadores para una fila específica, los elementos restantes se inicializan automáticamente en cero. Sin embargo, basándonos en las advertencias de <strong>O'Reilly</strong>, siempre es preferible ser explícito para evitar comportamientos ambiguos que dificulten el mantenimiento del software a largo plazo.</p>
+
+            <h3>Manipulación mediante Ciclos Anidados</h3>
+            <p>El procesamiento de arreglos multidimensionales requiere casi invariablemente el uso de estructuras de repetición anidadas. Según el <strong>cuaderno de NotebookLM sobre Educación y Metodologías Activas</strong>, dominar el uso de un ciclo <code>for</code> dentro de otro es una competencia crítica que separa al programador novato del desarrollador profesional. El ciclo externo típicamente recorre las filas, mientras que el ciclo interno recorre las columnas de la fila actual.</p>
+
+            <div class="practice-box">
+                <strong>💡 Ejemplo de Recorrido:</strong>
+                <p>Para calcular la suma de todos los elementos o buscar un valor específico, debés estructurar tu código de la siguiente manera:</p>
+                <pre><code>for ( int i = 0; i < filas; ++i ) {
+    for ( int j = 0; j < columnas; ++j ) {
+        // Operación sobre matriz[i][j]
+        std::cout << matriz[i][j] << " ";
+    }
+    std::cout << std::endl; // Salto de línea por cada fila terminada
+}</code></pre>
+            </div>
+
+            <h3>Paso de Arreglos Multidimensionales a Funciones</h3>
+            <p>Un detalle técnico avanzado que menciona <strong>Deitel</strong> es que, al pasar un arreglo multidimensional como argumento a una función, la declaración del parámetro debe especificar obligatoriamente el tamaño de todas las dimensiones, excepto la primera. Esto es necesario para que el compilador pueda realizar el cálculo de desplazamiento mencionado anteriormente. Por ejemplo: <code>void imprimirMatriz( int a[][4] )</code> indica que el arreglo tiene cuatro columnas, permitiendo al compilador saber exactamente dónde termina una fila y empieza la siguiente en la memoria lineal.</p>
+
+            <h3>Contexto en el Desarrollo Web y UX</h3>
+            <p>Desde el enfoque del <strong>cuaderno de NotebookLM sobre Desarrollo Web</strong>, las estructuras multidimensionales en C++ son el pilar del procesamiento de datos en el backend cuando se requiere una velocidad de respuesta crítica que los lenguajes de alto nivel no pueden ofrecer. Al enviar estos datos al frontend, suelen transformarse en objetos JSON complejos. Sin embargo, la optimización original en C++ garantiza que el servidor pueda manejar miles de estas estructuras simultáneamente sin degradar la <strong>experiencia del usuario</strong>.</p>
+            
+            <p>En términos de <strong>UX UI</strong>, la representación de estas matrices suele traducirse en componentes de tablas dinámicas o dashboards financieros. Si el programador no comprende la eficiencia de los arreglos multidimensionales, el renderizado de estas tablas podría verse afectado, provocando lo que en diseño llamamos <em>jank</em> o saltos visuales molestos para el usuario final. La prolijidad en el manejo de estas estructuras asegura una navegación intuitiva y fluida.</p>
+
+            <p>En conclusión, el estudio de los arreglos multidimensionales no solo amplía tus capacidades técnicas, sino que te obliga a pensar de manera espacial y estructural sobre la memoria del sistema. Como futuro profesional graduado, tenés que ser capaz de elegir la dimensionalidad adecuada para cada problema, garantizando siempre el equilibrio entre la legibilidad del código y la eficiencia del hardware.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-7-9')">Referencia: Deitel Secc. 7.9 | O'Reilly Cap. 7: Multidimensional Arrays | Cuadernos NotebookLM (UX-Web-Edu)</button>
+        </section>
+
+<section id="sec-7-10"> <span>📓</span> <h2>7.10 Ejemplo práctico: la clase LibroCalificaciones que usa un arreglo bidimensional</h2>
+
+<p>En el trayecto hacia la madurez académica en el desarrollo de software, te vas a encontrar con que la realidad rara vez se presenta de forma lineal. Este caso de estudio profundiza en la potencia de la Programación Orientada a Objetos aplicada a estructuras complejas, evolucionando nuestro modelo previo hacia una arquitectura capaz de gestionar datos tabulares multidimensionales. Basándonos en el enfoque pedagógico de <strong>Deitel</strong>, la clase <code>LibroCalificaciones</code> se transforma para representar un aula completa, donde no solo rastreamos la performance de un individuo, sino la evolución de una cohorte entera a lo largo de diversas instancias de evaluación.</p>
+
+<p>Aquí, el arreglo bidimensional se utiliza de forma estratégica: cada fila representa a un estudiante específico y cada columna corresponde a una calificación de un examen determinado. Esta disposición matricial no es caprichosa; responde a un modelo mental de organización jerárquica donde los datos relacionados se agrupan espacialmente en la memoria. De acuerdo con el cuaderno sobre <strong>Educación y Metodologías Activas</strong>, este ejemplo permite que visualices la relación jerárquica de los datos, facilitando el "andamiaje" cognitivo necesario para transitar desde colecciones simples hacia bases de datos relacionales complejas.</p>
+
+<div class="practice-box">
+    <h3>Estructura Interna y Encapsulamiento</h3>
+    <p>Desde una perspectiva de ingeniería formal, la clase define constantes estáticas para delimitar las dimensiones del arreglo, asegurando que el contrato de memoria sea explícito y seguro. Según <strong>O'Reilly</strong>, el uso de constantes para definir el número de estudiantes y exámenes asegura que el código sea mantenible y menos propenso a errores de desbordamiento de búfer, un riesgo crítico en C++. La declaración privada del arreglo garantiza que el "estado" del aula sea inaccesible para agentes externos, respetando el principio de ocultamiento de información.</p>
+    <pre><code>class LibroCalificaciones {
+public: static const int estudiantes = 10; // Número de filas static const int examenes = 3; // Número de columnas
+
+// Constructor e interfaz pública... void procesarCalificaciones(); int obtenerMinimo(); int obtenerMaximo(); double obtenerPromedio( const int [], const int ); void imprimirGraficoBarras(); void imprimirCalificaciones();
+
+private: std::string nombreCurso; int calificaciones[ estudiantes ][ examenes ]; // Arreglo 2D };</code></pre> </div>
+
+<h3>Análisis de Ingeniería: El Poder de la Iteración Anidada</h3>
+<p>Al procesar un arreglo bidimensional, debés utilizar ciclos <code>for</code> anidados como herramienta fundamental de navegación. El ciclo externo recorre las filas (los estudiantes), mientras que el ciclo interno procesa las columnas (las calificaciones de cada examen). Esta estructura es la base para algoritmos de procesamiento de datos por lotes y generación de reportes complejos en sistemas de gestión académica. Según el <strong>Libro de Deitel</strong>, esta técnica permite ejecutar operaciones masivas de forma elegante y predecible.</p>
+
+<p>Por ejemplo, para hallar la nota mínima de todo el curso, el algoritmo debe inspeccionar cada celda de la matriz. Empezás asumiendo que la primera nota (fila 0, columna 0) es la mínima y comparás secuencialmente contra el resto. Es vital notar que, técnicamente, C++ almacena estos datos en "orden de fila mayor" (row-major order), lo que significa que el procesador accede a la memoria de forma más eficiente si recorremos primero las filas y luego las columnas, minimizando los fallos de caché (cache misses).</p>
+
+<div class="table-res">
+    <table>
+        <caption>Lógica de Métodos Avanzados en LibroCalificaciones</caption>
+        <thead>
+            <tr>
+                <th>Método</th>
+                <th>Estrategia de Recorrido</th>
+                <th>Propósito Académico</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>obtenerMinimo</code></td>
+                <td>Doble ciclo <code>for</code> anidado sobre toda la matriz.</td>
+                <td>Identificar la nota más baja de toda la cohorte.</td>
+            </tr>
+            <tr>
+                <td><code>obtenerPromedio</code></td>
+                <td>Ciclo simple sobre una fila específica recibida por parámetro.</td>
+                <td>Calcular la performance individual de un alumno.</td>
+            </tr>
+            <tr>
+                <td><code>imprimirGraficoBarras</code></td>
+                <td>Ciclo sobre un arreglo de frecuencias acumuladas.</td>
+                <td>Visualizar la distribución de notas del grupo.</td>
+            </tr>
+            <tr>
+                <td><code>imprimirCalificaciones</code></td>
+                <td>Doble ciclo con formateo de columnas mediante <code>setw</code>.</td>
+                <td>Presentar un reporte tabular claro y profesional.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h3>UX UI y la Claridad en la Representación de Datos</h3>
+<p>Desde la óptica del <strong>Cuaderno de NotebookLM sobre UX UI</strong>, la forma en que presentamos la información es tan importante como la precisión del cálculo. En este ejemplo, el método <code>imprimirCalificaciones</code> debe generar una salida legible, alineando las columnas para que el docente pueda escanear visualmente los resultados sin esfuerzo. El uso de encabezados claros y la separación visual entre el promedio individual y las notas parciales reduce la carga cognitiva del usuario.</p>
+
+<p>Asimismo, el gráfico de barras provee un <em>feedback</em> visual inmediato sobre la salud pedagógica del curso. Como señala el cuaderno de UX, la visualización de datos crudos transformados en patrones visuales permite detectar tendencias que los números aislados ocultan (por ejemplo, si la mayoría de los alumnos están concentrados en el rango central o si hay una polarización extrema). Este diseño modular es lo que permite que el software sea escalable, un principio fundamental discutido en el cuaderno de <strong>Desarrollo Web</strong> para crear aplicaciones que crezcan en complejidad sin perder usabilidad.</p>
+
+<div class="practice-box" style="background: rgba(26, 115, 232, 0.05); border-left-color: var(--accent);">
+    <strong>💡 Desafío de Pensamiento Computacional:</strong>
+    <p>Pensá en cómo podrías extender este modelo para una universidad entera. ¿Agregarías una tercera dimensión para representar diferentes cursos (<code>[curso][estudiante][examen]</code>)? Según las fuentes, esta jerarquía tridimensional permitiría análisis de Big Data académico, pero debés ser consciente de que el aumento de dimensiones incrementa exponencialmente la complejidad de los ciclos de procesamiento y el consumo de memoria física.</p>
+</div>
+
+<h3>Perspectiva Metodológica y Reusabilidad</h3>
+<p>De acuerdo con las <strong>Metodologías Activas</strong>, este ejemplo no debe ser visto como un fragmento de código estático, sino como un componente reutilizable. Al encapsular el arreglo dentro de una clase, estamos creando una "caja negra" que sabe cómo gestionarse a sí misma. El programador que utiliza tu clase <code>LibroCalificaciones</code> no necesita saber que internamente hay un arreglo 2D o cómo se anidan los <code>for</code>; solo necesita llamar a la interfaz pública.</p>
+
+<p>En el <strong>Desarrollo Web</strong>, este principio de modularidad permite que el <em>backend</em> (escrito en C++ para máximo rendimiento) envíe estos datos procesados a una interfaz de usuario moderna de manera limpia. La separación de preocupaciones garantiza que los errores de lógica queden confinados dentro de la clase, facilitando la depuración y el mantenimiento a largo plazo. Acordate siempre: en sistemas de nivel universitario, la prolijidad técnica es la garantía de la robustez del sistema final.</p>
+
+<button class="btn-ref" onclick="openRef('ref-deitel-7-10')">Referencia: Deitel Secc. 7.10 | O'Reilly Cap. 13: Classes | Cuadernos NotebookLM</button>
+</section>
+
+ <section id="sec-7-11">
+            <span>🚀</span>
+            <h2>7.11 Introducción a la plantilla de clase vector de la Biblioteca estándar de C++</h2>
+            
+            <p>En el proceso de evolución hacia un desarrollo de software robusto y profesional, te vas a encontrar con que los arreglos tradicionales de estilo C, si bien son eficientes, presentan limitaciones estructurales que pueden comprometer la estabilidad de tus aplicaciones. La Biblioteca estándar de C++ (<span class="abbr" data-title="STL: Standard Template Library. Colección de clases de plantillas que proporcionan estructuras de datos y algoritmos genéricos.">STL</span>) ofrece como solución la plantilla de clase <code>std::vector</code>, una estructura de datos que representa la evolución lógica y necesaria sobre los arreglos convencionales.</p>
+
+            <p>Según el texto fundamental de <strong>Deitel (6ta Edición)</strong>, un <code>vector</code> es una secuencia de elementos del mismo tipo que, a diferencia de los arreglos estáticos, puede crecer o contraerse dinámicamente según lo requiera el programa. Esta capacidad de redimensionamiento automático elimina una de las mayores cargas cognitivas del programador: la gestión manual de la memoria y la prevención de errores de desbordamiento. De acuerdo con el <strong>Cuaderno de NotebookLM sobre Educación</strong>, este concepto debe abordarse bajo el modelo de <em>andamiaje cognitivo</em>, donde el estudiante transita de la rigidez del arreglo hacia la flexibilidad del objeto inteligente, permitiendo una mayor concentración en la lógica de negocio que en la infraestructura del hardware.</p>
+
+            
+
+            <h3>Filosofía de Diseño: Seguridad vs. Rendimiento</h3>
+            <p>Desde la rigurosa perspectiva técnica de <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, el uso de vectores introduce una capa de abstracción que protege la integridad de la memoria. Mientras que en un arreglo de estilo C podrías acceder accidentalmente al índice 100 de una lista de 10 elementos (causando un fallo catastrófico), la clase <code>vector</code> provee métodos de acceso seguro. El método <code>.at()</code> es el estándar de oro en este sentido: si intentás acceder a una posición fuera de rango, el sistema lanza una <span class="abbr" data-title="Excepción: Mecanismo de C++ para señalar errores en tiempo de ejecución, permitiendo que el programa maneje el problema en lugar de cerrarse abruptamente.">excepción</span>, permitiendo que tu programa maneje el error de forma elegante.</p>
+
+            <p>Fijate que, basándonos en el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, esta característica de seguridad es indispensable en entornos de producción. En aplicaciones web escalables, donde los datos de entrada son impredecibles, confiar en la seguridad intrínseca del <code>std::vector</code> garantiza que el servidor no colapse ante peticiones malformadas o inesperadas. La escalabilidad no solo se trata de manejar más usuarios, sino de hacerlo de manera predecible y segura, un principio discutido exhaustivamente en la arquitectura de contenedores modernos.</p>
+
+            <div class="practice-box">
+                <h3>Capacidad vs. Tamaño: La gestión inteligente de memoria</h3>
+                <p>Una distinción técnica crucial que debés dominar es la diferencia entre <code>size()</code> y <code>capacity()</code>. Según <strong>Deitel</strong>:</p>
+                <ul>
+                    <li><strong>Size:</strong> Representa la cantidad de elementos actuales que el vector contiene.</li>
+                    <li><strong>Capacity:</strong> Indica cuántos elementos puede albergar el vector antes de necesitar reasignar memoria física.</li>
+                </ul>
+                <p>Cuando un vector se llena, automáticamente reserva un nuevo bloque de memoria más grande (generalmente el doble), copia los elementos anteriores y libera el bloque viejo. Como señala <strong>O'Reilly</strong>, aunque este proceso es transparente para vos, tiene un costo computacional. Por eso, si sabés de antemano cuántos datos vas a procesar, es una excelente práctica de ingeniería usar <code>reserve()</code> para evitar reasignaciones innecesarias, optimizando así la <strong>latencia del sistema</strong>.</p>
+            </div>
+
+            
+
+            <h3>Análisis Comparativo y Toma de Decisiones</h3>
+            <p>Como futuro profesional, tu criterio para elegir entre un arreglo tradicional y un vector debe basarse en los requisitos de tu sistema. El siguiente cuadro comparativo, sintetizado a partir de las fuentes técnicas y los cuadernos de análisis práctico, desglosa estas diferencias fundamentales:</p>
+
+            <div class="table-res">
+                <table>
+                    <caption>Diferencias Estructurales: Arreglo C vs. std::vector</caption>
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Arreglo (C-Style)</th>
+                            <th>std::vector (STL)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Gestión de Tamaño</strong></td>
+                            <td>Fijo al compilar. No puede cambiar.</td>
+                            <td>Dinámico. Crece bajo demanda con <code>push_back</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Seguridad de Límites</strong></td>
+                            <td>Nula. Responsabilidad total del programador.</td>
+                            <td>Alta. Uso de <code>.at()</code> para validación de rango.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Acceso a Memoria</strong></td>
+                            <td>Direccionamiento directo (Stack/Heap).</td>
+                            <td>Encapsulado. Gestión automática de memoria.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Paso a Funciones</strong></td>
+                            <td>Siempre por referencia (decae a puntero).</td>
+                            <td>Puede pasarse por valor, referencia o referencia constante.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mantenimiento</strong></td>
+                            <td>Difícil. Requiere seguir el tamaño manualmente.</td>
+                            <td>Sencillo. Conoce su propio tamaño con <code>size()</code>.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>UX UI: El Impacto en la Experiencia del Usuario</h3>
+            <p>Desde la óptica del <strong>Cuaderno de NotebookLM sobre UX UI</strong>, la robustez de los datos es la base de una interfaz confiable. Cuando diseñás una lista desplegable o una tabla dinámica que consume datos de un <code>vector</code>, la seguridad contra desbordamientos garantiza una experiencia sin interrupciones. Un programa que se cierra solo porque el usuario ingresó un dato de más es, desde el punto de vista del diseño de interacción, un fracaso. El uso de vectores permite crear aplicaciones "elásticas" que se adaptan a la carga de datos del usuario, manteniendo una respuesta fluida y evitando errores de sistema que degradan la percepción de calidad del producto.</p>
+
+            <div class="practice-box">
+                <h3>Implementación Académica Sugerida</h3>
+                <p>Para integrar un vector en tus proyectos, debés incluir el encabezado <code>&lt;vector&gt;</code>. Observá cómo la sintaxis de plantillas permite definir el tipo de dato entre corchetes angulares <code>&lt; &gt;</code>:</p>
+                <pre><code>#include &lt;vector&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    // Declaración de un vector de enteros con 5 posiciones iniciales en cero
+    std::vector&lt;int&gt; calificaciones( 5 ); 
+
+    // Asignación segura
+    calificaciones.at( 0 ) = 95; 
+
+    // Agregar un elemento nuevo dinámicamente
+    calificaciones.push_back( 100 ); 
+
+    // Recorrido moderno (Range-based for)
+    for ( int nota : calificaciones ) {
+        std::cout << nota << " ";
+    }
+}</code></pre>
+                <p>Acordate que, según <strong>Deitel</strong>, el operador <code>[]</code> sigue estando disponible para máxima velocidad de acceso cuando estás seguro de los límites, pero en el ámbito universitario y en etapas de depuración, siempre debés preferir <code>.at()</code> por su seguridad intrínseca.</p>
+            </div>
+
+            <h3>Consideraciones de Escalabilidad Web y Educación Activa</h3>
+            <p>El <strong>Cuaderno de Desarrollo Web</strong> indica que los contenedores de la STL son la base para construir estructuras de datos complejas que viajan a través de la red. La capacidad de un <code>vector</code> para ser iterado de forma segura permite que las operaciones de filtrado y mapeo de datos se realicen con una sintaxis limpia y moderna, similar a lenguajes de alto nivel como Python o JavaScript, pero manteniendo el rendimiento crítico de C++. </p>
+            
+            <p>Finalmente, retomando las <strong>Metodologías Activas</strong>, te sugerimos que no veas al vector simplemente como una "mejora" del arreglo, sino como un cambio de paradigma. Estás pasando de gestionar celdas de memoria a gestionar <strong>colecciones de objetos</strong>. Esta mentalidad es el primer paso para dominar conceptos avanzados de C++ como los iteradores y los algoritmos genéricos, que estudiaremos en las próximas unidades.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-7-11')">Referencia: Deitel Secc. 7.11 | O'Reilly Cap. 14: STL Containers | Cuadernos NotebookLM (UX-Web-Edu)</button>
+        </section>
+		
+<section id="sec-7-12"> <span>🏧</span> <h2>7.12 (Opcional) Ejemplo práctico: colaboración entre los objetos en el sistema ATM</h2>
+
+<p>En el trayecto hacia la madurez académica en el desarrollo de software, te vas a encontrar con que la definición de clases y la instanciación de objetos son apenas el primer paso. La verdadera ingeniería ocurre cuando esos objetos, antes aislados en su propia definición de atributos y métodos, comienzan a interactuar para resolver un problema complejo. En esta instancia del <strong>Caso de Estudio del ATM</strong>, trascendemos la visión estática para investigar el comportamiento dinámico del sistema mediante las <strong>colaboraciones</strong>. Según el texto fundamental de <strong>Deitel</strong>, un sistema robusto no es simplemente una colección de objetos, sino una red de entidades que interactúan enviándose mensajes entre sí para cumplir con los requerimientos funcionales del negocio.</p>
+
+<p>Desde la rigurosa perspectiva técnica de <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, esta colaboración representa la máxima expresión de la modularidad y el desacoplamiento. Al permitir que objetos especializados como la <code>BaseDatosBanco</code> o el <code>DispensadorEfectivo</code> operen de manera coordinada pero independiente, estamos construyendo un sistema donde el cambio en un componente no desestabiliza la arquitectura entera. De acuerdo con el <strong>Cuaderno de NotebookLM sobre UX UI</strong>, esta orquestación interna es el motor invisible que garantiza una experiencia de usuario fluida y segura: la visibilidad del sistema y la prevención de errores dependen enteramente de cómo se comunican estos componentes bajo el capó.</p>
+
+<h3>La Anatomía de la Colaboración: Mensajes y Métodos</h3>
+<p>En el lenguaje de la ingeniería de software, cuando decimos que "un objeto envía un mensaje a otro", técnicamente nos referimos a la invocación de una función miembro. En el sistema ATM, el objeto controlador (la instancia de la clase <code>ATM</code>) actúa como el orquestador principal. No realiza todas las tareas por sí mismo; en cambio, delega responsabilidades. Por ejemplo, para mostrar un mensaje de bienvenida, el objeto <code>ATM</code> invoca al método <code>mostrarMensaje</code> del objeto <code>Pantalla</code>. Esta delegación es fundamental: el <code>ATM</code> no necesita saber <em>cómo</em> se dibuja el texto en los píxeles de la pantalla, solo necesita saber que la <code>Pantalla</code> sabe hacerlo.</p>
+
+<div class="practice-box">
+    <strong>Análisis de Flujo Crítico: El Proceso de Autenticación</strong>
+    <p>Siguiendo las pautas del <strong>Cuaderno de NotebookLM sobre Educación</strong>, analicemos este escenario como un "andamio cognitivo" para entender la jerarquía de colaboración:</p>
+    <ol>
+        <li>El <code>ATM</code> solicita al <code>Teclado</code> el número de cuenta y el PIN (Mensaje: <code>obtenerEntrada()</code>).</li>
+        <li>El <code>ATM</code> envía estos datos a la <code>BaseDatosBanco</code> para su validación (Mensaje: <code>autenticarUsuario()</code>).</li>
+        <li>La <code>BaseDatosBanco</code>, actuando como la "fuente de verdad", responde con un valor booleano.</li>
+        <li>Dependiendo del resultado, el <code>ATM</code> colabora con la <code>Pantalla</code> para informar el estado (Mensaje: <code>mostrarMensaje()</code>).</li>
+    </ol>
+    <p>Notá cómo cada paso requiere que un objeto conozca la interfaz del otro, pero no su implementación interna. Este es el corazón del <span class="abbr" data-title="Encapsulamiento: Principio de diseño que oculta los detalles internos de un objeto, exponiendo solo lo necesario a través de una interfaz pública.">encapsulamiento</span> en acción.</p>
+</div>
+
+<h3>Visualización de la Interacción: UML como Lenguaje de Ingeniería</h3>
+<p>Para modelar estas interacciones complejas, el enfoque académico de <strong>Deitel</strong> utiliza herramientas visuales estandarizadas del lenguaje UML. Es imperativo que vos, como futuro profesional, domines estas representaciones antes de escribir una sola línea de código en C++:</p>
+
+<ul>
+    <li><strong>Diagramas de Comunicación:</strong> Anteriormente conocidos como diagramas de colaboración, estos esquemas se centran en la organización jerárquica y estructural de los objetos. Resaltan qué objetos están conectados con quiénes. En nuestro caso, veríamos al objeto <code>ATM</code> en el centro, rodeado por sus periféricos y el acceso a datos.</li>
+    <li><strong>Diagramas de Secuencia:</strong> Estos son, quizás, los más vitales para el desarrollador. Enfatizan el <strong>orden temporal</strong> de los mensajes. Según el cuaderno de <strong>Desarrollo Web</strong>, este modelo es análogo a observar los registros de una red (logs) donde cada petición tiene una marca de tiempo y un destino claro.</li>
+</ul>
+
+<h3>UX UI y la Transparencia de la Colaboración</h3>
+<p>El <strong>Cuaderno de NotebookLM sobre UX UI</strong> nos recuerda un principio de diseño crítico: "El usuario no debe notar la costura entre los objetos". Si la colaboración entre el <code>ATM</code> y la <code>BaseDatosBanco</code> es lenta debido a una mala implementación algorítmica, la percepción de calidad del usuario caerá estrepitosamente. </p>
+<p>La ingeniería debe prever estos retardos. En el diseño de colaboración, esto se traduce en la implementación de "timeouts" y mensajes de retroalimentación inmediata. Por ejemplo, mientras el objeto <code>ATM</code> espera la respuesta de la base de datos, debe enviar un mensaje de <code>mostrarProcesando()</code> a la <code>Pantalla</code>. Esta sincronización entre la lógica de negocio y la interfaz de usuario es lo que separa un programa académico de una aplicación de nivel industrial.</p>
+
+<div class="table-res">
+    <table>
+        <caption>Matriz de Responsabilidades y Colaboración en el ATM</caption>
+        <thead>
+            <tr>
+                <th>Objeto Origen</th>
+                <th>Mensaje (Método)</th>
+                <th>Objeto Destino</th>
+                <th>Propósito del Diseño</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>ATM</code></td>
+                <td><code>obtenerEntrada()</code></td>
+                <td><code>Teclado</code></td>
+                <td>Captura de datos crudos (I/O).</td>
+            </tr>
+            <tr>
+                <td><code>ATM</code></td>
+                <td><code>autenticar()</code></td>
+                <td><code>BaseDatosBanco</code></td>
+                <td>Seguridad y persistencia de datos.</td>
+            </tr>
+            <tr>
+                <td><code>Retiro</code></td>
+                <td><code>debitar()</code></td>
+                <td><code>Cuenta</code></td>
+                <td>Actualización del estado financiero.</td>
+            </tr>
+            <tr>
+                <td><code>Retiro</code></td>
+                <td><code>entregarEfectivo()</code></td>
+                <td><code>Dispensador</code></td>
+                <td>Control de hardware físico.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h3>Paralelismo con el Desarrollo Web Moderno</h3>
+<p>Desde el enfoque del <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, esta estructura de colaboración es el precursor directo de las arquitecturas de microservicios y el patrón MVC (Modelo-Vista-Controlador). El objeto <code>ATM</code> funciona como el <strong>Controlador</strong>, los objetos de datos como <code>Cuenta</code> representan el <strong>Modelo</strong>, y la <code>Pantalla</code> es la <strong>Vista</strong>. </p>
+<p>Como futuro graduado, debés entender que dominar el flujo de mensajes en una aplicación de consola en C++ te otorga la base conceptual para diseñar APIs escalables en el futuro. La lógica de "quién le habla a quién" es universal. Si tus objetos colaboran con un acoplamiento fuerte (demasiada dependencia mutua), tu sistema web será imposible de escalar o testear.</p>
+
+<div class="practice-box" style="background: rgba(26, 115, 232, 0.05); border-left: 6px solid var(--accent);">
+    <strong>💡 Metacognición y Metodologías Activas:</strong>
+    <p>Al estudiar estas colaboraciones, no te limites a memorizar los diagramas. Preguntate: ¿Qué pasaría si el <code>Dispensador</code> se queda sin billetes? ¿Qué objeto debe detectar el error y a quién debe avisarle primero? Esta práctica de "análisis de falla en cascada" es fundamental en la ingeniería de sistemas críticos.</p>
+</div>
+
+<h3>Reflexión Final sobre la Disciplina de Ingeniería</h3>
+<p>En conclusión, la sección 7.12 no es solo un anexo opcional; es la síntesis de todo lo aprendido sobre arreglos y objetos. Los arreglos se utilizan internamente en la <code>BaseDatosBanco</code> para almacenar las múltiples instancias de <code>Cuenta</code>, y la colaboración permite que el sistema navegue por esos arreglos para encontrar al usuario correcto. </p>
+<p>Como indica <strong>O'Reilly</strong>, "un buen programador escribe código que funciona; un ingeniero de software diseña sistemas que colaboran". Tu capacidad para visualizar esta danza coordinada de mensajes es lo que te permitirá construir soluciones que no solo cumplan con el cálculo matemático, sino que sean resilientes, seguras y centradas en el usuario.</p>
+
+<button class="btn-ref" onclick="openRef('ref-deitel-7-12')">Referencia: Deitel Secc. 7.12 | pág. 320-335 | O'Reilly Cap. 2: Software Engineering | Cuadernos NotebookLM (UX-Web-Edu)</button>
+</section>
+
+<section id="sec-7-13">
+            <span>🎓</span>
+            <h2>7.13 Repaso y Conceptos Avanzados de Objetos: Arquitectura, Memoria y Escalabilidad</h2>
+            
+            <p>Al llegar a este punto de la Unidad Didáctica 03, ya no sos simplemente un programador que manipula datos; te estás convirtiendo en un arquitecto de software. Para dominar el desarrollo profesional en C++, debés comprender con precisión quirúrgica cómo los arreglos y vectores interactúan con la arquitectura de clases. Según el texto fundamental de <strong>Deitel</strong>, la verdadera potencia del lenguaje emerge cuando combinamos la eficiencia del almacenamiento contiguo con la sofisticación del paradigma orientado a objetos. De acuerdo con las <strong>Metodologías Activas</strong> analizadas en los cuadernos de NotebookLM, la integración de estos conceptos avanzados es lo que permite construir sistemas que no solo funcionan, sino que son escalables y mantenibles en el tiempo.</p>
+
+            <p>En el nivel universitario, el desafío no es solo aprender la sintaxis, sino desarrollar un modelo mental sólido sobre la gestión de recursos. Basado en el enfoque de <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, cada decisión de diseño (desde declarar una función como <code>const</code> hasta definir un miembro como <code>static</code>) tiene una repercusión directa en la seguridad de la memoria y el rendimiento del sistema. A continuación, desglosamos los pilares que definen la madurez técnica en C++.</p>
+
+            <h3>1. El Puntero <code>this</code>: Autoreferencia y Llamadas en Cascada</h3>
+            <p>Todo objeto en C++ tiene acceso a su propia dirección a través del puntero <span class="abbr" data-title="this: Puntero implícito disponible en las funciones miembro no estáticas que apunta al objeto para el cual se invocó la función.">this</span>. Según <strong>Deitel</strong>, este puntero es un parámetro oculto que el compilador pasa a cada función miembro no estática. ¿Por qué es vital para vos? Porque permite evitar la ambigüedad cuando los nombres de los parámetros de una función son idénticos a los nombres de los datos miembros de la clase.</p>
+            
+            
+
+            <p>Desde la perspectiva del <strong>Cuaderno de NotebookLM sobre UX UI</strong>, el puntero <code>this</code> permite una técnica de diseño llamada "llamadas a funciones en cascada". Al devolver <code>*this</code> por referencia, podés encadenar múltiples operaciones en una sola línea de código (ej: <code>miObjeto.setX(10).setY(20).imprimir();</code>). Esto mejora la legibilidad de la <span class="abbr" data-title="API: Application Programming Interface. El conjunto de funciones y métodos que tu clase expone para que otros la utilicen.">API</span> de tu clase, reduciendo la carga cognitiva del desarrollador que utiliza tus componentes y asegurando una interacción más fluida con la arquitectura del sistema.</p>
+
+            <h3>2. Miembros de Clase <code>static</code>: El Estado Compartido</h3>
+            <p>A veces, necesitás que todos los objetos de una clase compartan una única pieza de información. Aquí es donde entran los miembros <code>static</code>. Según <strong>O'Reilly</strong>, un dato miembro estático representa una "variable de clase" que existe independientemente de cuántos objetos se hayan instanciado. Es ideal para llevar contadores globales o gestionar recursos compartidos, como una conexión a una base de datos en un entorno de <strong>Desarrollo Web</strong>.</p>
+            
+            <p>Tenés que recordar que las funciones miembro estáticas no pueden acceder a miembros no estáticos, ya que no poseen un puntero <code>this</code> (no están ligadas a ninguna instancia específica). Este concepto es fundamental para la <strong>Ingeniería de Software</strong>, ya que promueve la separación de responsabilidades entre el comportamiento individual del objeto y las propiedades intrínsecas de la clase como entidad abstracta.</p>
+
+            <h3>3. Constancia: Objetos <code>const</code> y Funciones Miembro <code>const</code></h3>
+            <p>El principio de menor privilegio dicta que no debés otorgar más acceso del estrictamente necesario. Según <strong>Deitel</strong>, al declarar un objeto como <code>const</code>, estás garantizando que su estado no cambiará después de su inicialización. Sin embargo, para que esto funcione, solo podés invocar funciones miembro que también estén marcadas como <code>const</code>.</p>
+            
+            <p>De acuerdo con el <strong>Cuaderno de NotebookLM sobre Educación</strong>, este es un excelente ejercicio de "metacognición": te obliga a pensar de antemano qué métodos son consultivos (lectura) y cuáles son modificadores (escritura). Desde el diseño de <strong>UX UI</strong>, esto previene "efectos secundarios" indeseados donde el simple hecho de consultar un dato (como ver un saldo en un ATM) termina alterando accidentalmente el estado interno del sistema, rompiendo la confianza del usuario.</p>
+
+            <div class="table-res">
+                <table>
+                    <caption>Resumen de Conceptos de Arquitectura Avanzada</caption>
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Propósito Técnico (Deitel/O'Reilly)</th>
+                            <th>Beneficio en el Sistema (NotebookLM)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>this</strong></td>
+                            <td>Autoreferencia y resolución de nombres.</td>
+                            <td>Permite APIs fluidas y encadenamiento de métodos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>static</strong></td>
+                            <td>Datos compartidos a nivel de clase.</td>
+                            <td>Eficiencia en memoria al evitar duplicación de datos globales.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>const</strong></td>
+                            <td>Contratos de inmutabilidad y seguridad.</td>
+                            <td>Reduce errores lógicos y mejora la estabilidad del backend.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>friend</strong></td>
+                            <td>Acceso privilegiado a miembros privados.</td>
+                            <td>Flexibilidad extrema para sobrecarga de operadores y tests.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>4. Relaciones de Amistad (<code>friend</code>): El Compromiso del Encapsulamiento</h3>
+            <p>C++ permite que funciones externas o clases completas sean declaradas como <span class="abbr" data-title="friend: Palabra clave que otorga a una función o clase externa acceso total a los miembros privados y protegidos de la clase que concede la amistad.">amigas</span>. Según <strong>O'Reilly</strong>, esto debe usarse con "extrema precaución", ya que rompe el principio de encapsulamiento. Sin embargo, es una herramienta indispensable para ciertas tareas de bajo nivel, como la sobrecarga de operadores de flujo (<code>&lt;&lt;</code> y <code>&gt;&gt;</code>).</p>
+            
+            <p>Fijate que la amistad se otorga, no se toma: la Clase A debe declarar explícitamente que la Clase B es su amiga. En el <strong>Desarrollo Web</strong> avanzado, esto se utiliza a veces para permitir que clases de "Pruebas Unitarias" inspeccionen el estado privado de un objeto sin exponerlo al resto de la aplicación, garantizando que el software sea testeable pero manteniéndose seguro para el usuario final.</p>
+
+            <h3>5. Clases Contenedoras e Iteradores: El Ciclo de Vida</h3>
+            <p>Finalmente, debés integrar el concepto de clases contenedoras, como la plantilla <code>std::vector</code> que estudiamos anteriormente. Una clase contenedora no solo guarda datos, sino que gestiona el ciclo de vida de otros objetos. Según el <strong>Cuaderno de Desarrollo Web</strong>, esto es la base de la escalabilidad: tu aplicación debe ser capaz de manejar colecciones dinámicas que crecen según la demanda del tráfico.</p>
+            
+            <p>Los <strong>iteradores</strong> actúan como el pegamento entre el contenedor y los algoritmos; son objetos que "apuntan" a elementos dentro de la colección y permiten avanzar a través de ellos de forma segura. De acuerdo con las <strong>Metodologías Activas</strong>, dominar el uso de iteradores te prepara para utilizar la Biblioteca Estándar de forma profesional, permitiéndote aplicar algoritmos de búsqueda y ordenamiento (como los vistos en 7.7 y 7.8) de manera genérica y eficiente.</p>
+
+            <div class="practice-box">
+                <h3>Resumen de Competencias Profesionales</h3>
+                <p>Para cerrar este capítulo, asegurate de que tu modelo mental incluya estos puntos críticos:</p>
+                <ul>
+                    <li><strong>Gestión Dinámica:</strong> Sabés usar <code>new</code> y <code>delete</code> para crear objetos en el <span class="abbr" data-title="Heap: Área de memoria utilizada para la asignación dinámica, donde el programador controla manualmente el tiempo de vida de los datos.">heap</span> cuando el tamaño del arreglo no se conoce en tiempo de compilación.</li>
+                    <li><strong>Transparencia de Estado:</strong> Usás miembros estáticos para que el sistema mantenga una "memoria colectiva" de todas sus instancias.</li>
+                    <li><strong>Defensa de Código:</strong> Aplicás <code>const</code> rigurosamente para que el compilador te ayude a detectar intentos ilegales de modificación de datos.</li>
+                </ul>
+                <p>Como indica <strong>Deitel</strong>, la prolijidad en estos detalles es lo que distingue a un desarrollador senior de un principiante. En la ingeniería de software universitaria, la elegancia del código es sinónimo de robustez técnica.</p>
+            </div>
+
+            
+
+            <p>En conclusión, el repaso de estos conceptos avanzados te otorga las herramientas necesarias para enfrentar proyectos de gran envergadura. Ya sea diseñando el motor de un sistema ATM o el backend de una plataforma web masiva, la comprensión profunda de cómo los objetos colaboran y gestionan su memoria es tu mayor ventaja competitiva. Acordate: en C++, vos tenés el control total, y con ese control viene la responsabilidad de diseñar arquitecturas impecables.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-7-13')">Referencia: Deitel Cap. 9: Clases: Un análisis más detallado | O'Reilly Cap. 13: Clases y Objetos | Cuadernos NotebookLM (UX-Web-Edu)</button>
+        </section>
+
+        <footer style="text-align: center; margin-top: 5rem; padding: 2rem; color: var(--text-secondary); border-top: 1px solid var(--border);">
+            <p>© 2026 - Cátedra de Programación Universitaria | Basado en Deitel y O'Reilly</p>
+        </footer>
+    </main>
+</div>
+
+<button class="theme-toggle" id="themeToggle" title="Cambiar Modo">🌓</button>
+
+<div id="refModal" class="modal">
+    <div class="modal-content">
+        <h3 id="refTitle" style="color:var(--accent)">Referencia Académica</h3>
+        <p id="refBody"></p>
+        <button class="btn-ref" onclick="closeRef()" style="background: var(--accent); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; margin-top: 1rem;">Cerrar</button>
+    </div>
+</div>
+
+<script>
+    const biblio = {
+        'ref-deitel-7-1': 'Deitel, P. J. & Deitel, H. M. C++ Cómo Programar, 6ta Edición. Cap. 7: Arreglos y vectores. Conceptos fundamentales y anatomía de memoria.',
+		'ref-deitel-7-2': 'Deitel Secc. 7.2 | O\'Reilly Cap. 7 - Arrays | Cuadernos NotebookLM',
+		'ref-deitel-7-3': 'Deitel Secc. 7.2 | O\'Reilly Cap. 7.3 | O\'Reilly Cap. 7: Arreglos | Cuadernos NotebookLM (Edu - Web - UX) | Cuadernos NotebookLM',
+		'ref-deitel-7-4': 'Deitel Secc. 7.4.1 - 7.4.9 | O\'Reilly Cap. 7: Arreglos | Cuadernos NotebookLM (UX-Web-Edu)',
+		'ref-deitel-7-5': 'Deitel Secc. 7.5 | O\'Reilly Cap. 9: Functions | Cuadernos NotebookLM (Educación - Web - UX)',
+		'ref-deitel-7-6': 'Deitel Secc. 7.6 | O\'Reilly Cap. 13: Classes and Objects | Cuadernos NotebookLM (UX - Edu - Web)',
+		'ref-deitel-7-7': 'Deitel Secc. 7.7 | O\'Reilly Cap. 7: Búsquedas | Cuadernos NotebookLM (UX-Web-Edu)',
+		'ref-deitel-7-8': 'Deitel Secc. 7.8 | O\'Reilly Cap. 16: Sorting and Pointers | Cuadernos NotebookLM (UX-Web-Edu)',
+		'ref-deitel-7-9': 'Deitel Secc. 7.9 | O\'Reilly Cap. 7: Multidimensional Arrays | Cuadernos NotebookLM (UX-Web-Edu)',
+		'ref-deitel-7-10': 'Deitel Secc. 7.10 | O\'Reilly Cap. 13: Classes | Cuadernos NotebookLM (UX-Web-Edu)',
+		'ref-deitel-7-11': 'Deitel Secc. 7.11 | O\'Reilly Cap. 14: STL Containers | Cuadernos NotebookLM (UX-Web-Edu)',
+		'ref-deitel-7-12': 'Deitel Secc. 7.12 pág. 320-335 | O\'Reilly Cap. 2: Software Engineering | Cuadernos NotebookLM (UX-Web-Edu)',
+		'ref-deitel-7-13': 'Deitel Secc. 7.13 Cap. 9: Clases: Un análisis más detallado | O\'Reilly Cap. 13: Clases y Objetos | Cuadernos NotebookLM (UX-Web-Edu)'
+    };
+
+    function openRef(id) {
+        document.getElementById('refBody').innerText = biblio[id];
+        document.getElementById('refModal').style.display = 'flex';
+    }
+
+    function closeRef() {
+        document.getElementById('refModal').style.display = 'none';
+    }
+
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    themeToggle.addEventListener('click', () => {
+        const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+    });
+
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+        let currentId = '';
+        sections.forEach(sec => {
+            const top = sec.offsetTop;
+            if (pageYOffset >= top - 150) currentId = sec.getAttribute('id');
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${currentId}`) link.classList.add('active');
+        });
+    });
+</script>
+
+</body>
+</html>
