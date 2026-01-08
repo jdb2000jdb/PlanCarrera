@@ -737,92 +737,120 @@ int caraDado = 1 + rand() % 6; // Produce valores en el rango [1, 6]</code></pre
 		
     </section>
 
-	<section id="sec-6-8"> <span class="icon-sec">🃏</span> <h2>6.8 Ejemplo práctico: Juego de probabilidad y gestión de estados mediante enumeraciones</h2>
+<section id="sec-6-8"> 
+    <span class="icon-sec">🃏</span> 
+    <h2>6.8 Ejemplo práctico: Juego de probabilidad y gestión de estados mediante enumeraciones</h2>
 
-        <p>En el proceso de formación de un ingeniero de software, la transición de la lógica lineal a la lógica de estados representa un salto cualitativo fundamental. Según el libro <em>C++ Cómo Programar</em> de <strong>Deitel</strong> (6ª Edición), una de las aplicaciones más interesantes para demostrar la potencia de las estructuras de control combinadas con tipos de datos personalizados es la simulación del juego de dados conocido como "Craps". [cite_start]Este ejemplo no solo sirve como una práctica de algoritmia, sino que introduce el concepto técnico de <strong>enumeración</strong> (<code>enum</code>), una herramienta que permite al programador definir conjuntos de constantes con nombre, elevando el nivel de abstracción del código y reduciendo drásticamente la posibilidad de errores lógicos asociados al manejo de números "mágicos" o literales enteros[cite: 16].</p>
+    <p>En el proceso de formación de un ingeniero de software, la transición de la lógica lineal a la lógica de estados representa un salto cualitativo fundamental. Según el <strong>PDF libro de C++ de Deitel</strong>, una de las aplicaciones más interesantes para demostrar la potencia de las estructuras de control combinadas con tipos de datos personalizados es la simulación del juego de dados conocido como "Craps". De acuerdo con este tratado, este ejemplo no solo sirve como una práctica de algoritmia, sino que introduce el concepto técnico de <strong>enumeración</strong> (<code>enum</code>), una herramienta que permite al programador definir conjuntos de constantes con nombre, elevando el nivel de abstracción del código y reduciendo drásticamente la posibilidad de errores lógicos asociados al manejo de números "mágicos" o literales enteros.</p>
 
-        <p>Desde la perspectiva de <strong>O'Reilly</strong> en su obra <em>Practical C++ Programming</em>, el uso de enumeraciones es una práctica de "defensa de código". O'Reilly enfatiza que un programa debe ser <strong>autodocumentado</strong>. Al utilizar identificadores semánticos en lugar de códigos numéricos, el desarrollador comunica sus intenciones no solo al compilador, sino a cualquier colega que deba realizar el mantenimiento del sistema en el futuro. En la arquitectura de un software profesional, la claridad semántica es tan prioritaria como la eficiencia algorítmica .</p>
+    <p>Desde la perspectiva del <strong>PDF libro de C++ de O'Reilly</strong>, el uso de enumeraciones es una práctica de "defensa de código". O'Reilly enfatiza que un programa debe ser <strong>autodocumentado</strong>. Al utilizar identificadores semánticos en lugar de códigos numéricos, el desarrollador comunica sus intenciones no solo al compilador, sino a cualquier colega que deba realizar el mantenimiento del sistema en el futuro. En la arquitectura de un software profesional, la claridad semántica es tan prioritaria como la eficiencia algorítmica.</p>
 
-        <h3>6.8.1 Mecánica del Azar: Las Reglas del Craps</h3>
-        <p>Para modelar este sistema, primero debés comprender las reglas del dominio, que en este caso provienen de la teoría de la probabilidad aplicada a los casinos. [cite_start]De acuerdo con <strong>Deitel</strong>, el flujo del juego se divide en el tiro de salida y los tiros subsiguientes[cite: 16]:</p>
-        <ul>
-            <li><strong>Primer Tiro:</strong> Si la suma de los dos dados es 7 u 11, el jugador gana inmediatamente. Si la suma es 2, 3 o 12 (lo que se conoce como "Craps"), el jugador pierde.</li>
-            <li><strong>Establecimiento del Punto:</strong> Si la suma es 4, 5, 6, 8, 9 o 10, esa suma se convierte en el "Punto" del jugador.</li>
-            <li><strong>Tiros Posteriores:</strong> Para ganar, el jugador debe seguir lanzando los dados hasta que obtenga nuevamente su "Punto". Sin embargo, si saca un 7 antes de igualar su punto, pierde la partida.</li>
-        </ul>
-        <p>Este conjunto de reglas exige que el programa mantenga un registro constante de lo que está sucediendo. Según el <strong>cuaderno de NotebookLM sobre educación y metodologías activas</strong>, este escenario es ideal para practicar el <strong>andamiaje cognitivo</strong> (<em>scaffolding</em>), donde el estudiante debe mapear una realidad física (dados y reglas) a una estructura de control lógica (bucles y selecciones) .</p>
+    <h3>6.8.1 Mecánica del Azar: Las Reglas del Craps</h3>
+    <p>Para modelar este sistema, primero debés comprender las reglas del dominio, que en este caso provienen de la teoría de la probabilidad aplicada a los casinos. Basado en las explicaciones del <strong>PDF de C++ de Deitel</strong>, el flujo del juego se divide en el tiro de salida y los tiros subsiguientes:</p>
+    <ul>
+        <li><strong>Primer Tiro:</strong> Si la suma de los dos dados es 7 u 11, el jugador gana inmediatamente. Si la suma es 2, 3 o 12 (lo que se conoce como "Craps"), el jugador pierde.</li>
+        <li><strong>Establecimiento del Punto:</strong> Si la suma es 4, 5, 6, 8, 9 o 10, esa suma se convierte en el "Punto" del jugador.</li>
+        <li><strong>Tiros Posteriores:</strong> Para ganar, el jugador debe seguir lanzando los dados hasta que obtenga nuevamente su "Punto". Sin embargo, si saca un 7 antes de igualar su punto, pierde la partida.</li>
+    </ul>
+    <p>Este conjunto de reglas exige que el programa mantenga un registro constante de lo que está sucediendo. Según el <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong>, este escenario es ideal para practicar el <strong>andamiaje cognitivo</strong> (<em>scaffolding</em>), donde el estudiante debe mapear una realidad física (dados y reglas) a una estructura de control lógica (bucles y selecciones).</p>
 
-        <h3>6.8.2 Implementación Técnica: El Tipo de Dato enum</h3>
-        <p>Técnicamente, una enumeración en C++ se define con la palabra clave <code>enum</code>. [cite_start]Según <strong>Deitel</strong>, al declarar <code>enum Status { CONTINUE, WON, LOST };</code>, estamos creando un nuevo tipo de dato donde cada identificador representa internamente un entero (empezando por defecto en 0), pero que en el código se manipula con su nombre representativo[cite: 16].</p>
-        
-        <p><strong>Análisis de la Estructura de Control:</strong></p>
-        <pre><code>// Definición de la enumeración para gestionar el estado de la partida
+    <h3>6.8.2 Implementación Técnica: El Tipo de Dato enum</h3>
+    <p>Técnicamente, una enumeración en C++ se define con la palabra clave <code>enum</code>. Según se detalla en el <strong>PDF de C++ de Deitel</strong>, al declarar <code>enum Status { CONTINUE, WON, LOST };</code>, estamos creando un nuevo tipo de dato donde cada identificador representa internamente un entero (empezando por defecto en 0), pero que en el código se manipula con su nombre representativo.</p>
+    
+    <p><strong>Análisis de la Estructura de Control:</strong></p>
+    <pre><code>// Definición de la enumeración para gestionar el estado de la partida
 enum Status { CONTINUAR, GANO, PERDIO };
 
-Status estadoJuego; // Variable de tipo enumeración int miPunto = 0; int sumaDados = tirarDados(); // Función auxiliar que usa rand()
+Status estadoJuego; // Variable de tipo enumeración 
+int miPunto = 0; 
+int sumaDados = tirarDados(); // Función auxiliar que usa rand()
 
-// Evaluación del primer tiro mediante una instrucción switch switch ( sumaDados ) { case 7: case 11: estadoJuego = GANO; break; case 2: case 3: case 12: estadoJuego = PERDIO; break; default: // Establecimiento del punto estadoJuego = CONTINUAR; miPunto = sumaDados; cout << "El punto es: " << miPunto << endl; break; }
+// Evaluación del primer tiro mediante una instrucción switch 
+switch ( sumaDados ) { 
+    case 7: 
+    case 11: 
+        estadoJuego = GANO; 
+        break; 
+    case 2: 
+    case 3: 
+    case 12: 
+        estadoJuego = PERDIO; 
+        break; 
+    default: 
+        // Establecimiento del punto 
+        estadoJuego = CONTINUAR; 
+        miPunto = sumaDados; 
+        cout << "El punto es: " << miPunto << endl; 
+        break; 
+}
 
-// Bucle de persistencia mientras el estado sea CONTINUAR while ( estadoJuego == CONTINUAR ) { sumaDados = tirarDados(); if ( sumaDados == miPunto ) estadoJuego = GANO; else if ( sumaDados == 7 ) estadoJuego = PERDIO; }</code></pre>
+// Bucle de persistencia mientras el estado sea CONTINUAR 
+while ( estadoJuego == CONTINUAR ) { 
+    sumaDados = tirarDados(); 
+    if ( sumaDados == miPunto ) 
+        estadoJuego = GANO; 
+    else if ( sumaDados == 7 ) 
+        estadoJuego = PERDIO; 
+}</code></pre>
 
-        <h3>6.8.3 Perspectiva de Diseño UX/UI: La Visibilidad del Estado</h3>
-        <p>Desde el enfoque del <strong>cuaderno de NotebookLM sobre UX UI</strong>, la gestión interna de estados mediante <code>enum</code> debe traducirse en una experiencia de usuario transparente. Aplicando los principios de <strong>Nielsen</strong> sobre la <em>visibilidad del estado del sistema</em>, el usuario nunca debe preguntarse si está ganando o qué número necesita sacar. El software debe utilizar el valor de la enumeración para disparar mensajes de retroalimentación claros. Por ejemplo, si el estado es <code>CONTINUAR</code>, la interfaz debe resaltar el valor de <code>miPunto</code> de forma prominente. Según el cuaderno de UX UI, la falta de feedback durante los tiros intermedios generaría una carga cognitiva innecesaria y frustración en el jugador .</p>
+    <h3>6.8.3 Perspectiva de Diseño UX/UI: La Visibilidad del Estado</h3>
+    <p>Desde el enfoque del <strong>Cuaderno de notebookLM sobre UX UI</strong>, la gestión interna de estados mediante <code>enum</code> debe traducirse en una experiencia de usuario transparente. Aplicando los principios de visibilidad del estado del sistema, el usuario nunca debe preguntarse si está ganando o qué número necesita sacar. El software debe utilizar el valor de la enumeración para disparar mensajes de retroalimentación claros. Por ejemplo, si el estado es <code>CONTINUAR</code>, la interfaz debe resaltar el valor de <code>miPunto</code> de forma prominente. Según el análisis de <strong>UX UI</strong>, la falta de feedback durante los tiros intermedios generaría una carga cognitiva innecesaria y frustración en el jugador.</p>
 
-        <h3>6.8.4 Comparativa con el Desarrollo Web Moderno</h3>
-        <p>Haciendo un paralelismo con el <strong>cuaderno de NotebookLM sobre desarrollo web</strong>, observamos que las enumeraciones de C++ cumplen una función análoga a las constantes de acción en arquitecturas de gestión de estado como Redux o los tipos de unión en TypeScript. El cuaderno de desarrollo web destaca que definir estados finitos (como <code>LOADING</code>, <code>SUCCESS</code>, <code>ERROR</code>) previene que la aplicación caiga en estados imposibles. En C++, la <span class="abbr" data-title="Enumeration: Tipo de dato definido por el usuario que consiste en un conjunto de constantes enteras con nombre.">enumeración</span> garantiza que la variable <code>estadoJuego</code> solo pueda contener uno de los tres valores permitidos, aportando una capa de seguridad que el manejo simple de enteros no posee .</p>
+    <h3>6.8.4 Comparativa con el Desarrollo Web Moderno</h3>
+    <p>Haciendo un paralelismo con el <strong>Cuaderno de notebookLM sobre desarrollo web</strong>, observamos que las enumeraciones de C++ cumplen una función análoga a las constantes de acción en arquitecturas de gestión de estado modernas. El cuaderno de desarrollo web destaca que definir estados finitos (como LOADING, SUCCESS, ERROR) previene que la aplicación caiga en estados imposibles. En C++, la <span class="abbr" data-title="Enumeration: Tipo de dato definido por el usuario que consiste en un conjunto de constantes enteras con nombre.">enumeración</span> garantiza que la variable <code>estadoJuego</code> solo pueda contener uno de los tres valores permitidos, aportando una capa de seguridad superior al manejo simple de enteros.</p>
 
-        <h3>6.8.5 Metodologías Activas: Modelado Mental y Resolución de Problemas</h3>
-        <p>El <strong>cuaderno de educación</strong> propone que para que comprendás profundamente este tema, debés realizar un ejercicio de <strong>trazabilidad de flujo</strong>. Imaginá que sos el procesador y debés decidir en qué momento la variable de estado cambia de <code>CONTINUAR</code> a <code>PERDIO</code>. Al visualizar este cambio, estás construyendo un <strong>modelo mental</strong> del ciclo de vida de un proceso. Según las metodologías activas, este tipo de pensamiento sistémico es lo que permite a los ingenieros diseñar sistemas de control de tráfico, procesos industriales o motores de videojuegos .</p>
+    <h3>6.8.5 Metodologías Activas: Modelado Mental y Resolución de Problemas</h3>
+    <p>El <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong> propone que para que comprendás profundamente este tema, debés realizar un ejercicio de <strong>trazabilidad de flujo</strong>. Al visualizar cómo la variable de estado cambia de <code>CONTINUAR</code> a <code>PERDIO</code>, estás construyendo un <strong>modelo mental</strong> del ciclo de vida de un proceso. Según las metodologías activas, este tipo de pensamiento sistémico es lo que permite a los ingenieros diseñar sistemas de control de tráfico o motores de videojuegos con alta fidelidad lógica.</p>
 
-        <div class="table-res">
-            <table>
-                <caption>Beneficios Académicos del uso de enum (Deitel vs O'Reilly)</caption>
-                <thead>
-                    <tr>
-                        <th>Criterio de Evaluación</th>
-                        <th>Uso de Literales Enteros (1, 2, 3)</th>
-                        <th>Uso de Enumeraciones (WON, LOST)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Legibilidad</strong></td>
-                        <td>Baja (Requiere memorizar qué significa cada número).</td>
-                        <td>Alta (El nombre describe la intención).</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Mantenibilidad</strong></td>
-                        <td>Difícil (Un cambio de lógica requiere buscar y reemplazar números).</td>
-                        <td>Simple (Se centraliza en la definición del enum).</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Seguridad de Tipos</strong></td>
-                        <td>Nula (Se puede asignar cualquier entero accidentalmente).</td>
-                        <td>Media/Alta (El compilador valida los valores del conjunto).</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Depuración (Debugging)</strong></td>
-                        <td>Compleja (Ver un '2' en el inspector de memoria es ambiguo).</td>
-                        <td>Directa (Muchos <span class="abbr" data-title="IDE: Integrated Development Environment. Entorno de desarrollo que permite ver los nombres de las enumeraciones durante la depuración.">IDEs</span> muestran el nombre de la constante).</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="table-res">
+        <table>
+            <caption>Beneficios Académicos del uso de enum (Deitel vs O'Reilly)</caption>
+            <thead>
+                <tr>
+                    <th>Criterio de Evaluación</th>
+                    <th>Uso de Literales Enteros (1, 2, 3)</th>
+                    <th>Uso de Enumeraciones (WON, LOST)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Legibilidad</strong></td>
+                    <td>Baja (Requiere memorizar qué significa cada número).</td>
+                    <td>Alta (El nombre describe la intención).</td>
+                </tr>
+                <tr>
+                    <td><strong>Mantenibilidad</strong></td>
+                    <td>Difícil (Un cambio de lógica requiere buscar y reemplazar números).</td>
+                    <td>Simple (Se centraliza en la definición del enum).</td>
+                </tr>
+                <tr>
+                    <td><strong>Seguridad de Tipos</strong></td>
+                    <td>Nula (Se puede asignar cualquier entero accidentalmente).</td>
+                    <td>Media/Alta (El compilador valida los valores del conjunto).</td>
+                </tr>
+                <tr>
+                    <td><strong>Depuración (Debugging)</strong></td>
+                    <td>Compleja (Ver un '2' en el inspector de memoria es ambiguo).</td>
+                    <td>Directa (Muchos IDEs muestran el nombre de la constante).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-        <div class="practice-box">
-            <strong>💡 Desafío de Ingeniería de Software:</strong>
-            <p>Basándote en las recomendaciones de <strong>O'Reilly</strong> y las guías de <strong>Metodologías Activas</strong>, modificá el programa de Craps para incluir un sistema de apuestas. </p>
-            <ul>
-                <li>Definí una nueva enumeración llamada <code>TipoApuesta</code> con estados como <code>MINIMA</code>, <code>ESTANDAR</code> y <code>MAXIMA</code>.</li>
-                <li>Utilizá una instrucción <code>switch</code> para aplicar diferentes multiplicadores de ganancia según el tipo de apuesta elegido.</li>
-                <li>¿Cómo impactaría en la <strong>UX</strong> del usuario si permitís que el estado de la apuesta cambie en medio de una partida donde el estado es <code>CONTINUAR</code>? Justificá tu respuesta usando el concepto de integridad de estado.</li>
-            </ul>
-        </div>
+    <div class="practice-box">
+        <strong>💡 Desafío de Ingeniería de Software:</strong>
+        <p>Basándote en las recomendaciones del <strong>PDF libro de C++ de O'Reilly</strong> y las guías del <strong>Cuaderno de notebookLM sobre educación y metodologías activas</strong>, modificá el programa de Craps para incluir un sistema de apuestas.</p>
+        <ul>
+            <li>Definí una nueva enumeración llamada <code>TipoApuesta</code> con estados como <code>MINIMA</code>, <code>ESTANDAR</code> y <code>MAXIMA</code>.</li>
+            <li>Utilizá una instrucción <code>switch</code> para aplicar diferentes multiplicadores de ganancia según el tipo de apuesta elegido.</li>
+            <li>¿Cómo impactaría en la <strong>UX</strong> del usuario si permitís que el estado de la apuesta cambie en medio de una partida donde el estado es <code>CONTINUAR</code>? Justificá tu respuesta usando el concepto de integridad de estado.</li>
+        </ul>
+    </div>
 
-        <p>En conclusión, el estudio del juego de Craps y las enumeraciones te permite dominar la <strong>gestión de la complejidad</strong>. Al separar la lógica de la probabilidad del manejo de los estados de la aplicación, estás aplicando principios de ingeniería de software que son universales. Como afirma <strong>Deitel</strong>, el uso inteligente de las instrucciones de control junto con tipos de datos personalizados es la marca de un programador que piensa en términos de arquitectura y no solo de sintaxis.</p>
+    <p>En conclusión, el estudio del juego de Craps y las enumeraciones te permite dominar la <strong>gestión de la complejidad</strong>. Al separar la lógica de la probabilidad del manejo de los estados de la aplicación, estás aplicando principios de ingeniería de software que son universales. Como afirma el <strong>PDF de Deitel</strong>, el uso inteligente de las instrucciones de control junto con tipos de datos personalizados es la marca de un programador que piensa en términos de arquitectura y no solo de sintaxis.</p>
 
-        <button class="btn-ref" onclick="openRef('ref-deitel-6-8')">Referencias: Deitel Cap. 6.8 | O'Reilly Cap. 9 | Cuadernos NotebookLM</button>
-    </section>
+    <button class="btn-ref" onclick="openRef('ref-deitel-6-8')">Referencia: Deitel Secc. 6.8 | O'Reilly Cap. 9 | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+</section>
 
 	<section id="sec-6-9">
             <span class="icon-sec">📦</span>
@@ -1678,104 +1706,110 @@ return 0;
 <button class="btn-ref" onclick="openRef('ref-deitel-6-17')">Referencias: Deitel Cap. 6.17 | O'Reilly Cap. 9 y 13 | Cuadernos NotebookLM</button>
 </section>
 
-<section id="sec-6-18"> <span class="icon-sec">🧬</span> <h2>6.18 Plantillas de funciones: La Escencia de la Programación Genérica</h2>
+<section id="sec-6-18"> 
+    <span class="icon-sec">🧬</span> 
+    <h2>6.18 Plantillas de funciones: La Esencia de la Programación Genérica</h2>
 
-<p>En el diseño de sistemas de software robustos y escalables, la eficiencia no se mide únicamente por los ciclos de CPU, sino también por la capacidad del ingeniero para reutilizar lógica sin introducir redundancia. [cite_start]Basado en el libro <em>C++ Cómo Programar</em> de <strong>Deitel</strong> (6ª Edición), las <strong>plantillas de funciones</strong> (<em>function templates</em>) representan la piedra angular de lo que denominamos <span class="abbr" data-title="Programación Genérica: Paradigma que permite escribir código que funciona con diversos tipos de datos sin perder la seguridad de tipos, separando el algoritmo de la representación de datos.">programación genérica</span>[cite: 36]. Esta técnica permite definir una única función que actúa como un "plano de construcción" para una familia de funciones similares que operan sobre distintos tipos de datos, garantizando la integridad sistémica y facilitando el mantenimiento a largo plazo.</p>
+    <p>En el diseño de sistemas de software robustos y escalables, la eficiencia no se mide únicamente por los ciclos de CPU, sino también por la capacidad del ingeniero para reutilizar lógica sin introducir redundancia. Según el tratado de <strong>Deitel</strong> en su obra <em>C++ Cómo Programar</em>, las <strong>plantillas de funciones</strong> (<em>function templates</em>) representan la piedra angular de lo que denominamos <span class="abbr" data-title="Programación Genérica: Paradigma que permite escribir código que funciona con diversos tipos de datos sin perder la seguridad de tipos, separando el algoritmo de la representación de datos.">programación genérica</span>. Esta técnica permite definir una única función que actúa como un "plano de construcción" para una familia de funciones similares que operan sobre distintos tipos de datos, garantizando la integridad sistémica y facilitando el mantenimiento a largo plazo.</p>
 
-<p>Según el <strong>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</strong>, la enseñanza de plantillas debe abordarse desde un enfoque constructivista. No se trata simplemente de aprender una sintaxis nueva, sino de entender la necesidad arquitectónica que resuelven: la eliminación del código duplicado. [cite_start]Deitel enfatiza que, en lugar de escribir múltiples versiones sobrecargadas de una función para manejar <code>int</code>, <code>float</code> o <code>char</code>, el programador define una plantilla y delega en el <span class="abbr" data-title="Compilador: Programa que traduce el código fuente a código máquina y, en el caso de las plantillas, genera automáticamente la implementación específica para cada tipo de dato utilizado.">compilador</span> la tarea de generar las versiones específicas bajo demanda[cite: 36].</p>
+    <p>Desde la perspectiva pedagógica del <strong>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</strong>, la enseñanza de plantillas debe abordarse desde un enfoque constructivista. No se trata simplemente de aprender una sintaxis nueva, sino de entender la necesidad arquitectónica que resuelven: la eliminación del código duplicado. Tal como enfatiza <strong>Deitel</strong>, en lugar de escribir múltiples versiones sobrecargadas de una función para manejar <code>int</code>, <code>float</code> o <code>char</code>, el programador define una plantilla y delega en el <span class="abbr" data-title="Compilador: Programa que traduce el código fuente a código máquina y, en el caso de las plantillas, genera automáticamente la implementación específica para cada tipo de dato utilizado.">compilador</span> la tarea de generar las versiones específicas bajo demanda.</p>
 
-<h3>6.18.1 Motivación y Análisis de Ingeniería: El Fin del Código Duplicado</h3>
-[cite_start]<p>Basado en el PDF de <strong>O'Reilly</strong>, <em>Practical C++ Programming</em>, las plantillas son la solución profesional a un problema histórico: el mantenimiento de algoritmos idénticos para tipos distintos[cite: 40]. Imagine que necesitás una función para encontrar el valor máximo entre dos elementos. Sin plantillas, tendrías que recurrir a la sobrecarga manual de funciones, lo cual es propenso a errores y genera un código difícil de auditar. [cite_start]O'Reilly advierte que la duplicación es la enemiga de la calidad; si encontrás un error en la lógica de comparación, tendrías que corregirlo en cada una de las versiones sobrecargadas[cite: 40].</p>
+    <h3>6.18.1 Motivación y Análisis de Ingeniería: El Fin del Código Duplicado</h3>
+    <p>Basado en el <strong>PDF de O'Reilly</strong>, <em>Practical C++ Programming</em>, las plantillas son la solución profesional a un problema histórico: el mantenimiento de algoritmos idénticos para tipos distintos. Imaginá que necesitás una función para encontrar el valor máximo entre dos elementos. Sin plantillas, tendrías que recurrir a la sobrecarga manual de funciones, lo cual es propenso a errores y genera un código difícil de auditar. <strong>O'Reilly</strong> advierte que la duplicación es la enemiga de la calidad; si encontrás un error en la lógica de comparación, tendrías que corregirlo en cada una de las versiones sobrecargadas.</p>
 
-<p>Desde la perspectiva del <strong>Cuaderno de NotebookLM sobre UX UI</strong>, la legibilidad del código es una forma de interfaz para el desarrollador. El uso de plantillas reduce la <strong>carga cognitiva</strong> significativamente. En lugar de procesar mentalmente cinco funciones <code>maximo</code> diferentes, el ingeniero solo necesita comprender una única estructura lógica universal. Según los principios de diseño visual y jerárquico aplicados al código, las plantillas actúan como un patrón de diseño limpio que mejora la escaneabilidad del proyecto.</p>
+    <p>Desde la perspectiva del <strong>Cuaderno de NotebookLM sobre UX UI</strong>, la legibilidad del código es una forma de interfaz para el desarrollador. El uso de plantillas reduce la <strong>carga cognitiva</strong> significativamente. En lugar de procesar mentalmente cinco funciones <code>maximo</code> diferentes, el ingeniero solo necesita comprender una única estructura lógica universal. Según los principios de diseño visual y jerárquico aplicados al código, las plantillas actúan como un patrón de diseño limpio que mejora la escaneabilidad del proyecto.</p>
 
-<h3>6.18.2 Sintaxis y Estructura del "Plano Genérico"</h3>
-[cite_start]<p>De acuerdo con <strong>Deitel</strong>, la definición de una plantilla comienza con la palabra clave <code>template</code> seguida de una lista de parámetros de tipo encerrada en corchetes angulares (<code>&lt; &gt;</code>)[cite: 36]. Generalmente, se utiliza el identificador formal <code>T</code> para representar el tipo genérico.</p>
+    <h3>6.18.2 Sintaxis y Estructura del "Plano Genérico"</h3>
+    <p>De acuerdo con la teoría técnica de <strong>Deitel</strong>, la definición de una plantilla comienza con la palabra clave <code>template</code> seguida de una lista de parámetros de tipo encerrada en corchetes angulares (<code>&lt; &gt;</code>). Generalmente, se utiliza el identificador formal <code>T</code> para representar el tipo genérico.</p>
 
-<pre><code>// Definición de una plantilla de función (Basado en Deitel)
-template <typename T> T determinarMaximo(T valor1, T valor2) { return (valor1 > valor2) ? valor1 : valor2; }</code></pre>
+    <pre><code>// Definición de una plantilla de función (Basado en Deitel)
+template &lt;typename T&gt; 
+T determinarMaximo(T valor1, T valor2) { 
+    return (valor1 > valor2) ? valor1 : valor2; 
+}</code></pre>
 
-[cite_start]<p>Técnicamente, <strong>Deitel</strong> aclara que podés usar tanto <code>typename</code> como <code>class</code> para declarar el parámetro de tipo, aunque <code>typename</code> es el estándar preferido en la comunidad académica moderna para evitar confusiones semánticas con la definición de clases de objetos[cite: 36]. [cite_start]O'Reilly destaca que esta flexibilidad permite que el algoritmo funcione con cualquier tipo de dato que tenga definido el operador mayor que (<code>&gt;</code>)[cite: 40].</p>
+    <p>Técnicamente, <strong>Deitel</strong> aclara que podés usar tanto <code>typename</code> como <code>class</code> para declarar el parámetro de tipo, aunque <code>typename</code> es el estándar preferido en la comunidad académica moderna para evitar confusiones semánticas con la definición de clases de objetos. Por su parte, el manual de <strong>O'Reilly</strong> destaca que esta flexibilidad permite que el algoritmo funcione con cualquier tipo de dato que tenga definido el operador mayor que (<code>&gt;</code>).</p>
 
-<div class="table-res">
-    <table>
-        <caption>Tabla Comparativa: Sobrecarga manual vs. Plantillas de funciones</caption>
-        <thead>
-            <tr>
-                <th>Atributo</th>
-                <th>Sobrecarga Manual (Basado en O'Reilly)</th>
-                <th>Plantillas de Funciones (Basado en Deitel)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Esfuerzo de Codificación</strong></td>
-                <td>Alto (Una definición por cada tipo de dato).</td>
-                <td>Bajo (Una única definición universal).</td>
-            </tr>
-            <tr>
-                <td><strong>Mantenibilidad</strong></td>
-                <td>Baja (Los cambios deben replicarse en cada función).</td>
-                <td>Alta (Centralización de la lógica algorítmica).</td>
-            </tr>
-            <tr>
-                <td><strong>Eficiencia de Memoria</strong></td>
-                <td>Moderada (Se compilan todas las versiones escritas).</td>
-                <td>Óptima (Solo se compilan las versiones invocadas).</td>
-            </tr>
-            <tr>
-                <td><strong>Flexibilidad</strong></td>
-                <td>Limitada a los tipos previstos por el autor.</td>
-                <td>Total para cualquier tipo con operadores compatibles.</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<h3>6.18.3 El Mecanismo de Instanciación: ¿Qué sucede bajo el capó?</h3>
-<p>Es vital que comprendas que una plantilla <strong>no es una función ejecutable</strong> por sí misma. [cite_start]Según <strong>Deitel</strong>, es meramente una instrucción para el compilador sobre cómo generar funciones[cite: 36]. Este proceso se denomina <strong>instanciación de plantilla</strong>. [cite_start]Cuando el compilador encuentra una llamada como <code>determinarMaximo(10, 20)</code>, identifica que estás usando el tipo <code>int</code> y genera automáticamente en memoria una copia de la función adaptada a enteros[cite: 36].</p>
-
-<p>De acuerdo con el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, este proceso es análogo a la compilación de componentes en frameworks modernos como Svelte o la transpilación de TypeScript a JavaScript. En la web, abstraemos la complejidad del DOM; en C++, abstraemos la rigidez de los tipos de datos físicos para ganar velocidad en el desarrollo sin sacrificar el rendimiento del hardware. El cuaderno resalta que la modularidad extrema es la clave para evitar que el software colapse bajo su propio peso técnico.</p>
-
-<h3>6.18.4 Diagrama Conceptual de Instanciación</h3>
-<div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); text-align: center; margin: 2rem 0;">
-    <p style="font-weight: 700; color: var(--accent);">FLUJO DE COMPILACIÓN DE PLANTILLAS</p>
-    <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 1rem;">
-        <div style="border: 2px solid var(--accent); padding: 10px; border-radius: 8px;">
-            <strong>Código Fuente</strong><br><small>Plantilla Genérica (T)</small>
-        </div>
-        <div style="font-size: 1.5rem;">➔</div>
-        <div style="border: 2px dashed var(--text-secondary); padding: 10px; border-radius: 8px;">
-            <strong>Llamada en Código</strong><br><small>maximo(int, int)</small>
-        </div>
-        <div style="font-size: 1.5rem;">➔</div>
-        <div style="background: var(--accent); color: white; padding: 10px; border-radius: 8px;">
-            <strong>Instanciación</strong><br><small>Generación de Código Binario Específico</small>
-        </div>
+    <div class="table-res">
+        <table>
+            <caption>Tabla Comparativa: Sobrecarga manual vs. Plantillas de funciones</caption>
+            <thead>
+                <tr>
+                    <th>Atributo</th>
+                    <th>Sobrecarga Manual (Basado en O'Reilly)</th>
+                    <th>Plantillas de Funciones (Basado en Deitel)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Esfuerzo de Codificación</strong></td>
+                    <td>Alto (Una definición por cada tipo de dato).</td>
+                    <td>Bajo (Una única definición universal).</td>
+                </tr>
+                <tr>
+                    <td><strong>Mantenibilidad</strong></td>
+                    <td>Baja (Los cambios deben replicarse en cada función).</td>
+                    <td>Alta (Centralización de la lógica algorítmica).</td>
+                </tr>
+                <tr>
+                    <td><strong>Eficiencia de Memoria</strong></td>
+                    <td>Moderada (Se compilan todas las versiones escritas).</td>
+                    <td>Óptima (Solo se compilan las versiones invocadas).</td>
+                </tr>
+                <tr>
+                    <td><strong>Flexibilidad</strong></td>
+                    <td>Limitada a los tipos previstos por el autor.</td>
+                    <td>Total para cualquier tipo con operadores compatibles.</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    [cite_start]<p style="font-size: 0.85rem; margin-top: 15px; font-style: italic;">Nota: El compilador solo crea las versiones que vos usás efectivamente en tu programa[cite: 36].</p>
-</div>
 
-<h3>6.18.5 Restricciones Técnicas y Especialización</h3>
-<p>A pesar de su potencia, las plantillas exigen un rigor absoluto. [cite_start]O'Reilly advierte que si intentás usar una plantilla diseñada con operaciones aritméticas (como <code>+</code> o <code>*</code>) con un objeto que no tiene sobrecargados esos operadores, el programa no compilará[cite: 40]. Esto refuerza el concepto de <strong>andamiaje técnico</strong>: el programador debe asegurar que los cimientos (los tipos de datos) soporten la estructura (la plantilla).</p>
+    <h3>6.18.3 El Mecanismo de Instanciación: ¿Qué sucede bajo el capó?</h3>
+    <p>Es vital que comprendas que una plantilla <strong>no es una función ejecutable</strong> por sí misma. Según la explicación de <strong>Deitel</strong>, es meramente una instrucción para el compilador sobre cómo generar funciones. Este proceso se denomina <strong>instanciación de plantilla</strong>. Cuando el compilador encuentra una llamada como <code>determinarMaximo(10, 20)</code>, identifica que estás usando el tipo <code>int</code> y genera automáticamente en memoria una copia de la función adaptada a enteros.</p>
 
-[cite_start]<p>Según <strong>Deitel</strong>, también podés tener plantillas con múltiples parámetros de tipo, como <code>template &lt;typename T1, typename T2&gt;</code>, lo que permite crear funciones que manejen conversiones o comparaciones entre tipos heterogéneos[cite: 36]. [cite_start]Esta versatilidad es la que alimenta bibliotecas industriales como la <span class="abbr" data-title="STL: Standard Template Library. Colección masiva de estructuras de datos y algoritmos genéricos que vienen integrados con C++.">STL</span>[cite: 36].</p>
+    <p>De acuerdo con el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, este proceso es análogo a la compilación de componentes en frameworks modernos o la transpilación de lenguajes tipados. En la web, abstraemos la complejidad del DOM; en C++, abstraemos la rigidez de los tipos de datos físicos para ganar velocidad en el desarrollo sin sacrificar el rendimiento del hardware. El cuaderno resalta que la modularidad extrema es la clave para evitar que el software colapse bajo su propio peso técnico.</p>
 
-<div class="practice-box">
-    <strong>💡 Desafío de Ingeniería Aplicada (Metodología Activa):</strong>
-    <p>Utilizando los principios de <strong>Active Learning</strong> descritos en el Cuaderno de NotebookLM sobre Educación, te proponemos el siguiente ejercicio práctico:</p>
-    <ol>
-        <li>Diseñá una plantilla de función llamada <code>intercambiarValores</code> que reciba dos referencias genéricas (<code>T &amp;a, T &amp;b</code>) y realice el <em>swap</em> de sus contenidos.</li>
-        <li>Implementá una prueba en tu <code>main</code> utilizando dos variables <code>int</code> y luego dos variables de tipo <code>string</code>.</li>
-        <li><strong>Reflexión Pedagógica:</strong> ¿Por qué es más eficiente usar referencias en una plantilla que pasar los valores por copia? [cite_start]Justificá tu respuesta basándote en la gestión de memoria de la pila (<em>stack</em>) que estudiamos en secciones anteriores[cite: 36, 40].</li>
-    </ol>
-    <p><em>Este ejercicio fomenta la metacognición al obligarte a pensar en el costo físico de los datos genéricos.</em></p>
-</div>
+    <h3>6.18.4 Diagrama Conceptual de Instanciación</h3>
+    
+    <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); text-align: center; margin: 2rem 0;">
+        <p style="font-weight: 700; color: var(--accent);">FLUJO DE COMPILACIÓN DE PLANTILLAS</p>
+        <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div style="border: 2px solid var(--accent); padding: 10px; border-radius: 8px;">
+                <strong>Código Fuente</strong><br><small>Plantilla Genérica (T)</small>
+            </div>
+            <div style="font-size: 1.5rem;">➔</div>
+            <div style="border: 2px dashed var(--text-secondary); padding: 10px; border-radius: 8px;">
+                <strong>Llamada en Código</strong><br><small>maximo(int, int)</small>
+            </div>
+            <div style="font-size: 1.5rem;">➔</div>
+            <div style="background: var(--accent); color: white; padding: 10px; border-radius: 8px;">
+                <strong>Instanciación</strong><br><small>Generación de Código Binario Específico</small>
+            </div>
+        </div>
+        <p style="font-size: 0.85rem; margin-top: 15px; font-style: italic;">Nota: El compilador solo crea las versiones que vos usás efectivamente en tu programa (Deitel, Secc. 6.18).</p>
+    </div>
 
-<h3>Conclusión Técnica y Académica</h3>
-<p>En conclusión, el dominio de las plantillas de funciones es lo que separa a un codificador de un arquitecto de software de nivel universitario. Al integrar los conceptos de <strong>Deitel</strong> sobre instanciación, la visión de <strong>O'Reilly</strong> sobre la genericidad y los principios de <strong>UX UI</strong> sobre la reducción de la complejidad visual, estarás capacitado para construir herramientas que trascienden la especificidad del dato. Las plantillas no solo hacen que tu código sea más corto; lo hacen intelectualmente más denso y profesionalmente más sólido, cumpliendo con la premisa de ingeniería de "escribir una vez, ejecutar para cualquier tipo".</p>
+    <h3>6.18.5 Restricciones Técnicas y Especialización</h3>
+    <p>A pesar de su potencia, las plantillas exigen un rigor absoluto. <strong>O'Reilly</strong> advierte que si intentás usar una plantilla diseñada con operaciones aritméticas (como <code>+</code> o <code>*</code>) con un objeto que no tiene sobrecargados esos operadores, el programa no compilará. Esto refuerza el concepto de <strong>andamiaje técnico</strong>: el programador debe asegurar que los cimientos (los tipos de datos) soporten la estructura (la plantilla).</p>
 
-<button class="btn-ref" onclick="openRef('ref-6-18')">Referencia: Deitel Secc. 6.18 & O'Reilly Cap. 24</button>
+    <p>Según <strong>Deitel</strong>, también podés tener plantillas con múltiples parámetros de tipo, como <code>template &lt;typename T1, typename T2&gt;</code>, lo que permite crear funciones que manejen conversiones o comparaciones entre tipos heterogéneos. Esta versatilidad es la que alimenta bibliotecas industriales como la <span class="abbr" data-title="STL: Standard Template Library. Colección masiva de estructuras de datos y algoritmos genéricos que vienen integrados con C++.">STL</span>.</p>
+
+    <div class="practice-box">
+        <strong>💡 Desafío de Ingeniería Aplicada (Metodología Activa):</strong>
+        <p>Utilizando los principios de <strong>Active Learning</strong> descritos en el <strong>Cuaderno de NotebookLM sobre Educación</strong>, te proponemos el siguiente ejercicio práctico:</p>
+        <ol>
+            <li>Diseñá una plantilla de función llamada <code>intercambiarValores</code> que reciba dos referencias genéricas (<code>T &amp;a, T &amp;b</code>) y realice el <em>swap</em> de sus contenidos.</li>
+            <li>Implementá una prueba en tu <code>main</code> utilizando dos variables <code>int</code> y luego dos variables de tipo <code>string</code>.</li>
+            <li><strong>Reflexión Pedagógica:</strong> ¿Por qué es más eficiente usar referencias en una plantilla que pasar los valores por copia? Justificá tu respuesta basándote en la gestión de memoria de la pila (<em>stack</em>) que estudiamos en secciones anteriores, siguiendo los lineamientos técnicos de <strong>Deitel</strong> y <strong>O'Reilly</strong>.</li>
+        </ol>
+        <p><em>Este ejercicio fomenta la metacognición al obligarte a pensar en el costo físico de los datos genéricos.</em></p>
+    </div>
+
+    <h3>Conclusión Técnica y Académica</h3>
+    <p>En conclusión, el dominio de las plantillas de funciones es lo que separa a un codificador de un arquitecto de software de nivel universitario. Al integrar los conceptos de <strong>Deitel</strong> sobre instanciación, la visión de <strong>O'Reilly</strong> sobre la genericidad y los principios de <strong>UX UI</strong> sobre la reducción de la complejidad visual, estarás capacitado para construir herramientas que trascienden la especificidad del dato. Las plantillas no solo hacen que tu código sea más corto; lo hacen intelectualmente más denso y profesionalmente más sólido, cumpliendo con la premisa de ingeniería de "escribir una vez, ejecutar para cualquier tipo".</p>
+
+    <button class="btn-ref" onclick="openRef('ref-6-18')">Referencia: Deitel Secc. 6.18 | O'Reilly Cap. 24 | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
 </section>
 
 <section id="sec-6-19">
@@ -2094,136 +2128,138 @@ unsigned long fibonacci(unsigned long n) { // Caso base: si n es 0 o 1, devolvem
 <button class="btn-ref" onclick="openRef('ref-deitel-6-21')">Referencia Académica: Deitel Cap. 6.21 | O'Reilly Cap. 9 | Cuadernos NotebookLM</button>
 </section>
 
-<section id="sec-6-22"> <span class="icon-sec">🏦</span> <h2>6.22 Ingeniería de Software: Identificación de las operaciones de las clases en el sistema ATM</h2>
+<section id="sec-6-22"> 
+    <span class="icon-sec">🏦</span> 
+    <h2>6.22 Ingeniería de Software: Identificación de las operaciones de las clases en el sistema ATM</h2>
 
-<p>En el proceso de desarrollo de sistemas complejos, la transición del análisis de requerimientos al diseño técnico constituye una fase crítica que determina la robustez y escalabilidad de la arquitectura. [cite_start]Según el libro <strong>C++ Cómo Programar</strong> de <strong>Deitel</strong> (6ª Edición), una vez identificadas las clases y sus atributos, el ingeniero debe proceder a la identificación de las <strong>operaciones</strong> (también conocidas como servicios o comportamientos) que cada objeto debe proveer al sistema para cumplir con su propósito funcional[cite: 23].</p>
+    <p>En el proceso de desarrollo de sistemas complejos, la transición del análisis de requerimientos al diseño técnico constituye una fase crítica que determina la robustez y escalabilidad de la arquitectura. Según el tratado de <strong>Deitel</strong> en su obra <em>C++ Cómo Programar</em>, una vez identificadas las clases y sus atributos, el ingeniero debe proceder a la identificación de las <strong>operaciones</strong> (también conocidas como servicios o comportamientos) que cada objeto debe proveer al sistema para cumplir con su propósito funcional.</p>
 
-<p>Este procedimiento se fundamenta en un análisis gramatical exhaustivo de la especificación de requerimientos. Mientras que en las etapas previas (secciones 3.11 y 4.13) nos enfocamos en los sustantivos para definir clases y en los adjetivos para definir atributos, en esta sección nos concentraremos en los <strong>verbos</strong> y las frases verbales. [cite_start]Basado en el PDF de <strong>Deitel</strong>, estos verbos nos indican qué acciones deben ser capaces de realizar los objetos[cite: 23]. De acuerdo con el <strong>cuaderno de NotebookLM sobre educación y metodologías activas</strong>, esta técnica de mapeo lingüístico es un pilar fundamental del <span class="abbr" data-title="ADOO: Análisis y Diseño Orientado a Objetos. Metodología para diseñar sistemas de software modelando entidades del mundo real.">ADOO</span>, permitiendo que el estudiante universitario conecte la lógica del lenguaje natural con la estructura técnica del código fuente.</p>
+    <p>Este procedimiento se fundamenta en un análisis gramatical exhaustivo de la especificación de requerimientos. Mientras que en las etapas previas (secciones 3.11 y 4.13) nos enfocamos en los sustantivos para definir clases y en los adjetivos para definir atributos, en esta sección nos concentraremos en los <strong>verbos</strong> y las frases verbales. Basado en el <strong>PDF de Deitel</strong>, estos verbos nos indican qué acciones deben ser capaces de realizar los objetos. De acuerdo con el <strong>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</strong>, esta técnica de mapeo lingüístico es un pilar fundamental del <span class="abbr" data-title="ADOO: Análisis y Diseño Orientado a Objetos. Metodología para diseñar sistemas de software modelando entidades del mundo real.">ADOO</span>, permitiendo que el estudiante universitario conecte la lógica del lenguaje natural con la estructura técnica del código fuente.</p>
 
-<h3>Metodología de Extracción de Operaciones</h3>
-<p>Usted debe observar que no todos los verbos en un enunciado se convierten automáticamente en funciones miembro. El criterio de ingeniería, según el PDF de <strong>O'Reilly (Practical C++ Programming)</strong>, dicta que debemos filtrar aquellas acciones que son transitorias o que no residen lógicamente en la entidad bajo análisis. O'Reilly enfatiza que una operación bien diseñada debe tener una responsabilidad única y clara, evitando efectos secundarios que compliquen el flujo de la <span class="abbr" data-title="Pila de llamadas: Estructura de memoria donde se almacenan los marcos de activación de las funciones en ejecución.">pila de llamadas</span>.</p>
+    <h3>Metodología de Extracción de Operaciones</h3>
+    <p>Debés observar que no todos los verbos en un enunciado se convierten automáticamente en funciones miembro. El criterio de ingeniería, según el <strong>PDF de O'Reilly</strong> (<em>Practical C++ Programming</em>), dicta que debemos filtrar aquellas acciones que son transitorias o que no residen lógicamente en la entidad bajo análisis. O'Reilly enfatiza que una operación bien diseñada debe tener una responsabilidad única y clara, evitando efectos secundarios que compliquen el flujo de la <span class="abbr" data-title="Pila de llamadas: Estructura de memoria donde se almacenan los marcos de activación de las funciones en ejecución.">pila de llamadas</span>.</p>
 
-<p>Basado en la especificación del sistema <span class="abbr" data-title="ATM: Automated Teller Machine (Cajero Automático).">ATM</span> descrita por <strong>Deitel</strong>, extraemos las siguientes necesidades operativas:</p>
-<ul>
-    <li><strong>Autenticar al usuario:</strong> El sistema debe verificar si la credencial y el NIP coinciden con los registros.</li>
-    <li><strong>Ejecutar transacciones:</strong> Cada tipo de operación financiera (retiro, depósito, consulta) debe ser procesable.</li>
-    <li><strong>Dispensar efectivo:</strong> El hardware del cajero debe entregar los billetes físicos.</li>
-    <li><strong>Actualizar saldos:</strong> La base de datos debe reflejar los cambios tras un crédito o débito.</li>
-</ul>
+    <p>Basado en la especificación del sistema <span class="abbr" data-title="ATM: Automated Teller Machine (Cajero Automático).">ATM</span> descrita por <strong>Deitel</strong>, extraemos las siguientes necesidades operativas:</p>
+    <ul>
+        <li><strong>Autenticar al usuario:</strong> El sistema debe verificar si la credencial y el NIP coinciden con los registros.</li>
+        <li><strong>Ejecutar transacciones:</strong> Cada tipo de operación financiera (retiro, depósito, consulta) debe ser procesable.</li>
+        <li><strong>Dispensar efectivo:</strong> El hardware del cajero debe entregar los billetes físicos.</li>
+        <li><strong>Actualizar saldos:</strong> La base de datos debe reflejar los cambios tras un crédito o débito.</li>
+    </ul>
 
-<h3>Mapeo Detallado de Clases y Funciones Miembro</h3>
-<p>A continuación, se detalla la asignación de operaciones a las clases del sistema, integrando los principios técnicos de <strong>Deitel</strong> y los criterios de modularidad del <strong>cuaderno de NotebookLM sobre desarrollo web</strong>:</p>
+    <h3>Mapeo Detallado de Clases y Funciones Miembro</h3>
+    <p>A continuación, se detalla la asignación de operaciones a las clases del sistema, integrando los principios técnicos de <strong>Deitel</strong> y los criterios de modularidad analizados en el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>:</p>
 
-<div class="table-res">
-    <table>
-        <thead>
-            <tr>
-                <th>Clase UML</th>
-                <th>Operación (Función Miembro)</th>
-                <th>Responsabilidad Técnica</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>ATM</strong></td>
-                <td><code>ejecutar()</code></td>
-                <td>Orquesta el inicio de sesión y el flujo principal del menú.</td>
-            </tr>
-            <tr>
-                <td><strong>Pantalla</strong></td>
-                <td><code>mostrarMensaje()</code></td>
-                <td>Gestiona la salida visual hacia el usuario (Capa de Presentación).</td>
-            </tr>
-            <tr>
-                <td><strong>Teclado</strong></td>
-                <td><code>obtenerEntrada()</code></td>
-                <td>Captura datos numéricos ingresados por el cliente.</td>
-            </tr>
-            <tr>
-                <td><strong>BaseDatosBanco</strong></td>
-                <td><code>autenticarUsuario()</code></td>
-                <td>Valida la identidad contra los registros de la cuenta.</td>
-            </tr>
-            <tr>
-                <td><strong>BaseDatosBanco</strong></td>
-                <td><code>obtenerSaldoDisponible()</code> / <code>abonar()</code></td>
-                <td>Interactúa con el repositorio persistente de datos de cuentas.</td>
-            </tr>
-            <tr>
-                <td><strong>DispensadorEfectivo</strong></td>
-                <td><code>repartirEfectivo()</code></td>
-                <td>Comunica con el hardware de distribución de billetes.</td>
-            </tr>
-            <tr>
-                <td><strong>SolicitudSaldo</strong> / <strong>Retiro</strong></td>
-                <td><code>ejecutar()</code></td>
-                <td>Polimorfismo aplicado: cada transacción sabe cómo procesarse.</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<h3>Diseño Centrado en el Usuario (Perspectiva UX/UI)</h3>
-<p>Desde la perspectiva académica del <strong>cuaderno de NotebookLM sobre UX UI</strong>, la identificación de estas operaciones es el primer paso para garantizar el <strong>ocultamiento de información</strong>. El usuario frente al cajero nunca debe estar expuesto a la complejidad de la lógica de <code>abonar()</code> o a la validación de bits en <code>recibioSobre()</code>. [cite_start]La interfaz (representada por la clase <code>Pantalla</code>) actúa como un mediador que reduce la <strong>carga cognitiva</strong> del cliente, ocultando los detalles de implementación del backend[cite: 23].</p>
-
-<p>De acuerdo con el cuaderno de <strong>UX UI</strong>, un buen diseño de operaciones debe seguir el <strong>Principio de Menor Sorpresa</strong>: si el usuario elige "Retirar", la operación <code>ejecutar()</code> de la clase <code>Retiro</code> debe comportarse de forma predecible y consistente, informando siempre el estado del proceso. [cite_start]Usted verá que la modularidad permite que, si el banco decide cambiar el mecanismo de <code>repartirEfectivo()</code>, el resto del software (como el menú del ATM) permanezca inalterado, lo cual es una "buena práctica de programación" esencial[cite: 23].</p>
-
-<h3>Modificando el Diagrama de Clases UML</h3>
-<p>Al integrar estas operaciones, el diagrama de clases <span class="abbr" data-title="UML: Unified Modeling Language. Estándar gráfico para modelar sistemas de software.">UML</span> evoluciona. Ya no solo muestra "quién conoce a quién", sino "quién hace qué para quién". [cite_start]Según <strong>Deitel</strong>, este nivel de detalle permite a los programadores comenzar la fase de codificación con una hoja de ruta inequívoca, reduciendo errores lógicos fatales en tiempo de ejecución[cite: 23].</p>
-
-<div style="background: var(--bg-secondary); padding: 2rem; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border);">
-    <h4 style="text-align: center; color: var(--accent);">Diagrama Conceptual de Operaciones (Simplified Class View)</h4>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-        <div style="background: var(--bg-paper); border: 2px solid var(--accent); padding: 10px; border-radius: 8px;">
-            <strong>ATM</strong>
-            <hr>
-            <small>- usuarioAutenticado: bool</small>
-            <hr>
-            <code>+ ejecutar()</code><br>
-            <code>+ autenticarUsuario()</code>
-        </div>
-        <div style="background: var(--bg-paper); border: 2px solid var(--accent); padding: 10px; border-radius: 8px;">
-            <strong>BaseDatosBanco</strong>
-            <hr>
-            <small>- cuentas: Account[]</small>
-            <hr>
-            <code>+ autenticar()</code><br>
-            <code>+ obtenerSaldo()</code><br>
-            <code>+ cargar()</code>
-        </div>
-        <div style="background: var(--bg-paper); border: 2px solid var(--accent); padding: 10px; border-radius: 8px;">
-            <strong>Pantalla</strong>
-            <hr>
-            <small>(Sin atributos)</small>
-            <hr>
-            <code>+ mostrarMensaje()</code><br>
-            <code>+ mostrarMonto()</code>
-        </div>
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Clase UML</th>
+                    <th>Operación (Función Miembro)</th>
+                    <th>Responsabilidad Técnica</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>ATM</strong></td>
+                    <td><code>ejecutar()</code></td>
+                    <td>Orquesta el inicio de sesión y el flujo principal del menú.</td>
+                </tr>
+                <tr>
+                    <td><strong>Pantalla</strong></td>
+                    <td><code>mostrarMensaje()</code></td>
+                    <td>Gestiona la salida visual hacia el usuario (Capa de Presentación).</td>
+                </tr>
+                <tr>
+                    <td><strong>Teclado</strong></td>
+                    <td><code>obtenerEntrada()</code></td>
+                    <td>Captura datos numéricos ingresados por el cliente.</td>
+                </tr>
+                <tr>
+                    <td><strong>BaseDatosBanco</strong></td>
+                    <td><code>autenticarUsuario()</code></td>
+                    <td>Valida la identidad contra los registros de la cuenta.</td>
+                </tr>
+                <tr>
+                    <td><strong>BaseDatosBanco</strong></td>
+                    <td><code>obtenerSaldoDisponible()</code> / <code>abonar()</code></td>
+                    <td>Interactúa con el repositorio persistente de datos de cuentas.</td>
+                </tr>
+                <tr>
+                    <td><strong>DispensadorEfectivo</strong></td>
+                    <td><code>repartirEfectivo()</code></td>
+                    <td>Comunica con el hardware de distribución de billetes.</td>
+                </tr>
+                <tr>
+                    <td><strong>SolicitudSaldo</strong> / <strong>Retiro</strong></td>
+                    <td><code>ejecutar()</code></td>
+                    <td>Polimorfismo aplicado: cada transacción sabe cómo procesarse.</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <p style="font-size: 0.85rem; margin-top: 15px; font-style: italic; text-align: center;">Usted puede observar cómo las operaciones (+) se distinguen de los atributos (-) por su accesibilidad pública.</p>
-</div>
 
-<h3>Relación con el Desarrollo Web y Microservicios</h3>
-<p>Haciendo un paralelismo con el <strong>cuaderno de NotebookLM sobre desarrollo web</strong>, este diseño del sistema ATM es el ancestro conceptual de la arquitectura de servicios moderna. Cada operación de clase (como <code>obtenerSaldo()</code>) puede visualizarse como un <span class="abbr" data-title="Endpoint: Punto final de comunicación en una API donde los clientes solicitan recursos.">endpoint</span> de una API. El cuaderno resalta que la importancia de definir estas interfaces antes de codificar permite que diferentes equipos (Frontend para la Pantalla y Backend para la Base de Datos) trabajen de forma paralela sin fricciones, asegurando la escalabilidad del producto digital.</p>
+    <h3>Diseño Centrado en el Usuario (Perspectiva UX/UI)</h3>
+    <p>Desde la perspectiva académica del <strong>Cuaderno de NotebookLM sobre UX/UI</strong>, la identificación de estas operaciones es el primer paso para garantizar el <strong>ocultamiento de información</strong>. El usuario frente al cajero nunca debe estar expuesto a la complejidad de la lógica de <code>abonar()</code> o a la validación de bits en el hardware. La interfaz (representada por la clase <code>Pantalla</code>) actúa como un mediador que reduce la <strong>carga cognitiva</strong> del cliente, ocultando los detalles de implementación del backend, tal como se describe en la sección 6.22 de <strong>Deitel</strong>.</p>
 
-<h3>Metodologías Activas: Scaffolding en el Caso de Estudio</h3>
-<p>Para usted, como estudiante universitario, el caso del ATM no es solo un ejemplo; es un ejercicio de <strong>andamiaje cognitivo</strong> (<em>scaffolding</em>). Según el <strong>cuaderno de NotebookLM sobre educación</strong>, esta técnica permite que usted aprenda a pensar "en objetos" de forma incremental. Al resolver primero la estructura (clases), luego los datos (atributos) y finalmente los servicios (operaciones), usted construye un modelo mental sólido de la ingeniería de software profesional. [cite_start]Se recomienda que usted intente "simular" el recorrido de un billete desde el dispensador hasta el usuario para verificar si ha olvidado alguna operación crítica en su diseño[cite: 23].</p>
+    <p>De acuerdo con el manual de <strong>UX/UI</strong>, un buen diseño de operaciones debe seguir el <strong>Principio de Menor Sorpresa</strong>: si el usuario elige "Retirar", la operación <code>ejecutar()</code> de la clase <code>Retiro</code> debe comportarse de forma predecible y consistente. Verás que la modularidad permite que, si el banco decide cambiar el mecanismo de <code>repartirEfectivo()</code>, el resto del software permanezca inalterado, lo cual es una "buena práctica de programación" destacada por <strong>Deitel</strong>.</p>
 
-<div class="practice-box">
-    <strong>🧠 Actividad Práctica de Ingeniería:</strong>
-    <p>Utilizando la técnica de extracción de verbos analizada en el PDF de <strong>Deitel</strong>, identifique qué operaciones serían necesarias para agregar una nueva funcionalidad al ATM: <strong>"Transferencia entre cuentas"</strong>.</p>
-    <ol>
-        <li>¿A qué clase le asignaría la responsabilidad de <code>validarFondos()</code>?</li>
-        <li>¿Qué cambios requeriría la clase <code>BaseDatosBanco</code> para procesar un <code>transferir()</code> de forma segura?</li>
-        <li>Según el cuaderno de <strong>UX UI</strong>, ¿cómo diseñaría usted el feedback en la clase <code>Pantalla</code> para este nuevo proceso sin abrumar al usuario con datos técnicos de la base de datos?</li>
-    </ol>
-    <p><em>Justifique sus respuestas basándose en el principio de modularidad y encapsulamiento.</em></p>
-</div>
+    <h3>Modificando el Diagrama de Clases UML</h3>
+    <p>Al integrar estas operaciones, el diagrama de clases <span class="abbr" data-title="UML: Unified Modeling Language. Estándar gráfico para modelar sistemas de software.">UML</span> evoluciona. Ya no solo muestra "quién conoce a quién", sino "quién hace qué para quién". Según explica <strong>Deitel</strong>, este nivel de detalle permite a los programadores comenzar la fase de codificación con una hoja de ruta inequívoca, reduciendo errores lógicos fatales en tiempo de ejecución.</p>
 
-<h3>Conclusión de la Fase de Diseño Operativo</h3>
-<p>En conclusión, la identificación de las operaciones es el acto de dar vida a los objetos estáticos. Usted ha pasado de definir "qué es" el sistema a definir "qué hace". Como señala el libro de <strong>Deitel</strong>, este rigor en el diseño previo es lo que diferencia a un programador de un ingeniero de software capacitado para liderar proyectos de gran escala en la industria argentina. [cite_start]En las secciones subsiguientes (Capítulo 7), veremos cómo estos objetos colaboran entre sí enviándose mensajes que disparan estas mismas operaciones[cite: 23].</p>
+    <div style="background: var(--bg-secondary); padding: 2rem; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border);">
+        <h4 style="text-align: center; color: var(--accent);">Diagrama Conceptual de Operaciones (Simplified Class View)</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div style="background: var(--bg-paper); border: 2px solid var(--accent); padding: 10px; border-radius: 8px;">
+                <strong>ATM</strong>
+                <hr>
+                <small>- usuarioAutenticado: bool</small>
+                <hr>
+                <code>+ ejecutar()</code><br>
+                <code>+ autenticarUsuario()</code>
+            </div>
+            <div style="background: var(--bg-paper); border: 2px solid var(--accent); padding: 10px; border-radius: 8px;">
+                <strong>BaseDatosBanco</strong>
+                <hr>
+                <small>- cuentas: Account[]</small>
+                <hr>
+                <code>+ autenticar()</code><br>
+                <code>+ obtenerSaldo()</code><br>
+                <code>+ cargar()</code>
+            </div>
+            <div style="background: var(--bg-paper); border: 2px solid var(--accent); padding: 10px; border-radius: 8px;">
+                <strong>Pantalla</strong>
+                <hr>
+                <small>(Sin atributos)</small>
+                <hr>
+                <code>+ mostrarMensaje()</code><br>
+                <code>+ mostrarMonto()</code>
+            </div>
+        </div>
+        <p style="font-size: 0.85rem; margin-top: 15px; font-style: italic; text-align: center;">Podés observar cómo las operaciones (+) se distinguen de los atributos (-) por su accesibilidad pública (Deitel, Secc. 6.22).</p>
+    </div>
 
-<button class="btn-ref" onclick="openRef('ref-deitel-6-22')">Referencia: Deitel Cap. 6.22 (pág. 253) | O'Reilly Cap. 2 | NotebookLM (UX/Web/Edu)</button>
+    <h3>Relación con el Desarrollo Web y Microservicios</h3>
+    <p>Haciendo un paralelismo con el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, este diseño del sistema ATM es el ancestro conceptual de la arquitectura de servicios moderna. Cada operación de clase puede visualizarse como un <span class="abbr" data-title="Endpoint: Punto final de comunicación en una API donde los clientes solicitan recursos.">endpoint</span> de una API. El cuaderno resalta que definir estas interfaces antes de codificar permite que diferentes equipos trabajen de forma paralela sin fricciones, asegurando la escalabilidad del producto final.</p>
+
+    <h3>Metodologías Activas: Scaffolding en el Caso de Estudio</h3>
+    <p>Para vos, como estudiante universitario, el caso del ATM es un ejercicio de <strong>andamiaje cognitivo</strong> (<em>scaffolding</em>). Según el <strong>Cuaderno de NotebookLM sobre Educación</strong>, esta técnica permite que aprendas a pensar "en objetos" de forma incremental. Al resolver primero la estructura, luego los datos y finalmente los servicios, construís un modelo mental sólido. <strong>Deitel</strong> recomienda que intentes "simular" el recorrido de un billete desde el dispensador hasta el usuario para verificar si has olvidado alguna operación crítica en tu diseño.</p>
+
+    <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
+        <h4 style="margin-top: 0; color: var(--accent);">🧠 Actividad Práctica de Ingeniería</h4>
+        <p>Utilizando la técnica de extracción de verbos analizada por <strong>Deitel</strong>, identificá qué operaciones serían necesarias para agregar una nueva funcionalidad: <strong>"Transferencia entre cuentas"</strong>.</p>
+        <ol>
+            <li>¿A qué clase le asignarías la responsabilidad de <code>validarFondos()</code>?</li>
+            <li>¿Qué cambios requeriría la clase <code>BaseDatosBanco</code> para procesar un <code>transferir()</code> de forma segura?</li>
+            <li>Según el manual de <strong>UX/UI</strong>, ¿cómo diseñarías el feedback en la clase <code>Pantalla</code> para este nuevo proceso sin abrumar al usuario con datos técnicos?</li>
+        </ol>
+        <p><em>Justificá tus respuestas basándote en el principio de modularidad y encapsulamiento.</em></p>
+    </div>
+
+    <h3>Conclusión de la Fase de Diseño Operativo</h3>
+    <p>En conclusión, la identificación de las operaciones es el acto de dar vida a los objetos estáticos. Has pasado de definir "qué es" el sistema a definir "qué hace". Como señala el texto de <strong>Deitel</strong>, este rigor en el diseño previo es lo que diferencia a un programador de un ingeniero de software capacitado. En las secciones subsiguientes (Capítulo 7), veremos cómo estos objetos colaboran entre sí enviándose mensajes que disparan estas mismas operaciones.</p>
+
+    <button class="btn-ref" onclick="openRef('ref-deitel-6-22')">Referencia: Deitel Secc. 6.22 | O'Reilly Cap. 7 | Cuadernos NotebookLM: Educación, UX/UI y Desarrollo Web</button>
 </section>
 
 <section id="sec-6-23"> <span class="icon-sec">🎓</span> <h2>6.23 Repaso y Conceptos de Objetos: Hacia una Arquitectura de Software Robusta</h2>
