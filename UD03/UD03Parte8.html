@@ -1407,59 +1407,59 @@ int Tiempo::obtenerHora() const {
 </section>
 
 <section id="sec-11-20">
-            <span class="icon">🚶</span>
-            <h2>11.20 Clases iteradoras: La Abstracción del Recorrido Uniforme</h2>
-            
-            <p>En el diseño de sistemas orientados a objetos con C++, la gestión de colecciones de datos plantea un desafío arquitectónico fundamental: ¿cómo podemos recorrer los elementos de una estructura sin exponer su implementación interna? La respuesta reside en las <strong>clases iteradoras</strong>. [cite_start]Según el tratado de <strong>Deitel</strong>, un iterador es un objeto que actúa como un "puntero inteligente", proporcionando una interfaz estandarizada para acceder secuencialmente a los elementos de una <span class="abbr" data-title="Container Class: Una clase diseñada para almacenar y organizar colecciones de otros objetos, como listas, vectores o colas.">clase contenedora</span>[cite: 1]. Como futuro ingeniero, debés comprender que el iterador no es simplemente una herramienta de conveniencia, sino un componente de desacoplamiento que permite que los algoritmos operen de forma genérica sobre diversas estructuras de datos.</p>
+    <span class="icon">🚶</span>
+    <h2>11.20 Clases iteradoras: La Abstracción del Recorrido Uniforme</h2>
+    
+    <p>En el diseño de sistemas orientados a objetos con C++, la gestión de colecciones de datos plantea un desafío arquitectónico fundamental: ¿cómo podemos recorrer los elementos de una estructura sin exponer su implementación interna? La respuesta reside en las <strong>clases iteradoras</strong>. De acuerdo con el <strong>PDF de C++ de Deitel</strong>, un iterador es un objeto que actúa como un "puntero inteligente", proporcionando una interfaz estandarizada para acceder secuencialmente a los elementos de una <span class="abbr" data-title="Container Class: Una clase diseñada para almacenar y organizar colecciones de otros objetos, como listas, vectores o colas.">clase contenedora</span>. Como futuro ingeniero, debés comprender que el iterador no es simplemente una herramienta de conveniencia, sino un componente de desacoplamiento que permite que los algoritmos operen de forma genérica sobre diversas estructuras de datos.</p>
 
-            [cite_start]<p>Desde la perspectiva pedagógica del <strong>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</strong>, el aprendizaje de los iteradores requiere un "andamiaje cognitivo" que permita visualizar al objeto no como un dato estático, sino como un "explorador" o "cursor" con autonomía lógica[cite: 3]. En lugar de que el programador manipule índices manuales (proclives a errores de desbordamiento), delega en el iterador la responsabilidad de conocer el camino. Esta transición del pensamiento procedimental al orientado a objetos es crítica en el nivel universitario, ya que fomenta la creación de software más robusto y mantenible.</p>
+    <p>Desde la perspectiva pedagógica expuesta en el <strong>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</strong>, el aprendizaje de los iteradores requiere un "andamiaje cognitivo" que permita visualizar al objeto no como un dato estático, sino como un "explorador" o "cursor" con autonomía lógica. En lugar de que el programador manipule índices manuales (proclives a errores de desbordamiento), delega en el iterador la responsabilidad de conocer el camino. Esta transición del pensamiento procedimental al orientado a objetos es crítica en el nivel universitario, ya que fomenta la creación de software más robusto y mantenible.</p>
 
-            <p><strong>La Mecánica de la Sobrecarga: El Motor del Iterador</strong></p>
-            [cite_start]<p>Basado en el libro de <strong>O'Reilly</strong>, la potencia de un iterador emana directamente de la <strong>sobrecarga de operadores</strong>[cite: 2]. Para que un objeto se comporte como un puntero, debe implementar obligatoriamente tres categorías de operadores:</p>
-            <ul>
-                <li><strong>Operador de Indirección (<code>*</code>):</strong> Permite obtener una referencia al dato apuntado. [cite_start]Académicamente, esto garantiza que el usuario pueda leer o modificar el valor contenido sin conocer la dirección física de memoria o el nodo de la lista[cite: 2].</li>
-                <li><strong>Operador de Incremento (<code>++</code>):</strong> Es el encargado de avanzar al siguiente elemento lógicamente disponible. En un <code>vector</code>, esto implica sumarle una posición a la memoria; en una <code>lista ligada</code>, significa seguir el puntero al próximo nodo. [cite_start]La magia reside en que la sintaxis es idéntica para el programador[cite: 1].</li>
-                <li><strong>Operadores de Comparación (<code>==</code> y <code>!=</code>):</strong> Fundamentales para establecer los límites del recorrido. [cite_start]Un ciclo estándar en C++ avanza mientras el iterador actual no sea igual al iterador que representa el final (<code>.end()</code>) de la colección[cite: 2].</li>
-            </ul>
+    <p><strong>La Mecánica de la Sobrecarga: El Motor del Iterador</strong></p>
+    <p>Basado en el <strong>PDF de C++ de O'Reilly</strong>, la potencia de un iterador emana directamente de la <strong>sobrecarga de operadores</strong>. Para que un objeto se comporte como un puntero, debe implementar obligatoriamente tres categorías de operadores:</p>
+    <ul>
+        <li><strong>Operador de Indirección (<code>*</code>):</strong> Permite obtener una referencia al dato apuntado. Según se detalla en el texto de <strong>O'Reilly</strong>, esto garantiza que el usuario pueda leer o modificar el valor contenido sin conocer la dirección física de memoria o el nodo de la lista.</li>
+        <li><strong>Operador de Incremento (<code>++</code>):</strong> Es el encargado de avanzar al siguiente elemento lógicamente disponible. Tal como explica <strong>Deitel</strong>, en un <code>vector</code> esto implica sumarle una posición a la memoria, mientras que en una <code>lista ligada</code> significa seguir el puntero al próximo nodo; la magia reside en que la sintaxis es idéntica para el programador.</li>
+        <li><strong>Operadores de Comparación (<code>==</code> y <code>!=</code>):</strong> Fundamentales para establecer los límites del recorrido. Siguiendo la teoría de <strong>O'Reilly</strong>, un ciclo estándar en C++ avanza mientras el iterador actual no sea igual al iterador que representa el final (<code>.end()</code>) de la colección.</li>
+    </ul>
 
-            <p><strong>Análisis desde la Experiencia del Desarrollador (UX/UI)</strong></p>
-            [cite_start]<p>De acuerdo con el <strong>Cuaderno de NotebookLM sobre UX/UI</strong>, el diseño de una clase iteradora es un ejercicio de <strong>consistencia y diseño centrado en el desarrollador</strong>[cite: 4]. Un iterador bien diseñado sigue el "Principio de Menor Sorpresa": si se comporta exactamente como un puntero nativo de C, la carga cognitiva del programador disminuye drásticamente. [cite_start]La usabilidad de una biblioteca de clases depende de que sus interfaces sean intuitivas y predecibles; al usar iteradores, eliminamos la necesidad de aprender métodos de acceso específicos para cada tipo de contenedor, unificando la experiencia de desarrollo bajo un único modelo mental de "navegación"[cite: 4].</p>
+    <p><strong>Análisis desde la Experiencia del Desarrollador (UX/UI)</strong></p>
+    <p>De acuerdo con el <strong>Cuaderno de NotebookLM sobre UX/UI</strong>, el diseño de una clase iteradora es un ejercicio de <strong>consistencia y diseño centrado en el desarrollador</strong>. Un iterador bien diseñado sigue el "Principio de Menor Sorpresa": si se comporta exactamente como un puntero nativo de C, la carga cognitiva del programador disminuye drásticamente. Según este mismo cuaderno, la usabilidad de una biblioteca de clases depende de que sus interfaces sean intuitivas y predecibles; al usar iteradores, unificamos la experiencia de desarrollo bajo un único modelo mental de "navegación".</p>
 
-            <div class="table-res">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Estructura Interna</th>
-                            <th>Lógica de Avance (<code>++</code>)</th>
-                            <th>Ventaja de la Abstracción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Arreglo (Vector)</td>
-                            <td>Aritmética de punteros (dirección + 1)</td>
-                            <td>Acceso aleatorio y velocidad extrema.</td>
-                        </tr>
-                        <tr>
-                            <td>Lista Ligada</td>
-                            <td>Seguimiento de puntero <code>next</code></td>
-                            <td>Inserciones eficientes en cualquier punto.</td>
-                        </tr>
-                        <tr>
-                            <td>Árbol Binario</td>
-                            <td>Recorrido en orden (in-order traversal)</td>
-                            <td>Mantener los datos siempre ordenados.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Estructura Interna</th>
+                    <th>Lógica de Avance (<code>++</code>)</th>
+                    <th>Ventaja de la Abstracción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Arreglo (Vector)</td>
+                    <td>Aritmética de punteros (dirección + 1)</td>
+                    <td>Acceso aleatorio y velocidad extrema.</td>
+                </tr>
+                <tr>
+                    <td>Lista Ligada</td>
+                    <td>Seguimiento de puntero <code>next</code></td>
+                    <td>Inserciones eficientes en cualquier punto.</td>
+                </tr>
+                <tr>
+                    <td>Árbol Binario</td>
+                    <td>Recorrido en orden (in-order traversal)</td>
+                    <td>Mantener los datos siempre ordenados.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-            <p><strong>Analogía con el Desarrollo Web Moderno</strong></p>
-            [cite_start]<p>Haciendo una analogía con el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, el concepto de iterador en C++ es el precursor directo de los protocolos de iteración en lenguajes modernos como JavaScript (<code>Symbol.iterator</code>)[cite: 5]. En el desarrollo web contemporáneo, recorremos arreglos o colecciones del <span class="abbr" data-title="DOM: Document Object Model. Representación jerárquica de los objetos de una página web.">DOM</span> utilizando métodos como <code>forEach</code> o ciclos <code>for...of</code>. Todos estos mecanismos se basan en la misma premisa académica nacida en lenguajes de sistemas: separar quién guarda los datos de quién sabe cómo recorrerlos. [cite_start]Entender la sobrecarga de operadores en C++ te otorga una base conceptual para dominar cualquier motor de ejecución moderno[cite: 5].</p>
+    <p><strong>Analogía con el Desarrollo Web Moderno</strong></p>
+    <p>Haciendo una analogía con el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, el concepto de iterador en C++ es el precursor directo de los protocolos de iteración en lenguajes modernos como JavaScript. En el desarrollo web contemporáneo, recorremos colecciones del <span class="abbr" data-title="DOM: Document Object Model. Representación jerárquica de los objetos de una página web.">DOM</span> basándonos en la misma premisa académica: separar quién guarda los datos de quién sabe cómo recorrerlos. Entender esta base conceptual en C++ permite dominar cualquier motor de ejecución moderno.</p>
 
-            <p><strong>Implementación Académica: Un Ejemplo Práctico</strong></p>
-            <p>Imaginemos una clase <code>Lista</code> personalizada. El iterador interno se definiría así (respetando los estándares de <strong>Deitel</strong>):</p>
-            <pre><code>class IteradorLista {
+    <p><strong>Implementación Académica: Un Ejemplo Práctico</strong></p>
+    <p>Imaginemos una clase <code>Lista</code> personalizada. El iterador interno se definiría así, respetando los estándares académicos:</p>
+    <pre><code>class IteradorLista {
 public:
     // Operador de indirección para obtener el dato
     int& operator*() { return actual->dato; }
@@ -1478,12 +1478,12 @@ private:
     Nodo* actual; // Puntero interno al nodo de la lista
 };</code></pre>
 
-            <p>Como podés observar, la complejidad del manejo de punteros <code>Nodo*</code> queda oculta detrás de una interfaz elegante. [cite_start]Según el cuaderno de <strong>Educación</strong>, esta capacidad de <strong>abstracción</strong> es lo que permite que los estudiantes pasen de resolver ejercicios aislados a diseñar arquitecturas de software de nivel industrial[cite: 3]. Tenés que acostumbrarte a usar iteradores siempre que sea posible, ya que son la puerta de entrada a la <span class="abbr" data-title="STL: Standard Template Library. La biblioteca de plantillas estándar de C++ que ofrece algoritmos y contenedores altamente optimizados.">STL</span>, donde algoritmos como <code>sort</code> o <code>find</code> operan exclusivamente a través de ellos.</p>
+    <p>Como podés observar, la complejidad queda oculta detrás de una interfaz elegante. Según el <strong>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</strong>, esta capacidad de abstracción es lo que permite diseñar arquitecturas de software de nivel industrial, siendo la puerta de entrada a la utilización profesional de la biblioteca estándar.</p>
 
-            <p>En conclusión, las clases iteradoras representan la culminación del uso inteligente de la sobrecarga de operadores. [cite_start]Al integrar el rigor técnico de <strong>O'Reilly</strong> y <strong>Deitel</strong> con la visión de diseño y pedagogía de los cuadernos de <strong>NotebookLM</strong>, comprendemos que el iterador es el hilo conductor que une las estructuras de datos con la lógica algorítmica, garantizando un código limpio, seguro y profesional[cite: 1, 2, 4].</p>
+    <p>En conclusión, las clases iteradoras representan la culminación del uso inteligente de la sobrecarga de operadores. Al integrar el rigor técnico de los <strong>PDFs de Deitel y O'Reilly</strong> con la visión de diseño de los <strong>Cuadernos de NotebookLM</strong>, garantizamos un código limpio, seguro y profesional.</p>
 
-            <button class="btn-ref" onclick="openRef('ref-deitel-11-20')">Referencia: Deitel Secc. 11.20 | O'Reilly Cap. 17: STL Iterators | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
-        </section>
+    <button class="btn-ref" onclick="openRef('ref-deitel-11-20')">Referencia: Deitel Secc. 11.20 | O'Reilly Cap. 17: STL Iterators | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+</section>
 
 <section id="sec-11-21">
     <span class="icon">👈</span>
