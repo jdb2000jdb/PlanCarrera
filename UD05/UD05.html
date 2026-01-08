@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Guía Universitaria C++ - Herencia. Basada en Deitel y O'Reilly.">
+    <title>Unidad Didáctica 05 - Programación Orientada a Objetos - Herencia</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Roboto+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #fdfdfd;
+            --bg-secondary: #f4f4f4;
+            --bg-paper: #ffffff;
+            --text-primary: #212121;
+            --text-secondary: #5f6368;
+            --accent: #1a73e8; 
+            --accent-hover: #1557b0;
+            --code-bg: #f8f9fa;
+            --border: #dadce0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --success: #1e8e3e;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-paper: #242424;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --accent: #8ab4f8;
+            --accent-hover: #aecbfa;
+            --code-bg: #2d2e31;
+            --border: #3c4043;
+            --shadow: 0 4px 12px rgba(0,0,0,0.5);
+            --success: #81c995;
+        }
+
+        * { box-sizing: border-box; transition: background-color 0.3s ease, color 0.3s ease; }
+        body { font-family: 'Merriweather', serif; background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.8; margin: 0; scroll-behavior: smooth; }
+
+        h1, h2, h3 { font-family: 'Roboto', sans-serif; }
+        h1 { font-weight: 700; font-size: 1.8rem; text-align: center; margin: 2rem 0; color: var(--accent); }
+        h1 a { text-decoration: none; color: inherit; }
+        h2 { border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-top: 3rem; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; }
+        
+        .app-container { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
+
+        aside { 
+            background-color: var(--bg-secondary); 
+            border-right: 1px solid var(--border); 
+            height: 100vh; 
+            position: sticky; 
+            top: 0; 
+            overflow-y: auto; 
+            padding: 1.5rem; 
+        }
+
+        .nav-links { list-style: none; padding: 0; }
+        .nav-links a { 
+            text-decoration: none; 
+            color: var(--text-secondary); 
+            font-size: 0.85rem; 
+            display: block; 
+            padding: 0.6rem; 
+            border-radius: 4px; 
+            margin-bottom: 2px;
+            line-height: 1.2;
+        }
+        .nav-links a:hover, .nav-links a.active { background: var(--accent); color: white; }
+
+        main { padding: 2rem 5%; max-width: 1100px; margin: 0 auto; }
+        section { 
+            background: var(--bg-paper); 
+            padding: 2.5rem; 
+            border-radius: 12px; 
+            margin-bottom: 4rem; 
+            box-shadow: var(--shadow); 
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        code { font-family: 'Roboto Mono', monospace; background: var(--code-bg); padding: 0.2rem 0.4rem; border-radius: 4px; color: var(--accent); font-size: 0.9rem; }
+        pre { background: var(--code-bg); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent); overflow-x: auto; margin: 1.5rem 0; }
+
+        /* Tooltips */
+        .abbr { border-bottom: 1px dotted var(--accent); cursor: help; color: var(--accent); font-weight: 600; position: relative; }
+        .abbr:hover::after {
+            content: attr(data-title);
+            position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%);
+            background: #323336; color: white; padding: 0.5rem 1rem; border-radius: 4px;
+            font-size: 0.8rem; width: 220px; z-index: 10; text-align: center; font-weight: 400;
+        }
+
+        .btn-ref {
+            background: transparent; border: 1px solid var(--accent); color: var(--accent);
+            padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 1rem;
+        }
+        .btn-ref:hover { background: var(--accent); color: white; }
+
+        .diagram {
+            background: var(--bg-secondary); border: 2px dashed var(--border);
+            padding: 1.5rem; border-radius: 8px; text-align: center; margin: 1.5rem 0;
+        }
+
+        .table-res { overflow-x: auto; margin: 2rem 0; }
+        table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); font-size: 0.9rem; }
+        th, td { padding: 1rem; border: 1px solid var(--border); text-align: left; }
+        th { background: var(--bg-secondary); color: var(--accent); }
+
+        .theme-toggle { position: fixed; bottom: 2rem; right: 2rem; width: 50px; height: 50px; border-radius: 50%; background: var(--accent); color: white; border: none; cursor: pointer; z-index: 100; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .modal-content { background: var(--bg-paper); padding: 2rem; border-radius: 12px; max-width: 600px; width: 90%; box-shadow: var(--shadow); }
+
+        @media (max-width: 1024px) { .app-container { grid-template-columns: 280px 1fr; } }
+        @media (max-width: 900px) { .app-container { grid-template-columns: 1fr; } aside { display: none; } }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <aside>
+        <h3 style="font-size: 1rem; color: var(--accent);">UNIDAD 05: HERENCIA</h3>
+        <ul class="nav-links">
+            <li><a href="#sec-12-1">12.1 Introducción</a></li>
+            <li><a href="#sec-12-2">12.2 Clases base y derivadas</a></li>
+            <li><a href="#sec-12-3">12.3 Miembros protected</a></li>
+            <li><a href="#sec-12-4">12.4 Relación entre clases</a></li>
+            <li><a href="#sec-12-4-1">12.4.1 EmpleadoPorComision</a></li>
+            <li><a href="#sec-12-4-2">12.4.2 Clase sin herencia</a></li>
+            <li><a href="#sec-12-4-3">12.4.3 Jerarquía de herencia</a></li>
+            <li><a href="#sec-12-4-4">12.4.4 Uso de datos protected</a></li>
+            <li><a href="#sec-12-4-5">12.4.5 Uso de datos private</a></li>
+            <li><a href="#sec-12-5">12.5 Constructores y destructores</a></li>
+            <li><a href="#sec-12-6">12.6 Tipos de herencia</a></li>
+            <li><a href="#sec-12-7">12.7 Ingeniería de software</a></li>
+            <li><a href="#sec-12-8">12.8 Repaso</a></li>
+            <li><a href="#sec-12-9">12.9 Crear nuevas clases</a></li>
+            <li><a href="#sec-12-10">12.10 Reutilización de software</a></li>
+            <li><a href="#sec-12-11">12.11 Conceptos de base/derivada</a></li>
+            <li><a href="#sec-12-12">12.12 Herencia múltiple</a></li>
+        </ul>
+    </aside>
+
+    <main>
+        <header id="home">
+            <h1><a href="#home">Unidad Didáctica 05 - Programación Orientada a Objetos - Herencia</a></h1>
+            <p style="text-align: center; font-style: italic; color: var(--text-secondary);">"La herencia no es solo copiar código, es definir la esencia y evolución de las jerarquías en el software."</p>
+        </header>
+
+<section id="sec-12-1">
+            <span>🏗️</span>
+            <h2>12.1 Introducción: La Filosofía de la Herencia en C++</h2>
+            
+            <p>La herencia no es simplemente un recurso técnico; es el pilar fundamental que permite a la <span class="abbr" data-title="POO: Programación Orientada a Objetos. Paradigma que utiliza objetos y sus interacciones para diseñar aplicaciones.">POO</span> modelar la complejidad del mundo real de manera jerárquica y eficiente. Según lo planteado en el texto de <strong>Deitel</strong>, la herencia constituye una forma de <span class="abbr" data-title="Software Reuse: Técnica de ingeniería que consiste en utilizar activos de software existentes para construir nuevos sistemas.">reutilización de software</span> en la que vos, como desarrollador, creás una nueva clase absorbiendo los miembros de una clase ya existente. Esta técnica no solo ahorra tiempo durante el proceso de diseño, sino que también hereda la fiabilidad de códigos que ya fueron probados y depurados en proyectos anteriores.</p>
+
+            <p>Comprendé que, en la ingeniería de software moderna, no buscamos "reinventar la rueda" en cada iteración. Tal como se analiza en los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong>, el aprendizaje de la herencia requiere un cambio de paradigma: debemos pasar de ver funciones aisladas a visualizar ecosistemas de objetos interconectados. Al diseñar una jerarquía, establecés una relación del tipo <strong>"es un" (is-a)</strong>. Esta distinción es crítica: un <code>Posgrado</code> "es un" <code>Curso</code>, un <code>Ahorro</code> "es una" <code>CuentaBancaria</code>. Si no podés afirmar esta relación con naturalidad, probablemente estés ante un caso de composición y no de herencia.</p>
+
+            <div class="diagram">
+                <strong>Estructura Conceptual de la Herencia</strong><br>
+                <code>[Clase Base: Generalización]</code><br>
+                <span>↓ (Hereda atributos y métodos)</span><br>
+                <code>[Clase Derivada: Especialización]</code>
+            </div>
+
+            <p>Desde la perspectiva del <strong>Libro de O'Reilly</strong>, la herencia permite definir una interfase común para un grupo de clases relacionadas. Esto es lo que permite tratar a objetos de distintas clases derivadas como si fueran de la misma clase base, un concepto que profundizarás al estudiar el polimorfismo. Tené en cuenta que una clase base contiene las características comunes a todas las clases que derivan de ella, mientras que la clase derivada agrega sus propias particularidades, resultando en un objeto mucho más específico y funcional para tareas puntuales.</p>
+
+            <h3>La Importancia de la Jerarquía en el Desarrollo Universitario</h3>
+            <p>En el ámbito académico, es fundamental que visualices las jerarquías como árboles genealógicos de software. Una clase base (también llamada superclase o clase padre) se ubica en la parte superior, y las clases derivadas (subclases o clases hijas) se extienden hacia abajo. Según <strong>Deitel</strong>, una clase derivada puede ser a su vez una clase base para otras clases más abajo en la jerarquía, creando una cadena de especialización que permite organizar el conocimiento y el comportamiento del sistema de manera lógica.</p>
+
+            <p>Fijate en este ejemplo de código que ilustra la sintaxis básica para declarar una relación de herencia en C++:</p>
+            <pre><code>// Definición de una clase base general
+class Vehiculo {
+public:
+    void arrancar() { /* Lógica general */ }
+protected:
+    int numeroRuedas;
+};
+
+// Definición de una clase derivada específica
+class Moto : public Vehiculo {
+public:
+    void hacerCaballito() { /* Lógica específica de motos */ }
+};</code></pre>
+
+            <p>Como futuro ingeniero, debés valorar que la herencia promueve la <strong>extensibilidad</strong>. Si el día de mañana necesitás agregar un nuevo tipo de vehículo (por ejemplo, un <code>MonopatinElectrico</code>), no tenés que modificar el código de la clase <code>Vehiculo</code> ni de la clase <code>Moto</code>. Simplemente derivás una nueva clase y definís lo que la hace única. Este principio de "abierto para la extensión, cerrado para la modificación" es una de las reglas de oro que también se mencionan en los <strong>Cuadernos de NotebookLM sobre Desarrollo Web</strong>, donde la arquitectura de componentes sigue una lógica jerárquica similar.</p>
+
+            <h3>Beneficios de la Reutilización y la Calidad de Software</h3>
+            <p>La reutilización de software mediante la herencia tiene un impacto directo en la reducción de errores. Al heredar de una clase base que ya ha sido validada por el equipo de <span class="abbr" data-title="QA: Quality Assurance. Proceso sistemático para asegurar que el software cumpla con los requisitos especificados.">QA</span>, minimizás la superficie de ataque para nuevos bugs. Además, según el <strong>Cuaderno de NotebookLM sobre UX/UI</strong>, una estructura de clases bien definida facilita la consistencia del sistema, permitiendo que las interacciones del usuario se comporten de manera predecible a través de diferentes módulos que comparten la misma lógica base.</p>
+
+            <p>Es importante destacar una advertencia presente en el texto de <strong>O'Reilly</strong>: no abuses de la herencia por el simple hecho de querer usar una función de otra clase. La herencia crea un acoplamiento fuerte entre la base y la derivada. Si cambiás algo en la clase base, podés romper involuntariamente el comportamiento de todas las derivadas. Por eso, en el diseño de nivel universitario, siempre analizamos si la relación es realmente de identidad (es un) o simplemente de utilidad (tiene un).</p>
+
+            <p>En resumen, la introducción a la herencia en la Unidad 05 te prepara para construir sistemas de gran escala. Al dominar la creación de clases base robustas y clases derivadas especializadas, estarás aplicando los mismos principios que utilizan las grandes bibliotecas estándar de C++, como la <span class="abbr" data-title="STL: Standard Template Library. Biblioteca que contiene algoritmos, contenedores y funciones en C++.">STL</span>, para gestionar estructuras de datos complejas. Este conocimiento es el que te permitirá diseñar software que no solo funcione hoy, sino que sea capaz de evolucionar y mantenerse a lo largo del tiempo sin colapsar bajo su propia complejidad.</p>
+
+            <p>Te recomendamos que, antes de pasar a la práctica, reflexiones sobre los objetos que te rodean. ¿Cómo podrías categorizarlos en una jerarquía? ¿Qué atributos serían comunes y cuáles específicos? Esa capacidad de abstracción es la herramienta más poderosa de un programador senior.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-1')">Referencia: Deitel Secc. 12.1 | O'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación y UX</button>
+        </section>
+
+<section id="sec-12-2">
+            <span>🌳</span>
+            <h2>12.2 Clases base y clases derivadas: El Corazón de la Jerarquía</h2>
+            
+            <p>En el diseño de software orientado a objetos de nivel universitario, debés comprender que la distinción entre una <strong>clase base</strong> y una <strong>clase derivada</strong> no es meramente técnica, sino ontológica. Una clase base representa una generalización, un molde abstracto que captura los atributos y comportamientos comunes a un grupo de entidades. Por el contrario, la clase derivada constituye una especialización. Según lo expuesto en el <strong>Libro de Deitel</strong>, esta relación permite que una clase "herede" las capacidades de otra, pero con la libertad de refinar su identidad funcional.</p>
+
+            <p>La esencia de esta arquitectura reside en la relación <strong>"es un" (is-a)</strong>. En términos académicos de ingeniería, esto significa que cada objeto de la clase derivada es, de manera intrínseca y simultánea, un objeto de la clase base. Fijate en este ejemplo: si tenés una clase base <code>Forma</code>, las clases derivadas como <code>Circulo</code> o <code>Triangulo</code> "son" formas. Sin embargo, lo opuesto no es válido: una <code>Forma</code> genérica no necesariamente "es un" <code>Circulo</code>. Esta unidireccionalidad es lo que garantiza la integridad jerárquica y evita errores de diseño catastróficos en sistemas complejos.</p>
+
+            <h3>Mecánica de Implementación y Sintaxis en C++</h3>
+            <p>Para declarar esta relación, C++ utiliza el operador de dos puntos (<code>:</code>). Comprendé que la sintaxis no solo vincula las clases, sino que define el nivel de visibilidad de esa herencia. Según <strong>O'Reilly</strong>, la forma más común y recomendada es la <strong>herencia pública</strong>. Al escribir <code>class Derivada : public Base</code>, estás indicando que todos los miembros públicos de la base seguirán siendo públicos en la derivada, preservando el contrato de la interfaz original.</p>
+            
+            <pre><code>// Definición de la Clase Base (Generalización)
+class MiembroComunidad {
+public:
+    void mostrarIdentidad() const;
+protected:
+    string nombre;
+    string legajo;
+};
+
+// Definición de la Clase Derivada (Especialización)
+class Profesor : public MiembroComunidad {
+public:
+    void asignarCatedra(string catedra);
+private:
+    string especialidad;
+};</code></pre>
+
+            <p>Como podés observar en el código anterior, la clase <code>Profesor</code> hereda automáticamente los atributos <code>nombre</code> y <code>legajo</code> de <code>MiembroComunidad</code>. No necesitás volver a declararlos. Esto reduce drásticamente la redundancia del código y, tal como se analiza en los <strong>Cuadernos de NotebookLM sobre Desarrollo Web</strong>, facilita la mantenibilidad: si el día de mañana el formato del legajo cambia, solo tenés que modificar la clase base y el cambio se propagará automáticamente a todas las especializaciones (profesores, alumnos, administrativos).</p>
+
+            <h3>Análisis Comparativo: Atributos y Responsabilidades</h3>
+            <p>Es fundamental que sepas distinguir las capacidades de cada nivel. La siguiente tabla comparativa desglosa las diferencias operativas entre ambos componentes según la teoría de sistemas de software:</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Clase Base (Padre)</th>
+                            <th>Clase Derivada (Hija)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Nivel de Abstracción</strong></td>
+                            <td>Alto (Generalización)</td>
+                            <td>Bajo (Especialización)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contenido de Miembros</strong></td>
+                            <td>Atributos comunes a todo el grupo</td>
+                            <td>Atributos específicos + miembros de la base</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Visibilidad</strong></td>
+                            <td>Define el contrato inicial</td>
+                            <td>Puede <span class="abbr" data-title="Overriding: Capacidad de una clase derivada para proporcionar una implementación específica de un método que ya está definido en su clase base.">sobrescribir (override)</span> métodos</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Relación Lógica</strong></td>
+                            <td>Es el origen de la jerarquía</td>
+                            <td>"Es un" ejemplar de la base</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>La Jerarquía como Modelo Mental (UX y Educación)</h3>
+            <p>Desde el punto de vista de las <strong>Metodologías Activas (NotebookLM)</strong>, el diseño de jerarquías de clases fomenta el pensamiento sistémico. Los estudiantes no solo aprenden a programar, sino a categorizar el mundo. Un error común en el nivel universitario es crear jerarquías demasiado profundas. <strong>O'Reilly</strong> advierte que una cadena de herencia de más de 4 o 5 niveles se vuelve difícil de depurar y entender. Aquí entra en juego la <strong>Arquitectura de Información</strong>: debés diseñar tus clases pensando en la carga cognitiva del desarrollador que leerá tu código en el futuro.</p>
+
+            <p>Por otro lado, el <strong>Cuaderno de UX/UI</strong> aplicado al desarrollo de software sugiere que las jerarquías deben ser consistentes. Si un método se llama <code>imprimir()</code> en la clase base, su comportamiento en las clases derivadas debe ser predecible. No deberías sobrescribir <code>imprimir()</code> en una derivada para que realice un cálculo matemático, ya que esto violaría el modelo mental del usuario del código y los principios de <span class="abbr" data-title="LSP: Liskov Substitution Principle. Establece que los objetos de una clase derivada deben poder sustituir a objetos de la clase base sin alterar el funcionamiento del programa.">Sustitución de Liskov</span>.</p>
+
+            <div class="diagram">
+                <strong>Visualización de Especialización</strong><br>
+                <code>Animal [Base]</code><br>
+                <span>↙ &nbsp; &nbsp; ↘</span><br>
+                <code>Mamifero [Derivada]</code> &nbsp; <code>Ave [Derivada]</code><br>
+                <span>↓</span><br>
+                <code>Perro [Derivada de Mamifero]</code>
+            </div>
+
+            <p>Finalmente, tenés que considerar que las clases derivadas suelen representar un grupo de objetos más pequeño pero con mayor funcionalidad. Pensalo así: hay millones de <code>Vehiculos</code> en el mundo (clase base), pero solo una fracción son <code>Ambulancias</code> (clase derivada). La <code>Ambulancia</code> tiene todo lo que tiene un vehículo (motor, ruedas, volante) pero agrega sirenas, camillas y equipamiento médico. Esta capacidad de añadir funcionalidad específica sin tocar el código base es lo que hace que la Programación Orientada a Objetos sea tan potente para la ingeniería de software a gran escala.</p>
+            
+            <p>En conclusión, dominar la relación entre clases base y derivadas es el paso previo indispensable para alcanzar el polimorfismo dinámico. Al estructurar tus programas mediante estas jerarquías, no solo estás escribiendo código, estás diseñando un sistema de conocimiento organizado, eficiente y preparado para el crecimiento constante.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-2')">Referencia: Deitel Secc. 12.2 | O'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+        </section>
+
+<section id="sec-12-3">
+            <span>🔑</span>
+            <h2>12.3 Miembros protected: El Equilibrio entre Seguridad y Flexibilidad</h2>
+            
+            <p>En el diseño de arquitecturas robustas bajo el paradigma de la <span class="abbr" data-title="OOP: Object-Oriented Programming. Paradigma que utiliza 'objetos' para representar datos y métodos.">POO</span>, el especificador de acceso <code>protected</code> actúa como un punto de inflexión crítico. Según la doctrina técnica de <strong>Deitel</strong>, los miembros protegidos de una clase base representan un "término medio" necesario: son accesibles para los miembros y clases amigas de la propia clase base, y fundamentalmente, para los miembros y clases amigas de sus clases derivadas. Sin embargo, permanecen estrictamente ocultos para el resto del sistema, manteniendo una barrera de seguridad contra el acceso externo no autorizado.</p>
+
+            <p>Como estudiante de ingeniería, debés comprender que el uso de <code>protected</code> altera la naturaleza del <span class="abbr" data-title="Encapsulation: Principio de ocultamiento de la complejidad interna para exponer solo lo necesario.">encapsulamiento</span>. Si bien facilita la comunicación dentro de una jerarquía de herencia, introduce una dependencia estructural. Tal como se analiza en los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong>, el aprendizaje de este concepto requiere que visualices no solo quién puede ver el dato, sino qué responsabilidades asume la clase derivada al manipularlo directamente.</p>
+
+            <h3>La Matriz de Accesibilidad en la Herencia</h3>
+            <p>Para dominar la ingeniería de software en C++, tenés que tener absoluta claridad sobre cómo interactúan los niveles de acceso. La siguiente tabla comparativa detalla el alcance de cada especificador desde la perspectiva de la clase base y su descendencia:</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Acceso en Clase Base</th>
+                            <th>Accesible en la Clase Base</th>
+                            <th>Accesible en Clases Derivadas</th>
+                            <th>Accesible desde el Objeto (main)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>public</code></td>
+                            <td>Sí</td>
+                            <td>Sí</td>
+                            <td>Sí</td>
+                        </tr>
+                        <tr>
+                            <td><code>protected</code></td>
+                            <td>Sí</td>
+                            <td>Sí</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td><code>private</code></td>
+                            <td>Sí</td>
+                            <td>No</td>
+                            <td>No</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Análisis de Riesgos: El Problema de la Clase Base Frágil</h3>
+            <p>De acuerdo con las advertencias de <strong>O'Reilly</strong>, el uso extensivo de miembros protegidos puede derivar en lo que se conoce como "acoplamiento fuerte". Si vos decidís declarar un miembro de datos como <code>protected</code>, estás permitiendo que cualquier programador que derive de tu clase pueda modificar ese dato sin pasar por métodos de validación. Esto genera un riesgo sistémico: un cambio en la lógica de la clase base podría invalidar supuestos críticos en cientos de clases derivadas, comprometiendo la estabilidad del software.</p>
+
+            <p>Desde la perspectiva del <strong>Desarrollo Web (NotebookLM)</strong>, esto es análogo a exponer estados internos de un componente que deberían ser inmutables. La recomendación académica imperante es: <strong>priorizá siempre el acceso privado</strong>. Utilizá métodos <code>public</code> o <code>protected</code> (getters y setters) para interactuar con los datos, incluso dentro de la jerarquía. Esto garantiza que la clase base conserve el control total sobre la integridad de sus datos, permitiendo auditorías y validaciones en un solo punto centralizado.</p>
+
+            <div class="diagram">
+                <strong>Flujo de Visibilidad Protegida</strong><br>
+                <code>Clase Base [Dato Protegido]</code><br>
+                &nbsp;&nbsp;&nbsp; ↓ (Acceso Directo Permitido)<br>
+                <code>Clase Derivada [Manipulación de Dato]</code><br>
+                &nbsp;&nbsp;&nbsp; ⦸ (Acceso Denegado)<br>
+                <code>Usuario Externo / Función main()</code>
+            </div>
+
+            <h3>Consideraciones de UX y Arquitectura de Información</h3>
+            <p>Incluso en el código fuente, los principios de <strong>UX/UI (NotebookLM)</strong> son aplicables. La visibilidad de un miembro es parte de la "interfaz de usuario" del programador. Declarar algo como <code>protected</code> es una señal clara para otros desarrolladores: <em>"Este componente es para uso interno de la familia de clases, no para el consumo general"</em>. Una arquitectura bien señalizada mediante especificadores de acceso correctos reduce la carga cognitiva del equipo de desarrollo y previene usos indebidos de la lógica de negocio.</p>
+
+            <h3>Ejemplo Práctico de Implementación</h3>
+            <p>Considerá una jerarquía de procesamiento de pagos en un entorno universitario. La clase base define un identificador de transacción que las clases derivadas (como <code>PagoTarjeta</code> o <code>Transferencia</code>) necesitan leer, pero que no debe ser modificado por el sistema externo:</p>
+
+            <pre><code>class Transaccion {
+protected:
+    long long idTransaccion; // Accesible para derivados
+    string timestamp;
+
+public:
+    Transaccion(long long id) : idTransaccion(id) {}
+    virtual void procesar() = 0;
+};
+
+class PagoTarjeta : public Transaccion {
+public:
+    void generarRecibo() {
+        // Acceso directo a idTransaccion permitido por ser 'protected'
+        cout << "Recibo para transacción Nro: " << idTransaccion << endl;
+    }
+};</code></pre>
+
+            <p>En este escenario, si <code>idTransaccion</code> fuera <code>private</code>, la clase <code>PagoTarjeta</code> se vería obligada a llamar a una función miembro pública de la base, lo que podría añadir una sobrecarga innecesaria en sistemas de tiempo real. El uso de <code>protected</code> aquí es una decisión de optimización técnica, pero recordá que debés documentar rigurosamente por qué se permite este acceso directo.</p>
+
+            <h3>Reflexión Pedagógica y Metodologías Activas</h3>
+            <p>En el marco de las <strong>Metodologías Activas</strong>, te proponemos un ejercicio de reflexión: ¿Qué sucedería si un miembro protegido es modificado accidentalmente por una clase derivada mal implementada? La dificultad para rastrear este error (debugging) aumenta exponencialmente. Por ello, en el nivel universitario, fomentamos el uso de <code>protected</code> principalmente para <strong>funciones miembro</strong> (métodos de utilidad) y no para <strong>miembros de datos</strong>. Esto permite que las derivadas compartan lógica interna sin exponer el estado crudo de la memoria.</p>
+
+            <p>En conclusión, los miembros <code>protected</code> son una herramienta de precisión. Utilizalos cuando la eficiencia del acceso directo en la jerarquía supere los riesgos de acoplamiento, pero siempre con la consciencia de que estás abriendo una puerta en la muralla del encapsulamiento. La elegancia de un sistema en C++ reside en saber cerrar esa puerta a tiempo para mantener el código mantenible, escalable y, sobre todo, predecible ante los cambios futuros.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-3')">Referencia: Deitel Secc. 12.3 | O'Reilly Cap. 13: Inheritance | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+        </section>
+
+<section id="sec-12-4"> <span>🤝</span> <h2>12.4 Relación entre las clases base y las clases derivadas: El Vínculo de Identidad</h2>
+
+<p>En el diseño de sistemas complejos bajo el paradigma de la <span class="abbr" data-title="OOP: Object-Oriented Programming. Paradigma que utiliza objetos para representar datos y métodos.">POO</span>, la relación entre una clase base y sus clases derivadas constituye el andamiaje sobre el cual se construye la jerarquía de conocimiento. Vos debés entender que esta conexión no es una simple transferencia de atributos, sino una declaración de identidad profunda basada en la relación <strong>"es un" (is-a)</strong>. Según lo establecido en el texto de <strong>Deitel</strong>, un objeto de una clase derivada es, para todos los fines prácticos del compilador, también un objeto de su clase base. Esta simetría técnica es la que permite que el software sea extensible y mantenible a largo plazo.</p>
+
+<p>Fijate que, aunque la clase derivada hereda la gran mayoría de los componentes, existe un "contrato de exclusión" crítico. Las clases derivadas heredan todos los miembros de la clase base, con la excepción fundamental de los <strong>constructores</strong>, los <strong>destructores</strong> y el <strong>operador de asignación</strong>. De acuerdo con el análisis de <strong>O'Reilly</strong>, esto se debe a que estos miembros están intrínsecamente ligados a la identidad de creación y destrucción de la clase específica; permitir su herencia automática rompería la integridad de la memoria y la lógica de inicialización del objeto.</p>
+
+<h3>La Dimensión Pedagógica: Modelando la Realidad</h3>
+<p>Desde la perspectiva de los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong>, la comprensión de esta relación requiere que visualices el flujo de datos como una "escalera de especialización". [cite_start]En el contexto de un sistema para docentes rurales[cite: 2], podríamos definir una clase base <code>RecursoEducativo</code> y una clase derivada <code>RecursoOffline</code>. El recurso offline <em>es un</em> recurso educativo, pero posee capacidades adicionales (como el almacenamiento local en caché) que la base no conoce. [cite_start]Esta jerarquía ayuda al estudiante a organizar mentalmente las prioridades del diseño: primero lo general, luego lo específico[cite: 4, 11].</p>
+
+<div class="diagram" style="background: rgba(26, 115, 232, 0.05); border: 1px solid var(--accent); padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <strong>Esquema de Relación "Es un" (is-a)</strong><br><br>
+    <code>Clase Base (Generalización)</code><br>
+    <span style="font-size: 1.5rem;">↑</span><br>
+    <span class="abbr" data-title="Sustitución: Un objeto de la clase hija puede reemplazar a uno de la clase padre sin romper el programa.">Sustitución de Liskov (LSP)</span><br>
+    <span style="font-size: 1.5rem;">↓</span><br>
+    <code>Clase Derivada (Especialización)</code>
+</div>
+
+<h3>La Arquitectura del Software y la UX del Desarrollador</h3>
+<p>Tené presente que una relación de herencia mal diseñada es una de las principales fuentes de "deuda técnica". Según los principios de <strong>UX/UI (NotebookLM)</strong> aplicados a la arquitectura de sistemas, la jerarquía de clases debe ser predecible. [cite_start]Si un desarrollador interactúa con una clase derivada, su modelo mental asume que heredará el comportamiento consistente de la base[cite: 2, 10]. Si rompés esta consistencia (por ejemplo, haciendo que una derivada cambie drásticamente el propósito de un método heredado), estás creando una interfaz de programación frustrante y propensa a errores.</p>
+
+<p>En el <strong>Desarrollo Web moderno</strong>, esta lógica de componentes es vital. [cite_start]Al igual que en C++, donde una clase derivada extiende las capacidades de la base, en los frameworks de vanguardia [cite: 2, 8] buscamos crear componentes base (como un <code>BotonGenerico</code>) que luego se especializan (como un <code>BotonEnviarFormulario</code>). Esta <span class="abbr" data-title="Software Reuse: Capacidad de utilizar código existente para crear nuevas funciones sin reescribir.">reutilización de software</span> no solo acelera el despliegue, sino que garantiza que las mejoras de seguridad aplicadas a la base se propaguen automáticamente a toda la jerarquía.</p>
+
+<h3>Detalles Técnicos de la Herencia en C++</h3>
+<p>Para implementar esta relación, C++ utiliza el operador de dos puntos (<code>:</code>) seguido del especificador de acceso y el nombre de la clase base. Es vital que comprendas la diferencia entre la herencia y la <strong>composición</strong> (relación "tiene un"). <strong>Deitel</strong> enfatiza que la herencia debe usarse solo cuando existe una relación de tipo jerárquico natural. No heredes de una clase solo para "robar" código; si la relación no es de identidad, usá composición.</p>
+
+<div class="table-res">
+    <table>
+        <thead>
+            <tr>
+                <th>Concepto</th>
+                <th>Clase Base (Ancestro)</th>
+                <th>Clase Derivada (Descendiente)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Visibilidad</strong></td>
+                <td>Define los miembros <code>public</code> y <code>protected</code> compartidos.</td>
+                <td>Puede acceder a todo lo que no sea <code>private</code>.</td>
+            </tr>
+            <tr>
+                <td><strong>Capacidad</strong></td>
+                <td>Provee el "molde" común y métodos generales.</td>
+                <td>Añade miembros de datos y funciones específicas.</td>
+            </tr>
+            <tr>
+                <td><strong>Sustitución</strong></td>
+                <td>No puede actuar como una derivada sin casting explícito.</td>
+                <td>Puede tratarse como un objeto de la base (<span class="abbr" data-title="Upcasting: Tratar a un objeto hijo como si fuera su padre.">Upcasting</span>).</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<p>Un punto de dolor común para los estudiantes es el manejo de la memoria y la asignación. Recordá que el <strong>operador de asignación</strong> no se hereda porque cada clase tiene su propia "huella" de memoria. Si la clase derivada tiene miembros de datos adicionales, un operador de asignación heredado de la base no sabría cómo gestionarlos, dejando al objeto en un estado inconsistente. Por eso, C++ te obliga a definir o dejar que el compilador genere un operador específico para cada nivel de la jerarquía.</p>
+
+<h3>Conclusión para la Práctica Profesional</h3>
+<p>Como futuro ingeniero, tu objetivo al diseñar esta relación debe ser la <strong>transparencia</strong>. [cite_start]Al igual que un sistema de asistencia docente debe ser "tecnología invisible" para el usuario[cite: 2], la jerarquía de herencia debe ser "lógica invisible" para el programador. [cite_start]Una buena relación entre clases base y derivadas permite aplicar el <strong>Polimorfismo</strong>: la capacidad de enviar un mensaje a un grupo heterogéneo de objetos (derivados) y que cada uno responda de la manera específica que le corresponde según su identidad[cite: 4].</p>
+
+<p>Fijate en este resumen de flujo operativo:</p>
+<pre><code>// Clase Base: Definición de la esencia
+class Empleado { public: void cobrarSueldo(); // Heredado protected: string legajo; // Accesible por derivados };
+
+// Clase Derivada: Especialización de la función class EmpleadoPorComision : public Empleado { public: void calcularComision(); // Nuevo comportamiento private: double ventasBrutas; // Nuevo estado };</code></pre>
+
+<p>En este ejemplo, un <code>EmpleadoPorComision</code> <strong>es un</strong> <code>Empleado</code>. Hereda el método <code>cobrarSueldo()</code> y el atributo <code>legajo</code>, pero expande su mundo con ventas y comisiones. Esta es la esencia de la ingeniería de software: construir sobre lo sólido para alcanzar lo específico.</p>
+
+<button class="btn-ref" onclick="openRef('ref-deitel-12-4')">Referencia: Deitel Secc. 12.4 | O'Reilly Cap. 13: Classes & Inheritance | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+</section>
+
+<section id="sec-12-4-1">
+            <span>💼</span>
+            <h2>12.4.1 Creación y uso de una clase EmpleadoPorComision</h2>
+            
+            <p>En el andamiaje de la ingeniería de software moderna, la clase <code>EmpleadoPorComision</code> se erige como el ejemplo paradigmático para comprender cómo una entidad del mundo real se traduce en una estructura lógica robusta. Según lo expuesto en el texto de <strong>Deitel</strong>, esta clase representa a un trabajador cuyos ingresos derivan estrictamente de un porcentaje sobre sus ventas concretadas. Vos, como futuro ingeniero, debés observar que antes de sumergirnos en la herencia propiamente dicha, es vital dominar la construcción de una clase base sólida, ya que cualquier inconsistencia en este nivel se propagará inevitablemente por toda la jerarquía de software.</p>
+
+            <p>Comprendé que el diseño de esta clase no es azaroso. Desde la perspectiva de los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong>, este modelo promueve el pensamiento crítico al obligarte a discernir qué atributos son inherentes a la identidad de un empleado y cuáles son situacionales. La clase <code>EmpleadoPorComision</code> agrupa datos esenciales como el nombre, el apellido y el número de seguro social, junto con variables críticas para la lógica de negocio: la tarifa de comisión y las ventas brutas totales. Esta agrupación de datos y métodos relacionados es lo que conocemos como <span class="abbr" data-title="Encapsulation: Ocultamiento de la complejidad interna para exponer solo lo necesario, protegiendo el estado del objeto.">encapsulamiento</span>, un principio que garantiza que el estado interno del objeto no sea corrompido por accesos externos no validados.</p>
+
+            <h3>Estructura Técnica y Miembros de Datos</h3>
+            <p>Tal como se detalla en el <strong>Libro de Deitel (6ta Edición)</strong>, la implementación de esta clase requiere que todos sus miembros de datos sean declarados bajo el especificador de acceso <code>private</code>. Esto asegura que solo las funciones miembro de la propia clase puedan manipularlos. Fijate en la lógica del constructor: no solo se encarga de asignar valores iniciales, sino que debe actuar como la primera barrera de seguridad, validando que la tarifa de comisión sea un número positivo y que las ventas no sean negativas. Si omitís estas validaciones, estarías diseñando un software frágil, propenso a errores lógicos que podrían tener consecuencias financieras reales en un sistema de nómina.</p>
+
+            <div class="diagram">
+                <strong>Anatomía de la Clase EmpleadoPorComision</strong><br>
+                <code>[Datos Privados: Identidad y Estado Financiero]</code><br>
+                <span>↓ (Interfaz Pública)</span><br>
+                <code>[Funciones Establecer/Obtener y Cálculo de Ingresos]</code>
+            </div>
+
+            <p>De acuerdo con el análisis de <strong>O'Reilly</strong>, una de las funciones más críticas es <code>ingresos()</code>. A diferencia de un simple "getter", esta función encapsula una regla de negocio activa. En C++, definir esta función como <code>const</code> es una buena práctica de ingeniería, ya que le garantiza al compilador y a otros desarrolladores que la invocación de este método no alterará el estado de las variables del objeto. En el nivel universitario, valoramos esta precisión técnica porque reduce los efectos secundarios indeseados en programas de gran escala.</p>
+
+            <h3>Perspectiva de Experiencia de Usuario y Desarrollo Web</h3>
+            <p>Incluso en el código de "backend", los principios del <strong>Cuaderno de NotebookLM sobre UX/UI</strong> son aplicables. Considerá que las funciones <code>establecer</code> (setters) actúan como la interfaz de usuario para otros programadores. Si una función <code>establecerVentasBrutas</code> permite ingresar valores absurdos, la experiencia del desarrollador será deficiente. Una arquitectura bien diseñada debe ser predecible e intuitiva. Al igual que en el <strong>Desarrollo Web</strong> buscamos componentes reutilizables y atómicos, la clase <code>EmpleadoPorComision</code> debe ser una unidad autosuficiente que no dependa de estados externos globales para realizar sus cálculos.</p>
+
+            <p>Fijate en este ejemplo de implementación detallada que refleja el estándar académico:</p>
+            <pre><code>class EmpleadoPorComision {
+public:
+    EmpleadoPorComision(const string&, const string&, const string&, double = 0.0, double = 0.0);
+    
+    void establecerPrimerNombre(const string&);
+    string obtenerPrimerNombre() const;
+    
+    void establecerVentasBrutas(double); // Validación crítica: valor >= 0
+    double obtenerVentasBrutas() const;
+    
+    void establecerTarifaComision(double); // Validación crítica: 0.0 < valor < 1.0
+    double obtenerTarifaComision() const;
+    
+    double ingresos() const; // Retorna tarifaComision * ventasBrutas
+    void imprimir() const;   // Muestra los datos del empleado en pantalla
+
+private:
+    string primerNombre;
+    string apellidoPaterno;
+    string numeroSeguroSocial;
+    double ventasBrutas;
+    double tarifaComision;
+};</code></pre>
+
+            <h3>Importancia de la Validación y el Estado Consistente</h3>
+            <p>Como futuro profesional de la computación, tenés que entender que el uso de funciones miembro para acceder a datos privados (getters y setters) no es un capricho burocrático. Según <strong>Deitel</strong>, esto permite que la clase mantenga un <strong>estado consistente</strong>. Si el día de mañana las leyes laborales de Argentina imponen un límite máximo a las comisiones, solo tendrías que modificar la función <code>establecerTarifaComision</code> para aplicar ese nuevo límite. Todas las demás partes del sistema que utilizan esta clase seguirían funcionando sin cambios. Este concepto de "aislamiento de cambios" es fundamental para la mantenibilidad de sistemas complejos.</p>
+
+            <p>Desde la óptica de las <strong>Metodologías Activas</strong>, te invitamos a reflexionar: ¿qué sucedería si permitiéramos el acceso público directo a <code>ventasBrutas</code>? Un error de teclado en cualquier otra parte del programa podría poner las ventas en un valor negativo, y la función <code>ingresos()</code> terminaría descontando dinero al empleado en lugar de sumarlo. El costo de depurar un error de este tipo en un sistema con miles de líneas de código es incalculable. Por eso, el rigor en el diseño de la clase <code>EmpleadoPorComision</code> es la mejor inversión que podés hacer en tu carrera como desarrollador.</p>
+
+            <h3>Consideraciones Finales sobre la Reutilización</h3>
+            <p>En el contexto de la Unidad 05, recordá que esta clase no es un fin en sí misma, sino el punto de partida para la <span class="abbr" data-title="Software Reuse: Técnica de ingeniería que consiste en utilizar activos de software existentes para construir nuevos sistemas, ahorrando tiempo y esfuerzo.">reutilización de software</span>. En secciones posteriores, verás cómo extender esta clase para crear un <code>EmpleadoBaseMasComision</code>. Si diseñás la base con descuido, estarás heredando problemas. Tal como se menciona en el <strong>Cuaderno de Desarrollo Web</strong>, la modularidad y la interfaz clara son las que permiten que un sistema crezca de forma orgánica y escalable, adaptándose a los requerimientos cambiantes de un entorno corporativo o académico dinámico.</p>
+
+            <p>Te recomendamos encarecidamente que pruebes el código, instanciando varios objetos con valores límite (ventas en cero, comisiones máximas) para verificar que tu lógica de validación responda correctamente. Esa curiosidad técnica es la marca de un ingeniero de nivel universitario.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-4-1')">Referencia: Deitel Secc. 12.4.1 | O'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+        </section>
+
+<section id="sec-12-4-2">
+            <span>⚠️</span>
+            <h2>12.4.2 Creación de una clase EmpleadoBaseMasComision sin usar la herencia: El Riesgo de la Redundancia</h2>
+            
+            <p>En el desarrollo de sistemas de gran escala, la tentación de utilizar la técnica de "copiar y pegar" código es uno de los errores más comunes y costosos que podés cometer como estudiante de ingeniería. Según lo analiza <strong>Deitel</strong> en su estudio sobre la arquitectura de software, si decidieras implementar la clase <code>EmpleadoBaseMasComision</code> de manera independiente —es decir, sin establecer un vínculo de herencia con <code>EmpleadoPorComision</code>—, te verías obligado a replicar casi la totalidad de la estructura lógica de la clase original. Esta aproximación, conocida como programación por "fuerza bruta", ignora los principios fundamentales de la ingeniería de software y genera lo que denominamos <strong>deuda técnica</strong>.</p>
+
+            <p>Comprendé que, al no utilizar la herencia, estarías duplicando miembros de datos críticos como <code>primerNombre</code>, <code>apellidoPaterno</code>, <code>numeroSeguroSocial</code>, <code>ventasBrutas</code> y <code>tarifaComision</code>. No se trata solo de copiar variables; se trata de copiar la lógica de validación asociada a cada uno de sus métodos <em>set</em> y <em>get</em>. Tal como se discute en los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong>, este enfoque impide que desarrolles una visión sistémica del problema, limitándote a resolver necesidades inmediatas sin considerar la sostenibilidad del sistema en el tiempo.</p>
+
+            <h3>El Peligro del Mantenimiento Inconsistente</h3>
+            <p>De acuerdo con las advertencias de <strong>O'Reilly</strong>, la duplicación de código es una "trampa de mantenimiento". Imaginate que estás trabajando en una consultora de software en Argentina y el equipo legal te informa que, debido a una nueva normativa de la <span class="abbr" data-title="AFIP: Administración Federal de Ingresos Públicos. Organismo encargado de la recaudación de impuestos en Argentina.">AFIP</span>, la validación de los números de seguridad social debe cambiar. Si tenés el código duplicado en varias clases, vas a tener que buscar y modificar cada instancia manualmente. Este proceso es propenso al error humano: basta con que te olvides de actualizar una sola clase para que el sistema empiece a generar datos inconsistentes o errores de liquidación de sueldos.</p>
+
+            <p>Desde la perspectiva del <strong>Desarrollo Web (NotebookLM)</strong>, este fenómeno es análogo a ignorar el principio <strong>DRY</strong> (<em>Don't Repeat Yourself</em>). En la web moderna, buscamos la atomicidad de los componentes; en C++, buscamos que la lógica de negocio resida en un único punto de verdad. Al copiar código, estás fragmentando esa verdad, lo que aumenta exponencialmente la complejidad del <span class="abbr" data-title="Debugging: Proceso de identificar y corregir errores en el código fuente de un programa.">debugging</span> y el tiempo de testeo unitario.</p>
+
+            <div class="diagram" style="background: rgba(234, 67, 53, 0.05); border: 1px dashed #ea4335; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <strong>Antipatrón: Código Duplicado</strong><br><br>
+                <code>[Clase A: Lógica de Ventas]</code> ← (Bug corregido aquí)<br>
+                <span style="color: #ea4335; font-weight: bold;">≠</span><br>
+                <code>[Clase B: Lógica de Ventas Copiada]</code> ← (Bug persiste aquí)
+            </div>
+
+            <h3>Análisis Técnico de la Redundancia en la Implementación</h3>
+            <p>Si observás el diseño de una clase <code>EmpleadoBaseMasComision</code> sin herencia, notarías que el 90% del archivo de encabezado (<code>.h</code>) y del archivo de implementación (<code>.cpp</code>) es una copia exacta de <code>EmpleadoPorComision</code>. Solo se agrega el miembro <code>sueldoBase</code> y se modifica la función <code>ingresos()</code> para sumar ese sueldo al cálculo de la comisión. Sin embargo, el costo oculto es inmenso. Según <strong>Deitel</strong>, el tamaño del ejecutable aumenta innecesariamente y la carga cognitiva para el programador que debe revisar el código se duplica, ya que debe verificar que ambas implementaciones "parecidas" sean efectivamente idénticas en su comportamiento base.</p>
+
+            <p>Fijate en la estructura redundante que tendrías que mantener (ejemplo de lo que <strong>no</strong> se debe hacer):</p>
+            <pre><code>// ARCHIVO: EmpleadoBaseMasComision.h (SIN HERENCIA)
+class EmpleadoBaseMasComision {
+public:
+    EmpleadoBaseMasComision(/* parámetros idénticos + sueldoBase */);
+    
+    // TODAS ESTAS FUNCIONES SON REPLICADAS DE EmpleadoPorComision
+    void establecerPrimerNombre(const string&);
+    string obtenerPrimerNombre() const;
+    void establecerVentasBrutas(double);
+    double obtenerVentasBrutas() const;
+    // ... así con cada miembro ...
+
+    void establecerSueldoBase(double);
+    double obtenerSueldoBase() const;
+    double ingresos() const; // Única diferencia lógica real
+private:
+    // ATRIBUTOS DUPLICADOS
+    string primerNombre;
+    string apellidoPaterno;
+    double ventasBrutas;
+    double tarifaComision;
+    // ATRIBUTO NUEVO
+    double sueldoBase;
+};</code></pre>
+
+            <h3>Impacto en la Experiencia del Desarrollador (UX)</h3>
+            <p>Aplicando los conceptos del <strong>Cuaderno de NotebookLM sobre UX/UI</strong> al diseño de software, la "interfaz" de esta clase para otros programadores es deficiente. Un desarrollador senior que use tu código se preguntará por qué existen dos clases que hacen casi lo mismo pero no tienen ninguna relación formal. Esto rompe el modelo mental de jerarquía que se espera en un sistema orientado a objetos. Como se menciona en el cuaderno de UX, la consistencia es clave para la usabilidad; en el código, la consistencia se logra mediante la abstracción, no mediante la repetición.</p>
+
+            <h3>Consideraciones Pedagógicas: El paso hacia la Herencia</h3>
+            <p>En el marco de las <strong>Metodologías Activas</strong>, este contraejemplo sirve para que vos reflexiones sobre el valor de la elegancia en el código. Programar no es solo hacer que el programa "funcione", sino que sea capaz de evolucionar. Si tu software es una colección de bloques copiados y pegados, ante el primer cambio de requerimientos se volverá inmanejable. El libro de <strong>O'Reilly</strong> enfatiza que un buen ingeniero de software dedica más tiempo a pensar en la estructura que a tipear código. Al evitar la redundancia, estás protegiendo el futuro de tu proyecto y facilitando el trabajo colaborativo.</p>
+
+            <p>En conclusión, la creación de una clase como <code>EmpleadoBaseMasComision</code> sin herencia es un ejercicio pedagógico para demostrar lo que <strong>no</strong> se debe hacer en la práctica profesional. Te obliga a enfrentarte a la monotonía de la repetición y al miedo constante de dejar un bug olvidado en una de las copias. En la próxima sección, verás cómo la herencia resuelve este dilema de manera elegante, permitiéndote concentrarte solo en lo que hace que un empleado con sueldo base sea único, mientras confiás en que la lógica compartida reside en un solo lugar seguro y validado.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-4-2')">Referencia: Deitel Secc. 12.4.2 | O'Reilly Cap. 13: Maintenance Hazards | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+        </section>
+
+<section id="sec-12-4-3">
+            <span>🧬</span>
+            <h2>12.4.3 Jerarquía de herencia EmpleadoPorComision-EmpleadoBaseMasComision: La Síntesis de la Eficiencia</h2>
+            
+            <p>En el estudio avanzado de la <span class="abbr" data-title="POO: Programación Orientada a Objetos. Paradigma que organiza el diseño de software en torno a datos u objetos, en lugar de funciones y lógica.">POO</span>, la transición de clases independientes a una estructura jerárquica representa un salto cualitativo en la madurez del diseño. Según el libro de <strong>Deitel</strong>, al aplicar la herencia entre las clases <code>EmpleadoPorComision</code> (como clase base) y <code>EmpleadoBaseMasComision</code> (como clase derivada), no solo estás escribiendo menos líneas de código; estás estableciendo un contrato semántico y técnico que redefine la arquitectura del sistema. Esta sección analiza cómo la derivación permite que una clase herede la infraestructura probada de otra, concentrando sus recursos exclusivamente en la especialización funcional.</p>
+
+            <p>Como estudiante universitario de ingeniería, debés comprender que esta jerarquía ejemplifica la relación <strong>"es un" (is-a)</strong> de manera pura. Un empleado con sueldo base más comisión <em>es un</em> empleado por comisión, pero con una característica financiera adicional: un salario fijo garantizado. De acuerdo con el análisis de <strong>O'Reilly</strong>, este modelo es superior a la composición en este caso específico, ya que la identidad del objeto no cambia, solo se enriquece. Al derivar, la clase hija tiene acceso a la lógica de cálculo de ventas y comisiones ya validada en la base, eliminando la redundancia que suele ser fuente de errores críticos en sistemas de liquidación de haberes.</p>
+
+            <h3>Mecánica de la Derivación y el Reúso de Software</h3>
+            <p>La implementación técnica en C++ requiere una sintaxis precisa que le indique al compilador la naturaleza del vínculo. Al declarar <code>class EmpleadoBaseMasComision : public EmpleadoPorComision</code>, estás habilitando el mecanismo de <span class="abbr" data-title="Software Reuse: Capacidad de utilizar código existente para crear nuevas funcionalidades sin reescribir, ahorrando tiempo y mejorando la confiabilidad.">reutilización de software</span> más potente del lenguaje. Según <strong>Deitel</strong>, la clase derivada hereda automáticamente todos los miembros públicos y protegidos de la clase base. Esto significa que métodos como <code>establecerVentasBrutas()</code> o <code>obtenerTarifaComision()</code> no necesitan ser redefinidos ni copiados; simplemente están "ahí", disponibles para ser utilizados por el objeto de la clase derivada.</p>
+            
+            <p>Fijate en la elegancia del constructor de la clase derivada. En lugar de intentar inicializar los datos que pertenecen a la clase base (como el nombre o el número de seguro social), la clase derivada delega esa tarea mediante un inicializador de base. Esto es lo que en los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong> se denomina "andamiaje estructural": construís sobre cimientos firmes colocados previamente.</p>
+
+            <pre><code>// Definición de la clase derivada extendiendo la base
+class EmpleadoBaseMasComision : public EmpleadoPorComision {
+public:
+    EmpleadoBaseMasComision(const string& nombre, const string& apellido, 
+        const string& nss, double ventas = 0.0, double tarifa = 0.0, double salario = 0.0)
+        : EmpleadoPorComision(nombre, apellido, nss, ventas, tarifa) // Llamada al constructor base
+    {
+        establecerSueldoBase(salario);
+    }
+
+    void establecerSueldoBase(double salario);
+    double obtenerSueldoBase() const;
+    double ingresos() const; // Sobrescribe para sumar el sueldo base
+private:
+    double sueldoBase;
+};</code></pre>
+
+            <h3>Perspectiva de Ingeniería: El Principio de Especialización</h3>
+            <p>Uno de los mayores beneficios de esta jerarquía es el aislamiento de responsabilidades. La clase <code>EmpleadoBaseMasComision</code> solo debe gestionar el atributo <code>sueldoBase</code>. Si las reglas para validar el apellido o el número de seguro social cambian en el futuro, solo debés modificar la clase base <code>EmpleadoPorComision</code>. Automáticamente, todas las clases derivadas en la jerarquía reflejarán el cambio. Esta es la esencia de la mantenibilidad en el desarrollo de software profesional. Tal como se menciona en el <strong>Cuaderno de Desarrollo Web</strong>, este enfoque es análogo al uso de componentes base en frameworks modernos, donde la modularidad dicta la escalabilidad del producto.</p>
+
+            <div class="diagram">
+                <strong>Flujo de Herencia y Especialización</strong><br>
+                <code>EmpleadoPorComision [Ventas, Tarifa, Identidad]</code><br>
+                &nbsp;&nbsp;&nbsp;&nbsp; ↓ (Hereda todo lo anterior)<br>
+                <code>EmpleadoBaseMasComision [Añade: SueldoBase]</code>
+            </div>
+
+            <h3>UX del Desarrollador y Modelos Mentales</h3>
+            <p>Desde la óptica del <strong>Cuaderno de NotebookLM sobre UX/UI</strong>, una jerarquía de herencia bien diseñada mejora la "experiencia del desarrollador" al reducir la carga cognitiva. Cuando un programador ve que una clase deriva de otra, inmediatamente comprende la mitad del comportamiento del objeto sin necesidad de leer todo el código fuente. La consistencia en los nombres de los métodos heredados permite que el modelo mental del usuario del código sea predecible y fluido. No tenés que aprender una interfaz nueva; simplemente aprendés qué es lo que la nueva clase agrega de especial.</p>
+
+            <p>Sin embargo, debés tener cuidado con lo que <strong>O'Reilly</strong> llama la "fragilidad de la clase base". Si modificás la interfaz pública de la clase base de manera imprudente, podés romper todas las clases derivadas. Por eso, en el nivel universitario, enfatizamos que la herencia es un compromiso a largo plazo con el diseño original. Tenés que estar seguro de que la relación de identidad es sólida antes de codificar el primer signo de dos puntos.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Concepto de Diseño</th>
+                            <th>Impacto en la Jerarquía</th>
+                            <th>Beneficio Académico/Profesional</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Reducción de Código</strong></td>
+                            <td>Eliminación de miembros duplicados (nombre, ventas, etc.).</td>
+                            <td>Menor probabilidad de introducir errores tipográficos o lógicos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Propagación de Mejoras</strong></td>
+                            <td>Correcciones en la base afectan a todas las derivadas.</td>
+                            <td>Mantenimiento centralizado y eficiente del software.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Claridad Semántica</strong></td>
+                            <td>Define explícitamente que una clase es una extensión de otra.</td>
+                            <td>Facilita la comprensión del dominio del problema para nuevos desarrolladores.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Polimorfismo Futuro</strong></td>
+                            <td>Prepara el terreno para tratar a ambos tipos bajo un puntero base.</td>
+                            <td>Flexibilidad extrema en la gestión de colecciones heterogéneas de objetos.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Conclusión: La Elegancia de la Especialización</h3>
+            <p>En conclusión, la jerarquía <code>EmpleadoPorComision</code>-<code>EmpleadoBaseMasComision</code> no es solo un ejercicio de sintaxis; es una lección de economía de pensamiento. Al heredar, estás reconociendo que el valor del software reside en su capacidad de evolucionar sin ser reescrito. Como futuro ingeniero, tu meta debe ser diseñar clases base tan robustas y genéricas que permitan derivar especializaciones potentes con el mínimo esfuerzo posible. Esta capacidad de abstracción es lo que separa a un codificador de un verdadero arquitecto de software, permitiendo que la complejidad del mundo real sea manejada con orden, lógica y, sobre todo, elegancia técnica.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-4-3')">Referencia: Deitel Secc. 12.4.3 | O'Reilly Cap. 13: Inheritance Systems | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+        </section>
+
+<section id="sec-12-4-4">
+            <span>🛡️</span>
+            <h2>12.4.4 Jerarquía mediante el uso de datos protected: Entre la Comodidad Técnica y el Riesgo de Diseño</h2>
+            
+            <p>En el trayecto hacia la maestría de la <span class="abbr" data-title="OOP: Object-Oriented Programming. Paradigma que utiliza 'objetos' para representar datos y métodos.">POO</span>, nos encontramos con un dilema clásico de la ingeniería de software: la elección entre la facilidad de acceso y el rigor del <span class="abbr" data-title="Encapsulation: Ocultamiento de la complejidad interna para exponer solo lo necesario.">encapsulamiento</span>. Según lo que explica el libro de <strong>Deitel</strong>, el especificador de acceso <code>protected</code> actúa como una suerte de "secreto familiar". Los miembros declarados bajo este nivel son visibles para la clase base, sus clases derivadas y sus funciones amigas, pero permanecen estrictamente inaccesibles para el resto del mundo exterior.</p>
+
+            <p>Fijate que en esta versión de la jerarquía <code>EmpleadoPorComision</code>-<code>EmpleadoBaseMasComision</code>, decidimos (con fines pedagógicos) cambiar el nivel de visibilidad de los atributos básicos —como el nombre, el apellido, el número de seguro social, las ventas brutas y la tarifa de comisión— de <code>private</code> a <code>protected</code>. Como estudiante universitario, tenés que comprender que este cambio altera profundamente la forma en que las clases se comunican entre sí. Ahora, la clase derivada <code>EmpleadoBaseMasComision</code> puede manipular directamente estas variables sin tener que pedir permiso a través de una función de acceso pública.</p>
+
+            <h3>Implementación y Acceso Directo</h3>
+            <p>De acuerdo con el análisis técnico de <strong>O'Reilly</strong>, el beneficio inmediato de usar datos protegidos es la simplificación de las expresiones dentro de la clase hija. En lugar de llamar a <code>obtenerVentasBrutas()</code>, simplemente usás la variable <code>ventasBrutas</code>. Por ejemplo, el cálculo de los ingresos en la clase derivada se vuelve mucho más sucinto:</p>
+
+            <pre><code>// Dentro de EmpleadoBaseMasComision.cpp
+double EmpleadoBaseMasComision::ingresos() const {
+    // Acceso directo a miembros protegidos de la base
+    return sueldoBase + (tarifaComision * ventasBrutas);
+}</code></pre>
+
+            <p>Si bien esto parece una "victoria" en términos de legibilidad inmediata y ahorro de unos pocos ciclos de CPU (al evitar la llamada a una función), <strong>Deitel</strong> nos advierte sobre un peligro latente: el acoplamiento excesivo. Tal como se analiza en el <strong>Cuaderno de NotebookLM sobre UX/UI</strong> aplicado a la arquitectura de sistemas, la "interfaz interna" de tu clase ahora está expuesta. Si la estructura de la clase base cambia, el impacto se propaga de forma incontrolable.</p>
+
+            <div class="diagram">
+                <strong>El Riesgo del Acoplamiento (Coupling)</strong><br>
+                <code>[Clase Base: Datos Protegidos]</code><br>
+                <span>↕ (Dependencia Directa de la Implementación)</span><br>
+                <code>[Clase Derivada: Acceso Directo]</code>
+            </div>
+
+            <h3>La Trampa de la "Base Frágil" y la Mantenibilidad</h3>
+            <p>Comprendé que al usar <code>protected</code>, estás creando una dependencia hacia la forma específica en que la clase base almacena sus datos. Según el <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, esto es análogo a depender de estados internos de un componente en lugar de usar su API pública. Si el día de mañana decidís que <code>ventasBrutas</code> ya no debe ser un <code>double</code>, sino que debe ser un objeto de una clase <code>Moneda</code> para manejar diferentes divisas, <strong>todas</strong> tus clases derivadas se romperán instantáneamente. Tendrás que entrar una por una y corregir el código manualmetne.</p>
+
+            <p>Además, existe un riesgo de integridad de datos. Si una clase derivada tiene acceso directo a <code>tarifaComision</code>, podría asignarle por error un valor negativo. Al saltearse la función <code>establecerTarifaComision</code>, también se saltea cualquier lógica de validación que hayas programado allí. Como futuro ingeniero, debés valorar que el código robusto no es el que se escribe más rápido, sino el que previene que los errores se propaguen en sistemas de gran escala.</p>
+
+            <h3>Análisis Comparativo de Accesibilidad</h3>
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Uso de datos Private (Recomendado)</th>
+                            <th>Uso de datos Protected (Riesgoso)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Encapsulamiento</strong></td>
+                            <td>Máximo: La base tiene el control total.</td>
+                            <td>Débil: La derivada puede alterar el estado interno.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Acoplamiento</strong></td>
+                            <td>Bajo: La derivada depende de la interfaz.</td>
+                            <td>Alto: La derivada depende de la implementación cruda.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Validación</strong></td>
+                            <td>Garantizada a través de métodos <code>set</code>.</td>
+                            <td>Opcional y frágil; puede ser ignorada por el hijo.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mantenimiento</strong></td>
+                            <td>Simple: Se cambia la base y la interfaz sigue igual.</td>
+                            <td>Pesadilla: Un cambio en la base rompe toda la jerarquía.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Perspectiva Pedagógica y de Experiencia del Desarrollador (UX)</h3>
+            <p>Desde la óptica de las <strong>Metodologías Activas (NotebookLM)</strong>, este ejemplo sirve para que desarrolles una mirada crítica. En el "laburo" diario de un programador senior, el uso de <code>protected</code> se reserva para situaciones muy específicas de optimización o para funciones miembro de utilidad, casi nunca para variables de datos. La <strong>carga cognitiva</strong> de recordar cómo se llama cada variable interna de la base es mucho mayor que simplemente seguir el contrato de la interfaz pública.</p>
+
+            <p>Recordá este principio de diseño: <strong>"Mantené tus datos privados"</strong>. El acceso protegido es una herramienta tentadora porque parece facilitar las cosas al principio del proyecto, pero en el nivel universitario te enseñamos a pensar en el ciclo de vida completo del software. Un sistema que es fácil de codificar hoy pero imposible de mantener mañana es, técnicamente, un fracaso de ingeniería. Tal como se menciona en el <strong>Cuaderno de UX/UI</strong>, la consistencia y la previsibilidad son los pilares de una buena experiencia de desarrollo.</p>
+
+            <p>En conclusión, la jerarquía mediante datos protegidos es un paso intermedio que debés conocer para entender cómo funciona C++, pero que debés evitar en tus proyectos profesionales. Al final de esta unidad, compararemos este enfoque con el uso de datos privados y funciones de acceso, y verás por qué el rigor del encapsulamiento es el mejor aliado de un programador que aspira a construir software de calidad internacional, escalable y, sobre todo, libre de bugs inesperados.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-4-4')">Referencia: Deitel Secc. 12.4.4 | O'Reilly Cap. 13: Inheritance Access | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+        </section>
+
+<section id="sec-12-4-5">
+            <span>🔒</span>
+            <h2>12.4.5 Jerarquía mediante el uso de datos private: El Estándar de Excelencia en la Ingeniería de Software</h2>
+            
+            <p>En el diseño de arquitecturas de software de nivel universitario, la decisión de mantener los miembros de datos como <code>private</code>, incluso dentro de una jerarquía de herencia, no es una mera sugerencia estética, sino la <strong>mejor práctica fundamental</strong> defendida por <strong>Deitel</strong>. Comprendé que, al declarar los datos como privados en la clase base, estás blindando la integridad de la información. La única forma de interactuar con estos datos es a través de una interfaz controlada: las funciones miembro públicas o protegidas (comúnmente denominadas <em>getters</em> y <em>setters</em>). Este enfoque permite que la jerarquía evolucione de forma segura, garantizando que los cambios en la implementación interna de la clase base no generen un efecto dominó que rompa las clases derivadas.</p>
+
+            <p>Como futuro ingeniero, debés valorar que el uso de datos privados es el pilar del <span class="abbr" data-title="Encapsulation: Principio de la POO que oculta los detalles internos de un objeto, exponiendo solo lo necesario a través de una interfaz clara.">encapsulamiento</span>. Según el análisis de <strong>O'Reilly</strong>, permitir que las clases derivadas accedan directamente a los datos (mediante <code>protected</code>) crea un acoplamiento tan fuerte que cualquier modificación mínima en la estructura de la base obligaría a reescribir y recompilar toda la descendencia. En cambio, si la clase base expone métodos como <code>obtenerVentasBrutas()</code>, la clase derivada se desentiende de <em>cómo</em> se almacena ese valor, centrándose únicamente en <em>qué</em> valor recibe.</p>
+
+            <h3>La "Interfaz de Servicio" entre Clases</h3>
+            <p>De acuerdo con el <strong>Cuaderno de NotebookLM sobre UX/UI</strong> aplicado al desarrollo de sistemas, debemos pensar en la clase base como un proveedor de servicios para la clase derivada. El programador que desarrolla la clase hija es un "usuario" de la clase padre. Una interfaz basada en métodos privados y accesores públicos/protegidos reduce la <span class="abbr" data-title="Cognitive Load: La cantidad total de esfuerzo mental que se utiliza en la memoria de trabajo de un desarrollador para comprender un código.">carga cognitiva</span>, ya que el desarrollador de la derivada no necesita conocer los nombres de las variables internas ni su tipo exacto; solo necesita conocer el contrato de los métodos.</p>
+
+            <div class="diagram" style="background: rgba(30, 142, 62, 0.05); border: 1px solid var(--success); padding: 25px; border-radius: 12px; margin: 25px 0;">
+                <strong>Modelo de Encapsulamiento Robusto</strong><br><br>
+                <code>[ Clase Base: Datos Private ]</code><br>
+                <span style="color: var(--success); font-weight: bold;">↑ (Filtro de Seguridad: Métodos Set/Get) ↑</span><br>
+                <code>[ Clase Derivada: Acceso vía Interfaz ]</code><br>
+                <p style="font-size: 0.85rem; margin-top: 10px;"><em>"Cualquier cambio interno en la Base es invisible para la Derivada mientras se mantenga la firma del método."</em></p>
+            </div>
+
+            <h3>Análisis Técnico de la Implementación</h3>
+            <p>Fijate en cómo se traduce esto al código en una jerarquía de empleados. Si <code>EmpleadoPorComision</code> mantiene sus ventas como privadas, la clase <code>EmpleadoBaseMasComision</code> debe llamar a <code>obtenerVentasBrutas()</code> para calcular los ingresos. Si mañana decidís cambiar el tipo de dato de <code>double</code> a un objeto más complejo para manejar inflación o diferentes monedas, solo modificás el cuerpo de <code>obtenerVentasBrutas()</code>. La clase derivada seguirá funcionando sin enterarse del cambio estructural. Este concepto es vital en el <strong>Desarrollo Web (NotebookLM)</strong>, donde la modularidad y la ocultación de estados internos permiten escalar aplicaciones de millones de líneas de código.</p>
+
+            <pre><code>// En la Clase Base (EmpleadoPorComision)
+class EmpleadoPorComision {
+public:
+    double obtenerVentasBrutas() const { return ventasBrutas; }
+    void establecerVentasBrutas(double v) { 
+        if (v >= 0) ventasBrutas = v; // Validación centralizada
+    }
+private:
+    double ventasBrutas; // Nadie fuera de aquí la ve
+};
+
+// En la Clase Derivada (EmpleadoBaseMasComision)
+double EmpleadoBaseMasComision::ingresos() const {
+    // Uso de la interfaz, no del dato crudo
+    return obtenerSueldoBase() + (obtenerTarifaComision() * obtenerVentasBrutas());
+}</code></pre>
+
+            <h3>Ventajas Estratégicas y Pedagógicas</h3>
+            <p>Desde la óptica de las <strong>Metodologías Activas (NotebookLM)</strong>, este nivel de abstracción fomenta el pensamiento sistémico. Los estudiantes aprenden que la calidad del software no se mide por la velocidad de acceso a la memoria, sino por la <strong>mantenibilidad</strong> y la <strong>robustez</strong> ante el cambio. La validación centralizada es otra ventaja crítica: si todas las modificaciones al sueldo deben pasar por un <code>setSueldo()</code>, podés asegurar que nunca existan valores negativos en ninguna parte de la jerarquía. Si permitieras acceso directo (protected), cualquier clase hija mal programada podría corromper el estado del objeto sin que la base pudiera evitarlo.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dimensión</th>
+                            <th>Enfoque con Datos Private</th>
+                            <th>Impacto en el Ciclo de Vida</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Integridad</strong></td>
+                            <td>Máxima: La lógica de validación reside en un solo lugar.</td>
+                            <td>Evita estados inconsistentes y bugs financieros.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Evolución</strong></td>
+                            <td>Alta: Podés cambiar la base sin afectar al resto.</td>
+                            <td>Reduce el costo de mantenimiento a largo plazo.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Seguridad</strong></td>
+                            <td>Blindaje total: Los detalles de implementación están ocultos.</td>
+                            <td>Previene el "hackeo" accidental del estado interno.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Claridad (UX)</strong></td>
+                            <td>Interfaz limpia y explícita para el programador.</td>
+                            <td>Facilita la integración de nuevos desarrolladores al equipo.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Consideraciones sobre el Rendimiento</h3>
+            <p>Es común que en el primer año de carrera te preocupes por si llamar a una función (getter) es más lento que acceder al dato directamente. <strong>O'Reilly</strong> aclara que los compiladores modernos de C++ realizan automáticamente una optimización llamada <span class="abbr" data-title="Inlining: Proceso por el cual el compilador reemplaza una llamada a función con el código real de la función para mejorar la velocidad.">inlining</span>. Esto significa que el ejecutable final será tan rápido como si hubieras accedido al dato directamente, pero tu código fuente conservará toda la elegancia y seguridad del encapsulamiento privado. No sacrifiques el diseño por una "optimización prematura" que el compilador ya resuelve por vos.</p>
+
+            <p>En conclusión, utilizar datos privados en las jerarquías de herencia es la marca distintiva de un profesional. Te obliga a diseñar pensando en la comunicación entre entidades y no solo en el almacenamiento de bytes. Como indica el <strong>Cuaderno de Educación</strong>, dominar este nivel de abstracción es lo que te permite transitar de ser un simple codificador a convertirte en un arquitecto de software capaz de liderar proyectos complejos en cualquier industria tecnológica moderna.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-4-5')">Referencia: Deitel Secc. 12.4.5 | O'Reilly Cap. 13: Classes and Encapsulation | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+        </section>
+
+<section id="sec-12-5">
+            <span>⚡</span>
+            <h2>12.5 Los constructores y destructores en las clases derivadas: Ciclo de Vida y Jerarquía</h2>
+            
+            <p>En el ámbito del desarrollo de software de alta calidad, comprender el ciclo de vida de un objeto es fundamental para garantizar la estabilidad y el rendimiento del sistema. Cuando trabajás con herencia en C++, la creación y destrucción de objetos sigue una coreografía estrictamente definida. Como estudiante universitario, debés internalizar que un objeto de una clase derivada no es una entidad plana, sino una estructura "anidada" donde la parte de la clase base debe existir plenamente antes de que las extensiones de la clase derivada tomen el control.</p>
+
+            <p>Según la teoría fundamental expuesta en el <strong>Libro de Deitel</strong>, el proceso de construcción se asemeja a la construcción de un edificio: no podés levantar el primer piso sin haber consolidado los cimientos. Técnicamente, cuando instanciás un objeto de una clase derivada, ocurre la siguiente secuencia de eventos:</p>
+            
+            <ol style="margin-bottom: 2rem;">
+                <li><strong>Invocación del Constructor de la Clase Base:</strong> El compilador garantiza que, antes de ejecutar cualquier instrucción en el cuerpo del constructor de la clase derivada, se llame al constructor de la clase base. Si no especificás una llamada en la lista de inicializadores, se invocará automáticamente al constructor predeterminado de la base.</li>
+                <li><strong>Inicialización de Miembros de Datos:</strong> Se inicializan los miembros de datos de la clase base y, posteriormente, los de la clase derivada en el orden en que fueron declarados.</li>
+                <li><strong>Ejecución del Cuerpo del Constructor:</strong> Finalmente, se ejecuta el código que vos hayas escrito dentro de las llaves del constructor de la clase derivada.</li>
+            </ol>
+
+            <p>De acuerdo con el <strong>Libro de O'Reilly</strong>, esta secuencia garantiza que las partes del objeto padre estén completamente listas y en un estado consistente antes de que el "hijo" intente utilizarlas. Imaginate el riesgo de seguridad que implicaría intentar acceder a un recurso de la clase base que aún no ha sido inicializado; C++ previene este tipo de errores estructurales mediante esta jerarquía de llamadas.</p>
+
+            <div class="diagram" style="background: rgba(26, 115, 232, 0.05); border: 2px solid var(--accent); padding: 25px; border-radius: 12px; margin: 25px 0;">
+                <h4 style="margin-top:0; color: var(--accent);">Visualización del Orden de Ejecución</h4>
+                <div style="display: flex; justify-content: space-around; align-items: center; gap: 20px;">
+                    <div style="text-align: center;">
+                        <strong>CONSTRUCCIÓN</strong><br>
+                        (De arriba hacia abajo)<br>
+                        <code>1. Clase Base</code><br>
+                        <span>↓</span><br>
+                        <code>2. Clase Derivada</code>
+                    </div>
+                    <div style="font-size: 2rem;">⇅</div>
+                    <div style="text-align: center;">
+                        <strong>DESTRUCCIÓN</strong><br>
+                        (De abajo hacia arriba)<br>
+                        <code>1. Clase Derivada</code><br>
+                        <span>↓</span><br>
+                        <code>2. Clase Base</code>
+                    </div>
+                </div>
+            </div>
+
+            <h3>La Lista de Inicializadores de Miembros y el Paso de Argumentos</h3>
+            <p>Un punto crítico que tenés que dominar es cómo pasar argumentos a un constructor de la clase base que no sea el predeterminado. En C++, esto se logra exclusivamente mediante la <strong>lista de inicializadores de miembros</strong>. Si omitís esto y la clase base no tiene un constructor sin parámetros, el compilador arrojará un error, ya que no sabrá cómo "armar" la base de tu objeto.</p>
+
+            <pre><code>// Ejemplo técnico de paso de argumentos
+class Empleado {
+public:
+    Empleado(string n) : nombre(n) { /* Cuerpo */ }
+private:
+    string nombre;
+};
+
+class EmpleadoComision : public Empleado {
+public:
+    // La clase derivada DELEGA la inicialización del nombre a la base
+    EmpleadoComision(string n, double v) : Empleado(n), ventas(v) {
+        // El cuerpo se ejecuta después de que la base está lista
+    }
+private:
+    double ventas;
+};</code></pre>
+
+            <p>Desde la perspectiva de los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong>, este concepto de "delegación" es una excelente metáfora del trabajo colaborativo: cada nivel de la jerarquía se hace responsable únicamente de lo que le compete, confiando en que el nivel anterior ya ha cumplido con su función. Esto reduce la carga cognitiva del programador y mejora la mantenibilidad del código.</p>
+
+            <h3>El Orden Inverso en los Destructores</h3>
+            <p>Al momento de destruir un objeto, el orden es estrictamente inverso al de la construcción. El destructor de la clase derivada se ejecuta primero, y una vez finalizado, se invoca automáticamente al destructor de la clase base. Esta "desapilación" asegura que la clase derivada pueda liberar sus recursos específicos (como memoria dinámica o descriptores de archivos) mientras la parte de la clase base todavía es válida y accesible.</p>
+            
+            <p><strong>Importante:</strong> Como futuro ingeniero, debés recordar que los constructores y el operador de asignación <strong>no se heredan</strong>. Cada clase debe definir los suyos o confiar en los que el compilador genera por defecto si no hay miembros complejos.</p>
+
+            <h3>Conexión con la UX y la Arquitectura de Sistemas</h3>
+            <p>Tal como se analiza en el <strong>Cuaderno de NotebookLM sobre UX/UI</strong> aplicado a la arquitectura técnica, la previsibilidad del ciclo de vida es lo que permite crear sistemas robustos. En el desarrollo de interfaces o componentes web, el concepto de "ciclo de vida" (lifecycle) es análogo: tenés momentos definidos para inicializar (mount) y para limpiar (unmount). Si el orden de estos eventos fuera aleatorio, la gestión de memoria en dispositivos de bajos recursos —comunes en el contexto rural argentino— se volvería inmanejable.</p>
+
+            <p>En el <strong>Desarrollo Web (NotebookLM)</strong>, esta lógica de jerarquía se traduce en la composición de componentes. Un componente hijo depende de las propiedades (props) que le inyecta el padre; si el padre no está "construido", el hijo no tiene contexto para operar. En C++, la herencia lleva este concepto al nivel de la memoria cruda, exigiendo un rigor máximo en el manejo de punteros y referencias durante estas fases de transición.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Acción</th>
+                            <th>Fase de Construcción</th>
+                            <th>Fase de Destrucción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Primer Paso</strong></td>
+                            <td>Constructor de Clase Base</td>
+                            <td>Destructor de Clase Derivada</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Segundo Paso</strong></td>
+                            <td>Cuerpo de Clase Base</td>
+                            <td>Destrucción de miembros de Derivada</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tercer Paso</strong></td>
+                            <td>Constructor de Clase Derivada</td>
+                            <td>Destructor de Clase Base</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Responsabilidad</strong></td>
+                            <td>Establecer el estado inicial seguro.</td>
+                            <td>Liberar recursos y limpiar memoria.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>En conclusión, dominar el orden de llamadas de constructores y destructores no es solo un requisito académico para aprobar un parcial; es la herramienta que te permitirá evitar <span class="abbr" data-title="Memory Leak: Fallo en un programa que ocurre cuando la memoria que ya no se necesita no se libera correctamente.">fugas de memoria (memory leaks)</span> y comportamientos indefinidos en tus aplicaciones. Recordá siempre: la base sostiene al hijo, y el hijo libera a la base al partir.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-5')">Referencia: Deitel Secc. 12.5 | O'Reilly Cap. 13: Constructors and Destructors | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+        </section>
+
+<section id="sec-12-6">
+            <span>📊</span>
+            <h2>12.6 Herencia public, protected y private: El Control de Acceso en la Jerarquía</h2>
+            
+            <p>En el desarrollo de software de nivel universitario, la elección del tipo de herencia no es una decisión trivial; es el mecanismo que define el contrato de visibilidad entre la clase base, sus descendientes y los usuarios externos. Según lo establecido en el <strong>Libro de Deitel</strong>, C++ ofrece tres variantes fundamentales: herencia pública, protegida y privada. Comprendé que este tipo de herencia actúa como un filtro que puede degradar los niveles de acceso de los miembros heredados, pero nunca elevarlos. Es decir, podés convertir algo público en privado, pero nunca algo privado en público mediante la herencia.</p>
+
+            <p>Desde la perspectiva de la ingeniería de software, esta distinción es vital para el <span class="abbr" data-title="Information Hiding: Principio de diseño que busca ocultar los detalles de implementación que no son esenciales para el uso de un componente.">ocultamiento de información</span>. Tal como se analiza en los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong>, para que un estudiante domine estas jerarquías, debe visualizar la clase derivada no solo como una extensión de datos, sino como una nueva "interfaz" que decide qué mostrar del pasado (la base) y qué ocultar para proteger la integridad del sistema futuro.</p>
+
+            <h3>1. Herencia Pública (public inheritance): La Relación "Es un"</h3>
+            <p>Es el tipo más común y, según <strong>O'Reilly</strong>, el único que representa fielmente la relación <strong>"es un" (is-a)</strong>. En este modelo, los miembros públicos de la clase base se mantienen públicos en la derivada, y los protegidos se mantienen protegidos. Esto permite que cualquier parte del programa trate a un objeto derivado como si fuera un objeto base sin restricciones adicionales de visibilidad.</p>
+            <p>Fijate que este tipo de herencia es la base del polimorfismo dinámico. Si querés que una función que recibe un puntero a <code>Vehiculo</code> pueda procesar una <code>Moto</code>, la herencia debe ser pública. De lo contrario, el compilador prohibirá la conversión implícita por razones de seguridad. Como se menciona en el <strong>Cuaderno de UX/UI</strong>, la herencia pública ofrece la mejor "experiencia de usuario" para otros desarrolladores, ya que respeta el modelo mental intuitivo de las jerarquías de objetos.</p>
+
+            <h3>2. Herencia Protegida (protected inheritance): El Linaje Familiar</h3>
+            <p>En la herencia protegida, tanto los miembros públicos como los protegidos de la clase base se transforman en miembros <strong>protegidos</strong> dentro de la clase derivada. ¿Qué significa esto para vos? Significa que los usuarios externos de la clase derivada (por ejemplo, desde la función <code>main</code>) no podrán acceder a ninguno de los métodos de la base, pero las futuras clases que hereden de tu clase derivada <em>sí</em> podrán verlos.</p>
+            <p>De acuerdo con <strong>Deitel</strong>, este enfoque es útil cuando querés ocultar la interfaz de la clase base al mundo exterior pero querés que tus propios descendientes sigan teniendo acceso a esas herramientas. Es una forma de "restringir el círculo de confianza" a la familia de clases. En el ámbito del <strong>Desarrollo Web</strong>, esto es comparable a los componentes que exponen ciertas propiedades solo a sus subcomponentes internos, manteniendo el estado global a salvo de manipulaciones externas imprevistas.</p>
+
+            <h3>3. Herencia Privada (private inheritance): La Relación "Se implementa mediante"</h3>
+            <p>Aquí es donde el diseño se vuelve más técnico. En la herencia privada, todos los miembros públicos y protegidos de la clase base se vuelven <strong>privados</strong> en la clase derivada. Según <strong>O'Reilly</strong>, esto no representa una relación "es un", sino una relación de <strong>"se implementa en términos de" (is-implemented-in-terms-of)</strong>. Es una alternativa a la composición.</p>
+            <p>Comprendé que, con herencia privada, estás usando la clase base como un motor interno. Ningún usuario de tu clase derivada sabrá que estás usando la clase base, y ninguna clase que herede de vos podrá acceder a esos miembros. Es el nivel máximo de aislamiento. Tené en cuenta que, aunque potente, la mayoría de los expertos (incluyendo a los autores de los cuadernos de arquitectura de sistemas) recomiendan usar <strong>composición</strong> antes que herencia privada, a menos que necesites acceder a miembros protegidos de la base o sobrescribir funciones virtuales.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Especificador de Herencia</th>
+                            <th>Miembros Public (Base) → Derivada</th>
+                            <th>Miembros Protected (Base) → Derivada</th>
+                            <th>Miembros Private (Base) → Derivada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code><strong>public</strong></code></td>
+                            <td>Se mantienen <code>public</code></td>
+                            <td>Se mantienen <code>protected</code></td>
+                            <td><strong>Inaccesibles</strong></td>
+                        </tr>
+                        <tr>
+                            <td><code><strong>protected</strong></code></td>
+                            <td>Pasan a ser <code>protected</code></td>
+                            <td>Pasan a ser <code>protected</code></td>
+                            <td><strong>Inaccesibles</strong></td>
+                        </tr>
+                        <tr>
+                            <td><code><strong>private</strong></code></td>
+                            <td>Pasan a ser <code>private</code></td>
+                            <td>Pasan a ser <code>private</code></td>
+                            <td><strong>Inaccesibles</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>La Regla de Oro: Los Miembros Privados de la Base</h3>
+            <p>Observá detenidamente la tabla anterior. Notarás que, independientemente del tipo de herencia, los miembros <code>private</code> de la clase base son <strong>siempre inaccesibles</strong> en la clase derivada. Según <strong>Deitel</strong>, esto es fundamental para el encapsulamiento: la clase base tiene derecho a guardar secretos incluso de sus propios hijos. Si necesitás que una clase derivada acceda a un dato pero querés ocultarlo del <code>main</code>, debés usar <code>protected</code> en la clase base, no herencia privada.</p>
+
+            <h3>Análisis Crítico y UX del Desarrollador</h3>
+            <p>Desde el punto de vista del <strong>Cuaderno de NotebookLM sobre UX/UI</strong>, el tipo de herencia define la "superficie de ataque" de tu API. Una herencia pública mal aplicada puede exponer métodos que el usuario no debería tocar, aumentando la carga cognitiva y el riesgo de errores. Por el contrario, una herencia privada excesiva puede hacer que tu clase sea rígida y difícil de extender por otros colegas. Como futuro ingeniero argentino, tu "laburo" consiste en encontrar el equilibrio: protegé tus datos, pero facilitá la reutilización legítima.</p>
+
+            <p>En el <strong>Desarrollo Web moderno</strong>, la tendencia es hacia componentes más cerrados y explícitos. C++ te da las herramientas para emular este comportamiento. Si estás diseñando un sistema de gestión para una universidad y tenés una clase base <code>Persona</code>, usarás herencia pública para <code>Estudiante</code>. Pero si tenés una clase <code>MotorDeSeguridad</code> y querés construir un <code>ValidadorDeLogin</code> usándola, quizás la herencia privada o la composición sean opciones más seguras para no exponer la lógica de encriptado al resto de la aplicación.</p>
+
+            <p>Para cerrar este tema, recordá la advertencia de <strong>O'Reilly</strong>: "No heredes públicamente a menos que puedas decir con total honestidad que la derivada ES una base". Si no podés, estás rompiendo el contrato lógico del sistema y creando un software frágil que colapsará ante el primer cambio de requerimientos. El rigor en los niveles de acceso es lo que separa a un programador aficionado de un profesional de la computación.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-6')">Referencia: Deitel Secc. 12.6 | O'Reilly Cap. 13: Access Control | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+        </section>
+
+<section id="sec-12-7">
+            <span>⚙️</span>
+            <h2>12.7 Ingeniería de software mediante la herencia: El Paradigma de la Reutilización</h2>
+            
+            <p>En el ámbito de la ingeniería de software profesional, la herencia no se percibe simplemente como una técnica de programación, sino como una decisión arquitectónica estratégica que redefine la eficiencia del ciclo de vida del producto. [cite_start]Según lo expuesto en el <strong>Libro de Deitel</strong>, la herencia es la piedra angular de la <span class="abbr" data-title="Software Reuse: Técnica de utilizar componentes de software existentes para construir nuevos sistemas, minimizando el desarrollo desde cero.">reutilización de software</span> de alta fidelidad[cite: 5]. Esta metodología permite que vos, como ingeniero, diseñés sistemas que absorban la funcionalidad probada de clases existentes para crear especializaciones potentes con un esfuerzo marginal. [cite_start]En un entorno universitario, debés comprender que "reinventar la rueda" es un fracaso técnico; el objetivo es construir sobre lo sólido[cite: 5].</p>
+
+            [cite_start]<p>De acuerdo con el análisis de los <strong>Cuadernos de NotebookLM sobre Desarrollo Web</strong>, la modularización es la única herramienta capaz de conquistar la complejidad creciente de los sistemas modernos[cite: 3]. La herencia facilita esta modularización al permitir que el código base permanezca intacto mientras las nuevas capacidades se agregan "hacia afuera". Esto nos lleva al principio fundamental de la ingeniería de software: el <strong>Principio de Abierto/Cerrado (Open/Closed Principle)</strong>. [cite_start]Este principio dicta que las clases deben estar <em>abiertas</em> para su extensión pero <em>cerradas</em> para su modificación[cite: 5]. Al aplicar herencia, podés extender el comportamiento de un sistema sin tocar una sola línea del código fuente original, lo que reduce drásticamente la probabilidad de introducir errores en funcionalidades que ya son estables.</p>
+
+            <h3>Impacto en la Mantenibilidad y el Trabajo en Equipo</h3>
+            [cite_start]<p>Tal como se analiza en los <strong>Cuadernos de NotebookLM sobre UX/UI</strong>, la consistencia es un factor crítico no solo para el usuario final, sino para el desarrollador que debe mantener el sistema[cite: 3]. Una jerarquía de herencia bien diseñada actúa como una "interfaz de usuario para el programador". [cite_start]Cuando un equipo de gran escala trabaja en un proyecto (como un sistema de gestión bancaria o un <span class="abbr" data-title="ATM: Automated Teller Machine. Sistema de cajero automático utilizado como caso de estudio en ingeniería de software.">ATM</span>), la herencia garantiza que todos los objetos derivados compartan una estructura común[cite: 5]. Esto reduce la <span class="abbr" data-title="Cognitive Load: Esfuerzo mental total requerido por un desarrollador para comprender y procesar la lógica de un fragmento de código.">carga cognitiva</span> del equipo, ya que una vez que se comprende la clase base, el comportamiento de las decenas de clases derivadas se vuelve predecible y familiar.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dimensión de Ingeniería</th>
+                            <th>Beneficio de la Herencia</th>
+                            <th>Impacto en el Proyecto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Costo de Desarrollo</strong></td>
+                            <td>Reutilización de lógica validada en la clase base.</td>
+                            <td>Reducción de horas hombre y aceleración del Time-to-Market.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fiabilidad</strong></td>
+                            <td>El código base ya ha pasado por <span class="abbr" data-title="QA: Quality Assurance. Procesos sistemáticos para asegurar que el software cumpla con los requerimientos y estándares de calidad.">QA</span> y depuración intensa.</td>
+                            [cite_start]<td>Menor tasa de regresiones y bugs estructurales[cite: 5].</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Escalabilidad</strong></td>
+                            <td>Permite agregar tipos de objetos sin modificar el motor principal.</td>
+                            <td>Facilidad para adaptar el software a nuevos requerimientos del negocio.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Consistencia (UX)</strong></td>
+                            <td>Unifica comportamientos a través de toda la familia de objetos.</td>
+                            <td>Mejora la legibilidad del código y la transferencia de conocimiento.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>La Herencia como Herramienta de Modelado Mental</h3>
+            [cite_start]<p>Desde la perspectiva de los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong>, el aprendizaje de la herencia fomenta el pensamiento sistémico[cite: 3]. Vos no estás simplemente declarando variables; estás categorizando el conocimiento. En la ingeniería de software universitaria argentina, enfatizamos que la jerarquía debe reflejar la realidad del dominio del problema. Si estás diseñando un sistema de asistencia docente, una clase base <code>Docente</code> puede derivar en <code>DocenteRural</code> o <code>DocenteTitular</code>. [cite_start]Esta estructura jerárquica permite que las mejoras globales —como un nuevo método para calcular la antigüedad— se implementen en un solo lugar y se propaguen automáticamente[cite: 2, 3].</p>
+
+            <p>Sin embargo, un ingeniero senior sabe que la herencia tiene un "costo oculto" si se abusa de ella. De acuerdo con el texto de <strong>O'Reilly</strong>, existe el riesgo del <strong>Acoplamiento Fuerte</strong>. Una clase derivada está íntimamente ligada a la implementación de su base. Si la base cambia drásticamente, el impacto en la jerarquía puede ser catastrófico. Por eso, en la práctica profesional, se recomienda seguir el principio de <strong>Sustitución de Liskov</strong>: un objeto de la clase base debe poder ser reemplazado por uno de la derivada sin alterar la corrección del programa. Romper este contrato es una de las fallas de ingeniería más comunes que genera software frágil e inmantenible.</p>
+
+            <h3>Ingeniería Aplicada: Herencia vs. Composición</h3>
+            <p>Es vital que discernás cuándo la herencia es la herramienta correcta. [cite_start]En ingeniería de software, a menudo comparamos la relación <strong>"es un" (is-a)</strong> propia de la herencia con la relación <strong>"tiene un" (has-a)</strong> propia de la composición[cite: 5]. Según <strong>Deitel</strong>, si la relación no es jerárquica por naturaleza, la composición suele ser una opción más flexible porque permite cambiar los componentes en tiempo de ejecución. La herencia, en cambio, es una relación estática definida en tiempo de compilación. [cite_start]Un sistema robusto utiliza ambas técnicas de forma equilibrada para maximizar la reutilización sin sacrificar la flexibilidad[cite: 5].</p>
+
+            <div class="diagram">
+                <strong>Ciclo de Mejora en Ingeniería de Software</strong><br>
+                <code>Análisis de Requerimientos</code> → <code>Identificación de Abstracciones Base</code><br>
+                <span>↓ (Diseño Orientado a Objetos)</span><br>
+                <code>Desarrollo de Jerarquías de Herencia</code> → <code>Implementación de Especializaciones</code><br>
+                <span>↓ (Evolución del Sistema)</span><br>
+                <strong>Software Reutilizable, Mantenible y Consistente</strong>
+            </div>
+
+            <p>Como conclusión técnica, debés ver la herencia como una palanca de productividad. Al centralizar la lógica común, no solo reducís el tamaño del código fuente, sino que creás un "punto único de verdad". Si encontrás un error en el cálculo de impuestos de una clase base <code>Producto</code>, al corregirlo ahí, estarás sanando automáticamente a cientos de productos derivados (libros, electrónicos, alimentos). [cite_start]Esta capacidad de propagación de calidad es lo que define a un sistema de software diseñado con rigor ingenieril, separando al programador ocasional del profesional capaz de liderar proyectos de envergadura nacional o internacional[cite: 4, 11].</p>
+
+            <p>Recordá que en el <strong>Desarrollo Web</strong> moderno, este concepto se traslada a los componentes de interfaz. [cite_start]Un componente base <code>Boton</code> se hereda conceptualmente para crear <code>BotonConfirmar</code> o <code>BotonCancelar</code>, manteniendo la coherencia visual y funcional que el usuario argentino espera de una aplicación profesional[cite: 3]. Tu "laburo" como ingeniero es asegurar que estas jerarquías sean profundas en funcionalidad pero simples en su mantenimiento.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-7')">Referencia: Deitel Secc. 12.7 | O'Reilly Cap. 13: Inheritance | Cuadernos NotebookLM: Educación, UX y Web</button>
+        </section>
+
+<section id="sec-12-8">
+            <span>📝</span>
+            <h2>12.8 Repaso y Reflexión Crítica: Herencia frente a Composición</h2>
+            
+            <p>Llegados a este punto de la unidad, es imperativo realizar un alto en el camino para consolidar los cimientos de lo que has aprendido sobre la herencia. Según el libro de <strong>Deitel</strong>, la herencia es una de las herramientas más potentes de la programación orientada a objetos, pero su poder conlleva una responsabilidad de diseño significativa. Hasta ahora, has visto cómo la herencia permite capturar similitudes entre clases, promoviendo la <span class="abbr" data-title="Software Reuse: Capacidad de utilizar código existente para crear nuevas funcionalidades sin reescribir.">reutilización de software</span>. Sin embargo, como futuro ingeniero, debés desarrollar un criterio agudo para discernir cuándo esta técnica es la solución óptima y cuándo puede convertirse en una trampa de mantenimiento.</p>
+
+            <p>Tenés que recordar la regla de oro: la herencia debe utilizarse únicamente cuando existe una relación natural y semántica del tipo <strong>"es un" (is-a)</strong>. Si un objeto de la clase B puede ser descrito lógicamente como un tipo especializado del objeto de la clase A, entonces la herencia es el camino. Tal como se analiza en los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong>, el aprendizaje profundo de la programación no se trata de memorizar sintaxis, sino de construir modelos mentales precisos de la realidad que intentamos sistematizar. Si forzás una relación de herencia donde no existe una identidad compartida, estarás introduciendo una fragilidad estructural que colapsará ante cualquier cambio en los requerimientos del sistema.</p>
+
+            <h3>El Dilema Fundamental: ¿Heredar o Componer?</h3>
+            <p>De acuerdo con el texto de <strong>O'Reilly</strong>, uno de los errores más frecuentes en el nivel universitario es heredar de una clase simplemente para "robar" o acceder a una de sus funciones miembro. Esta práctica es peligrosa. Si lo que buscás es que tu clase utilice las capacidades de otra, pero no podés afirmar que tu clase "es un" ejemplar de la otra, entonces lo que necesitás es la <strong>composición</strong>. La composición representa una relación del tipo <strong>"tiene un" (has-a)</strong> o <strong>"se implementa en términos de"</strong>. En lugar de derivar, incluís un objeto de esa clase como un miembro privado de la tuya.</p>
+
+            <p>Considerá la perspectiva de la <strong>Ingeniería de Software</strong> aplicada al <strong>Desarrollo Web (NotebookLM)</strong>. En los sistemas modernos, la tendencia actual favorece la composición sobre la herencia debido a que la primera ofrece un acoplamiento mucho más débil. Un cambio en un componente "hijo" o "miembro" es mucho menos probable que rompa la lógica interna de la clase contenedora que un cambio en una clase base lo haga con su clase derivada. Como futuro profesional argentino, tu "laburo" consiste en diseñar sistemas que sean resilientes al cambio, y eso se logra respetando los límites de cada abstracción.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Criterio de Evaluación</th>
+                            <th>Herencia (is-a)</th>
+                            <th>Composición (has-a)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Naturaleza Lógica</strong></td>
+                            <td>Especialización de un concepto general.</td>
+                            <td>Agregación de funcionalidades o partes.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Acoplamiento</strong></td>
+                            <td>Fuerte (Dependencia de la estructura interna).</td>
+                            <td>Débil (Dependencia de la interfaz pública).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Flexibilidad</strong></td>
+                            <td>Estática (se define en tiempo de compilación).</td>
+                            <td>Dinámica (puede cambiarse en tiempo de ejecución).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Visibilidad</strong></td>
+                            <td>Puede acceder a miembros <code>protected</code>.</td>
+                            <td>Solo accede a miembros <code>public</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ejemplo Típico</strong></td>
+                            <td>Un <code>Profesor</code> es una <code>Persona</code>.</td>
+                            <td>Un <code>Auto</code> tiene un <code>Motor</code>.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>UX del Código: La Carga Cognitiva y la Mantenibilidad</h3>
+            <p>Desde la óptica del <strong>Cuaderno de NotebookLM sobre UX/UI</strong>, el diseño de una jerarquía de clases debe ser interpretado como la creación de una "interfaz para desarrolladores". Una jerarquía de herencia demasiado profunda o semánticamente confusa aumenta drásticamente la <span class="abbr" data-title="Cognitive Load: Cantidad de esfuerzo mental que el programador necesita para entender y operar con un sistema.">carga cognitiva</span> de quien deba heredar tu código en el futuro. Si un programador debe navegar por cinco niveles de herencia para entender de dónde proviene un método, el diseño ha fallado en términos de usabilidad técnica.</p>
+
+            <p>Observá que la consistencia es clave. Si heredás de una clase base, debés respetar el contrato establecido por ella. Romper el comportamiento esperado de un método heredado (lo que se conoce como violación del principio de sustitución) es una de las formas más rápidas de arruinar la experiencia del desarrollador y la estabilidad del software. La herencia debe simplificar la vida del programador, no convertirla en un laberinto de dependencias ocultas.</p>
+
+            <div class="diagram" style="background: rgba(26, 115, 232, 0.05); border: 2px dashed var(--accent); padding: 25px; border-radius: 12px; margin: 25px 0;">
+                <h4 style="margin-top:0; color: var(--accent);">Diagrama de Decisión de Diseño</h4>
+                <p>1. ¿La nueva clase es lógicamente un tipo de la clase existente? → <strong>HERENCIA</strong></p>
+                <p>2. ¿La nueva clase solo necesita usar los servicios de la clase existente? → <strong>COMPOSICIÓN</strong></p>
+                <p>3. ¿La nueva clase es una parte integral de un todo mayor? → <strong>AGREGACIÓN / COMPOSICIÓN</strong></p>
+            </div>
+
+            <h3>Resumen de Conceptos Clave para el Examen</h3>
+            <p>Para cerrar este repaso, fijate en estos puntos esenciales que sintetizan la teoría de <strong>Deitel</strong> y <strong>O'Reilly</strong> bajo la lente de las metodologías universitarias:</p>
+            <ul>
+                <li><strong>Reutilización Directa:</strong> La herencia permite aprovechar código ya probado, reduciendo el tiempo de desarrollo y la tasa de errores iniciales.</li>
+                <li><strong>Fragilidad de la Base:</strong> Un cambio en la clase base puede tener efectos secundarios impredecibles en todas las clases derivadas. Este es el principal riesgo de la herencia.</li>
+                <li><strong>Ocultamiento de Información:</strong> Siempre preferí mantener los datos como <code>private</code> y usar funciones de acceso, incluso en la herencia, para minimizar el impacto de futuros cambios estructurales.</li>
+                <li><strong>Sustituibilidad:</strong> Un objeto derivado debe poder usarse en cualquier lugar donde se espere un objeto base. Si esto no se cumple, la jerarquía es lógicamente defectuosa.</li>
+            </ul>
+
+            <p>Como conclusión de esta sección de repaso, te proponemos un ejercicio de reflexión académica: no pienses en la herencia como una forma de escribir menos código (ese es un beneficio secundario), sino como una forma de organizar el pensamiento y la arquitectura del sistema. La elegancia de un diseño orientado a objetos reside en su capacidad de expresar relaciones complejas con simplicidad y rigor. Dominar la distinción entre herencia y composición es lo que te permitirá transitar de ser alguien que "tira código" a ser un verdadero arquitecto de software capaz de liderar proyectos de envergadura nacional o internacional.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-8')">Referencia: Deitel Secc. 12.8 | O'Reilly Cap. 13: Classes & Design | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+        </section>
+
+<section id="sec-12-9"> <span>✨</span> <h2>12.9 Crear nuevas clases heredando las clases ya existentes</h2>
+
+        <p>En el diseño de sistemas de alta complejidad, el acto de <strong>crear nuevas clases a partir de las ya existentes</strong> no es una simple tarea de transcripción sintáctica, sino un ejercicio profundo de <span class="abbr" data-title="Abstracción: Proceso de simplificación que consiste en identificar los aspectos esenciales de una entidad y descartar los detalles irrelevantes para un contexto dado.">abstracción</span> y análisis sistémico. Según la doctrina técnica de <strong>Deitel</strong>, este proceso constituye la base de la <span class="abbr" data-title="Software Reuse: Técnica de ingeniería que consiste en utilizar activos de software existentes para construir nuevos sistemas, reduciendo tiempo y errores.">reutilización de software</span>. Vos, como futuro ingeniero, debés aprender a identificar las características comunes entre diversas entidades para "factorizar" esos elementos hacia una <strong>clase base</strong> robusta, permitiendo que las clases derivadas se concentren exclusivamente en su especialización funcional.</p>
+
+        <p>Tal como se analiza en el <strong>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</strong>, la práctica reflexiva de abstraer estas propiedades es lo que diferencia sustancialmente a un programador de un verdadero ingeniero de software. Mientras que el programador suele enfocarse en la resolución inmediata de un problema (muchas veces recurriendo al antipatrón de "copiar y pegar"), el ingeniero reflexiona sobre la arquitectura a largo plazo, buscando patrones de comportamiento que puedan ser heredados para minimizar la deuda técnica y maximizar la mantenibilidad del sistema.</p>
+
+        <h3>El Proceso Académico de Identificación de Atributos</h3>
+        <p>De acuerdo con el <strong>Libro de Deitel</strong>, el primer paso para crear una jerarquía eficiente es el análisis de redundancias. Si tenés dos clases que comparten el 80% de su lógica, el rigor ingenieril te obliga a crear una clase base que contenga esa intersección de atributos y métodos. Por ejemplo, si estás diseñando un sistema universitario en Argentina y tenés las clases <code>AlumnoGrado</code> y <code>AlumnoPosgrado</code>, notarás que ambos tienen nombre, legajo y regularidad. Estos deben migrar a una clase base <code>Alumno</code>.</p>
+
+        <div class="diagram" style="background: rgba(26, 115, 232, 0.05); border: 2px dashed var(--accent); padding: 25px; border-radius: 12px; margin: 25px 0;">
+            <h4 style="margin-top:0; color: var(--accent);">Metodología de Refactorización para Herencia</h4>
+            <p>1. <strong>Identificación:</strong> Localizar miembros de datos y funciones idénticas en clases dispares.</p>
+            <p>2. <strong>Generalización:</strong> Crear una clase base que encapsule estos elementos comunes.</p>
+            <p>3. <strong>Derivación:</strong> Utilizar la sintaxis de herencia (<code>: public</code>) para vincular las clases originales a la nueva base.</p>
+            <p>4. <strong>Especialización:</strong> Eliminar el código redundante de las clases hijas y dejar solo lo que las hace únicas.</p>
+        </div>
+
+        <p>Desde la perspectiva de <strong>O'Reilly</strong>, este proceso debe ser cauteloso. Advierte que la herencia crea un <span class="abbr" data-title="Acoplamiento: Grado de dependencia entre dos módulos de software. Un acoplamiento fuerte dificulta los cambios y el mantenimiento.">acoplamiento fuerte</span>. Al heredar de una clase existente, estás aceptando su contrato de interfaz de por vida. Por lo tanto, antes de codificar la relación, debés estar seguro de que la relación es semánticamente correcta (relación "es un").</p>
+
+        <h3>Arquitectura de Información y UX del Código</h3>
+        <p>Incluso el código fuente posee una "experiencia de usuario". Según el <strong>Cuaderno de NotebookLM sobre UX/UI</strong>, una jerarquía de clases debe diseñarse pensando en el <strong>desarrollador como usuario</strong>. Si creás una estructura de herencia confusa, con múltiples niveles de derivación sin una lógica clara, estás aumentando la <span class="abbr" data-title="Carga Cognitiva: Cantidad de esfuerzo mental que el programador necesita para entender, procesar y operar con un sistema de software complejo.">carga cognitiva</span> del equipo de desarrollo. Una buena arquitectura es aquella que se explica por sí misma: al ver que <code>EmpleadoBaseMasComision</code> hereda de <code>EmpleadoPorComision</code>, el programador comprende inmediatamente el modelo mental del sistema sin necesidad de leer toda la implementación.</p>
+
+        <p>En el contexto del <strong>Desarrollo Web (NotebookLM)</strong>, este concepto es análogo a la creación de componentes modulares y reutilizables. Al igual que en la web buscamos componentes base (como un <code>InputGenerico</code>) que luego extendemos para casos específicos (<code>InputContraseña</code>), en C++ utilizamos la herencia para construir bloques de construcción sólidos que puedan adaptarse a los requerimientos cambiantes de una organización.</p>
+
+        <h3>Ejemplo Práctico de Implementación Universitaria</h3>
+        <p>Fijate en este fragmento de código que ilustra el paso de un diseño redundante a uno basado en herencia, siguiendo los estándares de <strong>Deitel</strong>:</p>
+        <pre><code>// CLASE BASE: Generalización de la entidad
+class MiembroFacultad { public: void establecerNombre(string n) { nombre = n; } string obtenerNombre() const { return nombre; } protected: string nombre; string legajo; };
+
+// CLASE DERIVADA: Especialización funcional class Profesor : public MiembroFacultad { public: void asignarCátedra(string c) { catedra = c; } // Hereda establecerNombre y obtenerNombre automáticamente private: string catedra; };</code></pre>
+
+        <p>Como podés observar, la clase <code>Profesor</code> no necesita redefinir la gestión del nombre ni del legajo. Al heredar de <code>MiembroFacultad</code>, "absorbe" esas capacidades. Esta es la esencia de la ingeniería: no repetir esfuerzos, sino capitalizar lo que ya funciona. Según los <strong>Cuadernos de NotebookLM</strong>, este enfoque no solo mejora la velocidad de desarrollo, sino que reduce drásticamente la superficie de error (bugs), ya que cualquier corrección en la clase base se propaga instantáneamente a todas las especializaciones.</p>
+
+        <h3>Consideraciones Finales: Ética y Calidad del Software</h3>
+        <p>En la formación universitaria argentina, enfatizamos que la herencia no debe usarse como un "atajo" para acceder a código ajeno. De acuerdo con <strong>O'Reilly</strong>, heredar solo para evitar escribir una función es un error de diseño. Si la relación no es de identidad (un Profesor <em>es un</em> Miembro de Facultad), debés optar por la composición. El ingeniero de software reflexivo evalúa constantemente este equilibrio entre reutilización y flexibilidad.</p>
+        
+        <p>Recordá que cada decisión de herencia que tomás hoy define la rigidez o flexibilidad del sistema del mañana. Al crear nuevas clases sobre las existentes, estás participando en el acto supremo de la ingeniería de software: la construcción de jerarquías de conocimiento que trascienden el código individual para convertirse en soluciones sistémicas escalables, mantenibles y, sobre todo, elegantes.</p>
+
+        <button class="btn-ref" onclick="openRef('ref-deitel-12-9')">Referencia: Deitel Secc. 12.9 | O'Reilly Cap. 13: Classes and Inheritance | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+    </section>
+
+<section id="sec-12-10"> <span>♻️</span> <h2>12.10 Entender la manera en que la herencia promueve la reutilización del software</h2>
+
+        <p>En el trayecto de formación de un ingeniero de software, comprender la <strong>reutilización</strong> no es simplemente una cuestión de eficiencia técnica, sino una filosofía de diseño fundamental. Según lo expresado en el texto de <strong>Deitel</strong>, la herencia es el mecanismo primordial que permite a los desarrolladores capturar la esencia de una funcionalidad existente y extenderla sin necesidad de reescribir código probado. Comprendé que, en el desarrollo profesional, cada línea de código que vos no escribís (porque ya fue escrita y validada por otro) es una línea de código que no tenés que testear ni depurar, lo cual reduce drásticamente el costo y el tiempo de salida al mercado.</p>
+
+        <p>De acuerdo con el <strong>Libro de O'Reilly</strong>, la herencia permite la creación de bibliotecas de clases robustas y extensibles. Al heredar de una clase base, estás aprovechando años o incluso décadas de optimización de otros ingenieros. Un ejemplo emblemático es la <span class="abbr" data-title="STL: Standard Template Library. Biblioteca estándar de C++ que provee estructuras de datos y algoritmos genéricos altamente optimizados.">STL</span>, la cual, aunque se apoya fuertemente en plantillas, demuestra cómo la estructuración jerárquica y el diseño modular permiten que el programador se concentre en la lógica de negocio específica en lugar de preocuparse por los detalles de bajo nivel de la infraestructura.</p>
+
+        <h3>La Visión Estratégica: No Reinventar la Rueda</h3>
+        <p>Fijate que la meta de un estudiante universitario en Argentina no debe ser únicamente "hacer que el programa funcione", sino hacerlo con un estándar de calidad internacional. Tal como se analiza en los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong>, la práctica de la reutilización fomenta el pensamiento sistémico. Al utilizar herencia, vos estás integrando tu trabajo en un ecosistema de software preexistente. Esta capacidad de "construir sobre hombros de gigantes" es lo que permite que proyectos complejos —como sistemas operativos o motores de búsqueda— sean viables en términos de mantenimiento.</p>
+
+        <p>Desde la perspectiva del <strong>Desarrollo Web (NotebookLM)</strong>, este concepto de reutilización es análogo a la arquitectura basada en componentes (como en React o Vue). Al igual que en la web diseñás un componente de interfaz base que luego especializás para diferentes contextos, en C++ utilizás la herencia para definir un comportamiento genérico que luego adaptás a necesidades puntuales. Esta modularidad es la que garantiza que, si encontrás un error en la lógica base, solo tengas que corregirlo en un lugar para que el cambio se propague automáticamente a toda la jerarquía de clases derivadas.</p>
+
+        <div class="table-res">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Impacto en la Reutilización</th>
+                        <th>Beneficio para la Ingeniería</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Generalización</strong></td>
+                        <td>Permite agrupar lógica común en un solo punto (Clase Base).</td>
+                        <td>Reducción del principio <span class="abbr" data-title="DRY: Don't Repeat Yourself. Principio de diseño de software que apunta a reducir la repetición de información de todo tipo.">DRY</span> y mayor consistencia.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Especialización</strong></td>
+                        <td>Solo se escribe el código que diferencia a la nueva entidad.</td>
+                        <td>Aceleración del desarrollo y código más limpio.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mantenimiento</strong></td>
+                        <td>Las correcciones en la base benefician a todas las derivadas.</td>
+                        <td>Menor riesgo de introducir bugs por inconsistencias.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Escalabilidad</strong></td>
+                        <td>Nuevas clases pueden incorporarse al sistema sin alterar el núcleo.</td>
+                        <td>Arquitecturas abiertas a la extensión pero cerradas a la modificación.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>UX del Desarrollador y el Modelo Mental de la Reutilización</h3>
+        <p>Incluso el código fuente debe ser analizado bajo la lente del <strong>Cuaderno de NotebookLM sobre UX/UI</strong>. La reutilización exitosa depende de la <em>transparencia</em> y la <em>previsibilidad</em> de la interfaz. Un desarrollador que hereda de tu clase base debe tener una <span class="abbr" data-title="DX: Developer Experience. El equivalente a la experiencia de usuario (UX) pero enfocado específicamente en los programadores que utilizan una herramienta o código.">DX (Developer Experience)</span> fluida. Si la jerarquía es confusa o las responsabilidades están mezcladas, la reutilización se convierte en un obstáculo en lugar de una ventaja. Como futuro ingeniero, debés diseñar tus clases pensando en que alguien más (o vos mismo en seis meses) querrá extender esa funcionalidad.</p>
+
+        <p>Tené en cuenta que la herencia promueve la creación de sistemas resilientes. Cuando reutilizás código de una biblioteca estándar o de un <em>framework</em> corporativo, estás utilizando componentes que ya han pasado por miles de horas de uso en producción. Este "testeo por uso masivo" es algo que nunca podrías replicar escribiendo todo desde cero. Por eso, dominar la jerarquía de herencia es, en esencia, dominar el arte de la eficiencia profesional en la industria tecnológica.</p>
+
+        <div class="diagram" style="background: rgba(26, 115, 232, 0.05); border: 2px dashed var(--accent); padding: 25px; border-radius: 12px; margin: 25px 0;">
+            <h4 style="margin-top:0; color: var(--accent);">Ciclo de Vida de la Reutilización Efectiva</h4>
+            <p>1. <strong>Identificar:</strong> Buscar patrones repetitivos en el dominio del problema.</p>
+            <p>2. <strong>Abstraer:</strong> Mover la lógica común a una clase base robusta.</p>
+            <p>3. <strong>Heredar:</strong> Crear clases derivadas que solo implementen lo nuevo.</p>
+            <p>4. <strong>Validar:</strong> Asegurar que la relación "es un" se mantenga coherente.</p>
+            <p>5. <strong>Evolucionar:</strong> Extender el sistema sin romper la compatibilidad hacia atrás.</p>
+        </div>
+
+        <h3>Desafíos y Ética en la Reutilización</h3>
+        <p>Sin embargo, no todo es ganancia. <strong>O'Reilly</strong> advierte sobre la "trampa de la dependencia". Un uso excesivo de la herencia para reutilizar código puede llevar a un <span class="abbr" data-title="Strong Coupling: Dependencia excesiva entre módulos que hace que un cambio en uno obligue a cambiar el otro.">acoplamiento fuerte</span>. Si la clase base es inestable o cambia con frecuencia, las clases derivadas sufrirán las consecuencias. El ingeniero reflexivo debe evaluar siempre si la herencia es la herramienta adecuada o si la <strong>composición</strong> (incluir un objeto como miembro) ofrecería una reutilización más flexible y menos riesgosa.</p>
+        
+        <p>En la facultad, a menudo se dice que "el mejor código es el que no se escribe". Con esto nos referimos a que debés buscar siempre la forma de apoyarte en soluciones existentes. Según el <strong>Cuaderno de Educación</strong>, este enfoque desarrolla en el estudiante una actitud de respeto por los estándares y una mayor capacidad de integración en equipos multidisciplinarios. Al final del día, la herencia es el lenguaje que permite que diferentes partes de un sistema hablen el mismo idioma técnico, garantizando que la arquitectura del software sea tan sólida como los puentes o edificios que diseñan otros ingenieros.</p>
+
+        <p>Para concluir, recordá que tu objetivo como profesional no es demostrar que podés escribir mil líneas de código en un día, sino demostrar que podés diseñar una solución elegante que use cien líneas nuevas y reutilice novecientas existentes. Esa es la marca de un ingeniero de software de élite. La reutilización es el motor del progreso tecnológico: nos permite enfocarnos en resolver los problemas nuevos porque los problemas viejos ya están resueltos en nuestras clases base.</p>
+
+        <button class="btn-ref" onclick="openRef('ref-deitel-12-10')">Referencia: Deitel Secc. 12.10 | O'Reilly Cap. 13: Software Reuse | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+    </section>
+
+<section id="sec-12-11"> <span>🧠</span> <h2>12.11 Comprender los conceptos de clase base y clase derivada: La Esencia de la Flexibilidad Arquitectónica</h2>
+
+        <p>En el diseño de sistemas de software de nivel universitario, la comprensión profunda de la relación entre la <strong>clase base</strong> y la <strong>clase derivada</strong> constituye el umbral entre ser un programador que "tira código" y un ingeniero que diseña arquitecturas resilientes. Según la doctrina técnica de <strong>Deitel</strong>, esta relación no es solo una transferencia de miembros de datos, sino una declaración de identidad técnica basada en la relación <strong>"es un" (is-a)</strong>. Vos debés internalizar que esta jerarquía permite que un programa trate a un objeto de una clase derivada como si fuera un objeto de su clase base, lo cual abre las puertas a la extensibilidad sin precedentes que ofrece el polimorfismo dinámico.</p>
+
+        <p>Tal como se analiza en los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong>, el aprendizaje de este concepto requiere que construyas un modelo mental sólido sobre la "identidad vs. capacidad". En el aula universitaria argentina, solemos utilizar la analogía taxonómica: si tenés un puntero a una clase base <code>Vehiculo</code>, este puede apuntar perfectamente a un objeto de la clase derivada <code>Automovil</code>. ¿Por qué? Porque un automóvil <em>es un</em> vehículo. Sin embargo, fijate que lo opuesto es lógicamente imposible e ilegal en C++: un puntero de clase derivada no puede apuntar a un objeto de clase base sin recurrir a conversiones riesgosas, ya que un vehículo genérico no posee necesariamente las capacidades específicas (aire acondicionado, baúl, etc.) de un automóvil.</p>
+
+        <h3>La Mecánica de los Punteros y las Referencias en la Jerarquía</h3>
+        <p>De acuerdo con el análisis de <strong>O'Reilly</strong>, la verdadera potencia de la herencia reside en la manipulación de objetos mediante punteros de clase base. Cuando declarás <code>Base *ptr = new Derivada();</code>, el compilador realiza lo que denominamos un <span class="abbr" data-title="Upcasting: Conversión automática de un puntero o referencia de una clase derivada a un tipo de clase base.">Upcasting</span> implícito. Este puntero tiene un <strong>tipo estático</strong> (la clase base) y apunta a un objeto con un <strong>tipo dinámico</strong> (la clase derivada). Comprendé que, bajo esta configuración, el puntero solo tiene "visibilidad" sobre los miembros que existen en la clase base. Si intentás acceder a un método exclusivo de la clase derivada a través de ese puntero base, el compilador te arrojará un error, protegiendo la integridad del sistema.</p>
+
+        <p>Este comportamiento es la base del polimorfismo. Como futuro ingeniero, tenés que entender que si un método en la clase base está marcado como <code>virtual</code>, C++ utilizará una <span class="abbr" data-title="vtable: Virtual Method Table. Una tabla utilizada para resolver las llamadas a funciones en tiempo de ejecución en el despacho dinámico.">vtable</span> para decidir en tiempo de ejecución qué versión del método llamar. Si el objeto apuntado es una clase derivada, se ejecutará la versión sobrescrita de esa clase, aun cuando estemos operando a través de un puntero base. Esta capacidad de "responder al mensaje según la identidad real del objeto" es lo que permite que el software sea verdaderamente modular.</p>
+
+        <div class="diagram" style="background: rgba(26, 115, 232, 0.05); border: 1px solid var(--accent); padding: 25px; border-radius: 12px; margin: 25px 0;">
+            <h4 style="margin-top:0; color: var(--accent);">Visualización de la Memoria y Visibilidad</h4>
+            <div style="display: flex; justify-content: space-around; align-items: flex-start; gap: 20px;">
+                <div style="flex: 1;">
+                    <strong>Puntero Clase Base (ptr)</strong><br>
+                    <code>[ Dirección ]</code><br>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);">Ve solo la "cara" de la Base</span>
+                </div>
+                <div style="font-size: 1.5rem;">➔</div>
+                <div style="flex: 1; border-left: 3px solid var(--accent); padding-left: 15px;">
+                    <strong>Objeto Clase Derivada</strong><br>
+                    <code>[ Miembros Base ]</code><br>
+                    <code>[ Miembros Derivados ]</code><br>
+                    <span style="font-size: 0.8rem; color: var(--success);">Identidad real completa</span>
+                </div>
+            </div>
+        </div>
+
+        <h3>Análisis Crítico: El Problema del Slicing y la Unidireccionalidad</h3>
+        <p>Un error común en el laboratorio de programación es olvidar la diferencia entre pasar por referencia y pasar por valor. Según <strong>Deitel</strong>, si pasás un objeto de clase derivada a una función que espera un objeto de clase base <em>por valor</em>, ocurre el fenómeno del <span class="abbr" data-title="Slicing: Recorte de un objeto derivado cuando se asigna a un objeto de clase base por valor, perdiendo los datos específicos del hijo.">Object Slicing</span> (recorte de objeto). C++ "rebana" los miembros específicos de la clase derivada y solo copia la parte de la clase base al nuevo objeto. Esto destruye la identidad polimórfica del objeto y puede llevar a bugs lógicos devastadores en sistemas financieros o de control industrial.</p>
+
+        <p>Por otro lado, la unidireccionalidad de la herencia es un principio de seguridad innegociable. <strong>O'Reilly</strong> advierte que forzar a un puntero de clase derivada a apuntar a un objeto base (Downcasting) sin el uso de <code>dynamic_cast</code> es una invitación al desastre. Como el objeto base no tiene el layout de memoria que la derivada espera, cualquier acceso a miembros inexistentes resultará en un comportamiento indefinido o un <em>crash</em> del sistema. En la ingeniería de software moderna, preferimos jerarquías planas y claras antes que estructuras forzadas que requieran <em>casting</em> constante.</p>
+
+        <h3>Perspectiva de UX UI y Desarrollo Web (NotebookLM)</h3>
+        <p>Desde la óptica del <strong>Cuaderno de NotebookLM sobre UX/UI</strong>, el diseño de estas jerarquías debe pensarse como una "interfaz para el desarrollador" (DX). Una clase base bien diseñada debe ser intuitiva y ocultar la complejidad. Si un programador necesita saber exactamente qué tipo de objeto hay detrás de un puntero base para poder usarlo, entonces el diseño de la jerarquía ha fallado en términos de usabilidad. La "tecnología invisible" aplicada al código dicta que el polimorfismo debe funcionar de manera fluida, sin que el usuario del objeto tenga que preocuparse por los detalles de implementación de la herencia.</p>
+
+        <p>En el <strong>Desarrollo Web</strong> moderno, este concepto se refleja en los sistemas de componentes jerárquicos. Al igual que en C++, donde una clase derivada extiende a la base, en frameworks de vanguardia utilizamos la composición y la herencia de propiedades (props) para crear elementos especializados. Comprendé que la lógica de "sustituibilidad" es la misma: un componente de botón especializado debe poder ser utilizado en cualquier lugar donde se espere un botón genérico, garantizando la consistencia visual y funcional que el usuario final demanda.</p>
+
+        <div class="table-res">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Concepto de Punteros</th>
+                        <th>Regla de Ingeniería</th>
+                        <th>Impacto en el Software</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Base* = &Derivada</strong></td>
+                        <td>Permitido (Upcasting implícito).</td>
+                        <td>Habilita el polimorfismo y el tratamiento uniforme.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Derivada* = &Base</strong></td>
+                        <td>Ilegal / Peligroso (Downcasting).</td>
+                        <td>Previene accesos a memoria no inicializada.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Llamada Virtual</strong></td>
+                        <td>Despacho dinámico (vtable).</td>
+                        <td>El objeto decide su comportamiento en ejecución.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Paso por Valor</strong></td>
+                        <td>Evitar (Slicing).</td>
+                        <td>Previene la pérdida de datos y de identidad.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Conclusión Pedagógica y Ética Profesional</h3>
+        <p>Finalmente, en el marco de las <strong>Metodologías Activas</strong>, te invitamos a reflexionar sobre la responsabilidad que implica diseñar estas relaciones. La herencia no es una forma de "ahorrar código", sino de organizar la realidad. Un ingeniero de la <strong>UBA</strong> o cualquier universidad argentina de prestigio sabe que cada clase derivada es un compromiso de mantenimiento a largo plazo. Al dominar el concepto de que el padre sostiene al hijo pero el hijo no puede sostener al padre, estás aprendiendo a construir sistemas que respetan la lógica de la realidad y los límites de la computación.</p>
+
+        <p>Fijate en este fragmento de código que resume la lección técnica de <strong>Deitel</strong>:</p>
+        <pre><code>// Definición conceptual
+class Figura { public: virtual void dibujar() { /* ... / } }; class Circulo : public Figura { public: void dibujar() override { / ... */ } };
+
+// Uso profesional Figura* miFigura = new Circulo(); // Upcasting seguro miFigura->dibujar(); // Llama a Circulo::dibujar() gracias al polimorfismo
+
+// ADVERTENCIA Figura basePura; // Circulo* miCirculo = &basePura; // ERROR: Una figura genérica no es un círculo.</code></pre>
+
+        <p>Como conclusión, entender la relación entre clase base y clase derivada es entender la <strong>interoperabilidad</strong>. Es lo que permite que el software evolucione: podés agregar nuevas clases derivadas hoy que funcionarán perfectamente con código de clase base escrito hace diez años. Esa es la verdadera marca de la ingeniería de software de clase mundial: crear sistemas que trasciendan el tiempo mediante el uso inteligente y riguroso de las jerarquías de tipos.</p>
+
+        <button class="btn-ref" onclick="openRef('ref-deitel-12-11')">Referencia: Deitel Secc. 12.11 | O'Reilly Cap. 13: Polymorphism and Inheritance | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+    </section>
+
+<section id="sec-12-12">
+            <span>🔗</span>
+            <h2>12.12 Herencia múltiple: Potencia, Ambigüedad y el Dilema del Diamante</h2>
+            
+            <p>La <strong>herencia múltiple</strong> es una de las características más potentes y, simultáneamente, más debatidas del lenguaje C++. A diferencia de otros lenguajes de programación modernos que limitan la derivación a una única clase base, C++ permite que vos creés una clase derivada que herede miembros de dos o más clases base independientes. Según lo expuesto en el <strong>Libro de Deitel</strong>, esta técnica es fundamental cuando un objeto "es un" ejemplar de múltiples categorías distintas al mismo tiempo. Por ejemplo, si estás diseñando un sistema de gestión para una universidad argentina, una clase <code>AyudanteAlumno</code> podría heredar simultáneamente de la clase <code>Estudiante</code> y de la clase <code>Empleado</code>, absorbiendo los atributos y comportamientos de ambos mundos.</p>
+
+            <p>Comprendé que la sintaxis para implementar esto es una extensión natural de la herencia simple: simplemente debés listar las clases base separadas por comas después de los dos puntos en la declaración de la clase. Fijate en este ejemplo técnico: <code>class Ayudante : public Estudiante, public Empleado { ... };</code>. Tal como se analiza en los <strong>Cuadernos de NotebookLM sobre Educación y Metodologías Activas</strong>, la enseñanza de este concepto requiere que visualices al objeto no como un eslabón en una cadena, sino como el punto de convergencia de múltiples linajes lógicos. Esta capacidad de síntesis es lo que permite modelar la realidad con una fidelidad técnica que la herencia simple a veces no alcanza a cubrir.</p>
+
+            <h3>La Mecánica de la Construcción Múltiple</h3>
+            <p>De acuerdo con el rigor técnico de <strong>Deitel</strong>, cuando instanciás un objeto de una clase con herencia múltiple, el orden de llamada de los constructores sigue estrictamente el orden en que las clases base aparecen en la lista de derivación (de izquierda a derecha). Si <code>Ayudante</code> hereda de <code>Estudiante</code> y luego de <code>Empleado</code>, primero se construirá la parte de estudiante y luego la de empleado. Es vital que vos, como ingeniero, gestiones correctamente el paso de argumentos a través de la lista de inicializadores de miembros en el constructor de la clase derivada para asegurar que todos los ancestros se inicialicen de forma consistente.</p>
+
+            <div class="diagram">
+                <strong>Estructura de Herencia Múltiple</strong><br><br>
+                <code>[Clase Base A]</code> &nbsp; &nbsp; &nbsp; &nbsp; <code>[Clase Base B]</code><br>
+                <span>↘</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span>↙</span><br>
+                <code>[Clase Derivada C]</code><br>
+                <small>(Hereda miembros de A y B)</small>
+            </div>
+
+            <h3>El Problema de la Ambigüedad y el "Dilema del Diamante"</h3>
+            <p>Sin embargo, "no todo lo que brilla es oro". El <strong>Libro de O'Reilly</strong> lanza una advertencia crítica sobre la complejidad que introduce la herencia múltiple, particularmente el fenómeno conocido como la <strong>ambigüedad</strong>. Si ambas clases base poseen una función miembro o un dato con el mismo nombre (por ejemplo, una función <code>imprimir()</code>), el compilador de C++ no sabrá cuál de las dos versiones debe ejecutar cuando la invoqués desde el objeto derivado. En este caso, debés ser explícito y utilizar el operador de resolución de ámbito (<code>::</code>) para indicarle al compilador exactamente qué "linaje" querés invocar: <code>miObjeto.ClaseA::imprimir();</code>.</p>
+
+            <p>El escenario más complejo es el <strong>Problema del Diamante</strong>. Este ocurre cuando dos clases base heredan de una misma superclase común. Según <strong>O'Reilly</strong>, esto genera que la clase derivada final contenga <em>dos copias</em> de los miembros de la superclase original, lo que no solo desperdicia memoria, sino que crea inconsistencias lógicas graves. Para solucionar esto, C++ introduce la <strong>herencia virtual</strong> (usando la palabra clave <code>virtual</code> en la derivación), lo que garantiza que solo exista una única instancia compartida de la clase abuela en toda la jerarquía. Comprendé que dominar estos detalles finos es lo que separa a un programador senior de uno que recién empieza.</p>
+
+            <div class="diagram">
+                <strong>El Problema del Diamante (Diamond Problem)</strong><br><br>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <code>[Clase Abuela]</code><br>
+                &nbsp; &nbsp; &nbsp; &nbsp; <span>↙</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span>↘</span><br>
+                <code>[Clase Padre A]</code> &nbsp; &nbsp; &nbsp; <code>[Clase Padre B]</code><br>
+                &nbsp; &nbsp; &nbsp; &nbsp; <span>↘</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span>↙</span><br>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <code>[Clase Nieta]</code><br>
+                <small>(¿De quién hereda los miembros de la Abuela?)</small>
+            </div>
+
+            <h3>Análisis Comparativo y Perspectiva de Ingeniería</h3>
+            <p>Desde la óptica del <strong>Desarrollo Web (NotebookLM)</strong>, la herencia múltiple de C++ se asemeja conceptualmente al uso de <em>mixins</em> o a la implementación de múltiples interfaces en lenguajes como Java o C#. No obstante, la implementación de C++ es mucho más cruda y poderosa, ya que heredás estado (datos) y no solo contrato (métodos). Esta diferencia exige un diseño arquitectónico mucho más riguroso. En el nivel universitario, debés evaluar si la herencia múltiple es realmente necesaria o si podrías resolver el problema mediante <strong>composición</strong> o herencia simple con interfaces abstractas.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Herencia Simple</th>
+                            <th>Herencia Múltiple</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Modelado</strong></td>
+                            <td>Jerarquía lineal y clara ("es un").</td>
+                            <td>Modelado de roles cruzados y facetas múltiples.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Complejidad</strong></td>
+                            <td>Baja; fácil de depurar.</td>
+                            <td>Alta; riesgos de ambigüedad y colisión de nombres.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Acoplamiento</strong></td>
+                            <td>Vincula la derivada a una sola base.</td>
+                            <td>Vincula la derivada a múltiples puntos de falla.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Solución de conflictos</strong></td>
+                            <td>No aplica (herencia directa).</td>
+                            <td>Requiere resolución de ámbito (<code>::</code>) o herencia virtual.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>UX del Desarrollador y Carga Cognitiva</h3>
+            <p>Tal como se analiza en el <strong>Cuaderno de NotebookLM sobre UX/UI</strong>, el diseño de una API o de una biblioteca de clases es, en última instancia, el diseño de una interfaz para otros programadores. Un uso abusivo de la herencia múltiple puede crear un "código spaghetti" jerárquico que aumenta drásticamente la <span class="abbr" data-title="Cognitive Load: Esfuerzo mental que el programador debe realizar para comprender el flujo y las dependencias del código.">carga cognitiva</span> de tu equipo. Si un colega tiene que rastrear tres archivos diferentes para entender por qué una función se comporta de cierta manera, tu diseño ha fallado en términos de usabilidad técnica. La recomendación académica argentina es: <strong>"Usá la herencia múltiple con moderación"</strong>; reservala para casos donde la elegancia del modelo justifique plenamente la complejidad técnica adicional.</p>
+
+            <h3>Conclusión Pedagógica y Ética del Diseño</h3>
+            <p>En el marco de las <strong>Metodologías Activas</strong>, te proponemos un ejercicio de reflexión: Pensá en un objeto del mundo real que pertenezca a dos categorías distintas sin ser una subclase de ninguna. Un <code>TelefonoInteligente</code> es una <code>Camara</code> y es un <code>DispositivoComunicacion</code>. Si heredás de ambos, obtenés un modelo potente, pero debés ser el guardián de su integridad. La herencia múltiple te da la libertad de romper las estructuras rígidas del árbol genealógico tradicional para construir redes de conocimiento. Como futuro profesional, tu compromiso es asegurar que esa red sea sólida, documentada y, sobre todo, comprensible para quienes hereden tu trabajo.</p>
+            
+            <p>Recordá que en el ámbito profesional, la claridad del código suele valer más que la brevedad de la sintaxis. Al dominar la herencia múltiple, no solo estás aprendiendo una regla de C++, estás aprendiendo a gestionar la complejidad sistémica en la ingeniería de software a gran escala. Tené siempre presente la máxima de <strong>O'Reilly</strong>: "Solo porque el lenguaje te permita hacer algo, no significa que sea siempre una buena idea hacerlo". El criterio ingenieril es tu herramienta más valiosa.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-12-12')">Referencia: Deitel Secc. 12.12 | O'Reilly Cap. 13: Multiple Inheritance | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+        </section>
+
+        <footer style="text-align: center; margin-top: 5rem; color: var(--text-secondary); border-top: 1px solid var(--border); padding-top: 2rem;">
+            <p>© 2026 - Cátedra de Programación Universitaria C++ - Basado en Deitel y O'Reilly</p>
+        </footer>
+    </main>
+</div>
+
+<button class="theme-toggle" id="themeToggle" title="Cambiar modo">🌓</button>
+
+<div id="refModal" class="modal">
+    <div class="modal-content">
+        <h3 id="refTitle" style="color: var(--accent);">Referencia Académica</h3>
+        <p id="refBody" style="font-size: 0.95rem;"></p>
+        <button onclick="closeRef()" style="background: var(--accent); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; float: right;">Entendido</button>
+    </div>
+</div>
+
+<script>
+    const biblio = {
+        'ref-deitel-12-1': 'Deitel, P. J., & Deitel, H. M. C++ Cómo Programar, 6ta Edición. Pearson. Capítulo 12: Programación orientada a objetos: herencia. Introducción conceptual.',
+		'ref-deitel-12-1': 'Deitel Secc. 12.2 | O\'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-2': 'Deitel Secc. 12.2 | O\'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-3': 'Deitel Secc. 12.3 | O\'Reilly Cap. 13: Inheritance | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+        'ref-deitel-12-4': 'Deitel, P. J., & Deitel, H. M. C++ Cómo Programar. Jerarquías de herencia y niveles de acceso (Private vs Protected).',
+		'ref-deitel-12-4-1': 'Deitel Secc. 12.4.1 | O\'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-4-2': 'Deitel Secc. 12.4.2 | O\'Reilly Cap. 13: Maintenance Hazards | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-4-3': 'Deitel Secc. 12.4.3 | O\'Reilly Cap. 13: Inheritance Systems | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-4-4': 'Deitel Secc. 12.4.4 | O\'Reilly Cap. 13: Inheritance Access | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-4-5': 'Deitel Secc. 12.4.5 | O\'Reilly Cap. 13: Classes and Encapsulation | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-5': ' Deitel Secc. 12.5 | O\'Reilly Cap. 13: Constructors and Destructors | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-6': 'Deitel Secc. 12.6 | O\'Reilly Cap. 13: Access Control | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-7': 'Deitel Secc. 12.7 | O\'Reilly Cap. 13: Inheritance | Cuadernos NotebookLM: Educación, UX y Web',
+		'ref-deitel-12-8': 'Deitel Secc. 12.8 | O\'Reilly Cap. 13: Classes & Design | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-9': 'Deitel Secc. 12.9 | O\'Reilly Cap. 13: Classes and Inheritance | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-10': 'Deitel Secc. 12.10 | O\'Reilly Cap. 13: Software Reuse | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-11': 'Deitel Secc. 12.11 | O\'Reilly Cap. 13: Polymorphism and Inheritance | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-12-12': 'Deitel Secc. 12.12 | O\'Reilly Cap. 13: Multiple Inheritance | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+        'ref-oreilly': 'Steve Oualline. Practical C++ Programming, O\'Reilly. Chapter 13: Inheritance and Polymorphism. Secciones de herencia múltiple y ambigüedad.'
+    };
+
+    function openRef(id) {
+        document.getElementById('refBody').innerText = biblio[id];
+        document.getElementById('refModal').style.display = 'flex';
+    }
+
+    function closeRef() {
+        document.getElementById('refModal').style.display = 'none';
+    }
+
+    // Persistencia del tema
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        const next = currentTheme === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('cpp-theme', next);
+    });
+
+    const savedTheme = localStorage.getItem('cpp-theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+
+    // Navegación Activa
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+        let currentSectionId = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 150) {
+                currentSectionId = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            const href = link.getAttribute('href').substring(1);
+            if (currentSectionId !== '' && href === currentSectionId) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
