@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Unidad Didáctica 03: Clases en C++ - Análisis detallado. Basado en Deitel y O'Reilly.">
+    <title>Unidad Didáctica 03 - Clases análisis detallado - Parte 6</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Roboto+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #fdfdfd;
+            --bg-secondary: #f4f4f4;
+            --bg-paper: #ffffff;
+            --text-primary: #212121;
+            --text-secondary: #5f6368;
+            --accent: #1a73e8; 
+            --accent-hover: #1557b0;
+            --code-bg: #f8f9fa;
+            --border: #dadce0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --success: #1e8e3e;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-paper: #242424;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --accent: #8ab4f8;
+            --accent-hover: #aecbfa;
+            --code-bg: #2d2e31;
+            --border: #3c4043;
+            --shadow: 0 4px 12px rgba(0,0,0,0.5);
+            --success: #81c995;
+        }
+
+        * { box-sizing: border-box; transition: background-color 0.3s ease, color 0.3s ease; }
+        body { font-family: 'Merriweather', serif; background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.8; margin: 0; scroll-behavior: smooth; }
+
+        h1, h2, h3 { font-family: 'Roboto', sans-serif; }
+        h1 { font-weight: 700; font-size: 2.2rem; text-align: center; margin: 2rem 0; color: var(--accent); }
+        h1 a { text-decoration: none; color: inherit; }
+        h2 { border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-top: 3rem; font-size: 1.6rem; display: flex; align-items: center; gap: 10px; }
+        
+        .app-container { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
+
+        aside { 
+            background-color: var(--bg-secondary); 
+            border-right: 1px solid var(--border); 
+            height: 100vh; 
+            position: sticky; 
+            top: 0; 
+            overflow-y: auto; 
+            padding: 1.5rem; 
+        }
+
+        .nav-links { list-style: none; padding: 0; }
+        .nav-links a { 
+            text-decoration: none; 
+            color: var(--text-secondary); 
+            font-size: 0.85rem; 
+            display: block; 
+            padding: 0.7rem; 
+            border-radius: 4px; 
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        .nav-links a:hover, .nav-links a.active { background: var(--accent); color: white; }
+
+        main { padding: 2rem 5%; max-width: 1100px; margin: 0 auto; }
+        section { 
+            background: var(--bg-paper); 
+            padding: 2.5rem; 
+            border-radius: 12px; 
+            margin-bottom: 4rem; 
+            box-shadow: var(--shadow); 
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        code { font-family: 'Roboto Mono', monospace; background: var(--code-bg); padding: 0.2rem 0.4rem; border-radius: 4px; color: var(--accent); font-size: 0.9rem; }
+        pre { background: var(--code-bg); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent); overflow-x: auto; margin: 1.5rem 0; }
+
+        .abbr { border-bottom: 1px dotted var(--accent); cursor: help; color: var(--accent); font-weight: 600; position: relative; }
+        .abbr:hover::after {
+            content: attr(data-title);
+            position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%);
+            background: #323336; color: white; padding: 0.6rem 1rem; border-radius: 4px;
+            font-size: 0.8rem; width: 240px; z-index: 10; text-align: center; line-height: 1.4;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .timeline { border-left: 3px solid var(--accent); padding-left: 1.5rem; margin: 2rem 0; }
+        .timeline-item { position: relative; margin-bottom: 2rem; }
+        .timeline-item::before { content: ''; position: absolute; left: -25px; top: 10px; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 3px solid var(--bg-paper); }
+        .timeline-date { font-weight: bold; color: var(--accent); font-size: 0.9rem; }
+
+        .table-res { overflow-x: auto; margin: 2rem 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; background: var(--bg-paper); }
+        th, td { padding: 1rem; border: 1px solid var(--border); text-align: left; font-size: 0.95rem; }
+        th { background: var(--bg-secondary); color: var(--accent); }
+
+        .theme-toggle { position: fixed; bottom: 2rem; right: 2rem; width: 50px; height: 50px; border-radius: 50%; background: var(--accent); color: white; border: none; cursor: pointer; z-index: 100; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        
+        .btn-ref { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 1rem; }
+        .btn-ref:hover { background: var(--accent); color: white; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .modal-content { background: var(--bg-paper); padding: 2.5rem; border-radius: 12px; max-width: 600px; width: 90%; box-shadow: var(--shadow); }
+
+        .diagram-box { background: var(--bg-secondary); border: 1px dashed var(--accent); border-radius: 8px; padding: 1.5rem; text-align: center; margin: 1.5rem 0; font-family: 'Roboto Mono', monospace; font-size: 0.85rem; }
+
+        @media (max-width: 900px) { .app-container { grid-template-columns: 1fr; } aside { display: none; } }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <aside>
+        <h3 style="color: var(--accent); font-size: 1.1rem; letter-spacing: 1px;">Contenido de la Unidad</h3>
+        <ul class="nav-links">
+            <li><a href="#sec-9-1">9.1 Introducción - Análisis detallado</a></li>
+            <li><a href="#sec-9-2">9.2 Clase Tiempo</a></li>
+            <li><a href="#sec-9-3">9.3 Alcance y Acceso</a></li>
+            <li><a href="#sec-9-4">9.4 Interfaz e Implementación</a></li>
+            <li><a href="#sec-9-5">9.5 Funciones Acceso/Utilitarias</a></li>
+            <li><a href="#sec-9-6">9.6 Constructores Predeterminados</a></li>
+            <li><a href="#sec-9-7">9.7 Destructores</a></li>
+            <li><a href="#sec-9-8">9.8 Orden de Llamadas</a></li>
+            <li><a href="#sec-9-9">9.9 Trampa: Referencias Private</a></li>
+            <li><a href="#sec-9-10">9.10 Asignación de Miembros</a></li>
+            <li><a href="#sec-9-11">9.11 Ingeniería: Sistema ATM</a></li>
+            <li><a href="#sec-9-12">9.12 Repaso</a></li>
+        </ul>
+    </aside>
+
+    <main>
+        <header id="home">
+            <h1><a href="#home">Unidad Didáctica 03 - Clases análisis detallado - Parte 6</a></h1>
+            <p style="text-align: center; font-style: italic; color: var(--text-secondary);">Basado en los estándares académicos de Deitel & O'Reilly para formación de ingenieros.</p>
+        </header>
+
+<section id="sec-9-1">
+    <span>🏛️</span>
+    <h2>9.1 Introducción - Clases, un análisis más detallado</h2>
+    
+    <p>En esta instancia de tu formación como ingeniero, debés trascender la visión simplista de la programación estructurada para adentrarte en un análisis riguroso de las <strong>clases</strong> como cimientos de sistemas robustos. Según el texto fundamental de <strong>Deitel</strong>, una clase no es meramente una agrupación de variables; es un plano arquitectónico que define un <span class="abbr" data-title="Abstract Data Type: Modelo lógico de un tipo de datos que define valores y operaciones, ocultando la complejidad de su implementación física.">TDA</span> (Tipo de Dato Abstracto). Este concepto es central: vos no solo programás datos, sino que modelás comportamientos y garantizás la <strong>integridad del estado interno</strong> del objeto.</p>
+
+    <p>La Programación Orientada a Objetos (<span class="abbr" data-title="Object-Oriented Programming: Paradigma que organiza el software como una colección de objetos que representan instancias de clases y colaboran entre sí.">OOP</span>) se fundamenta en la capacidad de crear componentes que sean <strong>reutilizables</strong> y, sobre todo, <strong>mantenibles</strong>. De acuerdo con las notas del <em>Cuaderno de NotebookLM sobre Desarrollo Web</em>, la modularización que permiten las clases en C++ es análoga a la arquitectura de microservicios moderna: cada entidad es responsable de su propia lógica, reduciendo el acoplamiento y facilitando la depuración en sistemas de gran escala.</p>
+
+    <div class="diagram-box">
+        <strong>Diagrama de Flujo Conceptual: Del Problema al Objeto</strong><br>
+        <code>Entidad Real</code> ➔ <code>Abstracción Académica</code> ➔ <strong>CLASE (Contrato)</strong> ➔ <code>Instanciación (Objeto)</code>
+    </div>
+
+    <h3>El Concepto de la "Caja Negra" y la Ocultación de Datos</h3>
+    <p>Como futuro profesional, tenés que asimilar la metáfora de la <strong>caja negra</strong>. Una clase bien diseñada actúa como una interfaz opaca para el cliente (el programador que utiliza tu clase). Basado en el enfoque de <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, la ocultación de información (<em>information hiding</em>) no es una medida de seguridad contra ataques externos, sino una salvaguarda contra errores accidentales. Al marcar los datos como <code>private</code>, evitás que el usuario de la clase manipule directamente el estado, obligándolo a pasar por canales validados: las funciones miembro públicas.</p>
+
+    <p>Desde la perspectiva del <em>Cuaderno de NotebookLM sobre UX/UI</em>, el diseño de la interfaz pública de una clase (su <span class="abbr" data-title="Application Programming Interface: Conjunto de funciones y protocolos que permiten que diferentes capas de software se comuniquen de forma predecible.">API</span>) debe priorizar la <strong>usabilidad del desarrollador</strong>. Una clase con demasiadas funciones públicas aumenta la <em>carga cognitiva</em>; por lo tanto, debés aplicar el principio de "menor privilegio", exponiendo solo lo estrictamente necesario para que el objeto cumpla su función social dentro del sistema.</p>
+
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Perspectiva Técnica (Deitel)</th>
+                    <th>Perspectiva Práctica (O'Reilly)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Encapsulamiento</strong></td>
+                    <td>Empaquetamiento de datos y funciones para prevenir acceso no autorizado.</td>
+                    <td>Mecanismo para simplificar la visión del programa y evitar "código espagueti".</td>
+                </tr>
+                <tr>
+                    <td><strong>Abstracción</strong></td>
+                    <td>Enfoque en las características esenciales de una entidad.</td>
+                    <td>Eliminación de detalles innecesarios para el nivel de resolución actual.</td>
+                </tr>
+                <tr>
+                    <td><strong>Integridad</strong></td>
+                    <td>Uso de constructores para asegurar estados iniciales válidos.</td>
+                    <td>Garantía de que las variables nunca contengan valores "basura" o inconsistentes.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Análisis de la Evolución Histórica de los Tipos</h3>
+    <div class="timeline">
+        <div class="timeline-item">
+            <span class="timeline-date">Era Procedural (C)</span>
+            <p>Uso de <code>struct</code> únicamente para agrupar datos. Las funciones operan sobre los datos de forma externa, aumentando el riesgo de inconsistencias.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Surgimiento de C++</span>
+            <p>Bjarne Stroustrup introduce las "clases" para amalgamar datos y funciones, permitiendo que el dato "sepa" cómo manipularse a sí mismo.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Estándar Moderno (C++11 en adelante)</span>
+            <p>Enfoque en la gestión de memoria automática y la semántica de movimiento dentro de las clases para optimizar el rendimiento universitario.</p>
+        </div>
+    </div>
+
+    <h3>Metodologías de Aprendizaje en el Modelado de Clases</h3>
+    <p>Según el <em>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</em>, el dominio de este tema requiere un <strong>aprendizaje constructivista</strong>. No basta con memorizar la sintaxis de <code>class</code>; debés enfrentarte a problemas reales donde la falta de una clase bien definida provoque el colapso del sistema. La recomendación académica es que realices ejercicios de refactorización: tomá un código procedural desordenado y encapsulalo en objetos coherentes.</p>
+
+    <p>Tené en cuenta que una clase no es una isla. En el análisis detallado que propone esta unidad, verás cómo las clases colaboran entre sí. La relación de "composición" (una clase que contiene objetos de otra) es un ejemplo de cómo la complejidad se construye a partir de la simplicidad. Al diseñar tus clases, preguntate siempre: "¿Esta clase es responsable de esta acción?". Si la respuesta es dudosa, probablemente estés violando el <strong>Principio de Responsabilidad Única</strong>.</p>
+
+    <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
+        <h4 style="margin-top: 0; color: var(--accent);">💡 Reflexión para el Estudiante</h4>
+        <p>Cuando escribís <code>class Usuario</code>, no solo estás reservando espacio en memoria. Estás definiendo qué significa "ser un usuario" en tu universo de software. Cualquier error en este nivel se propagará por todo el sistema. Por eso, el análisis detallado de esta unidad es, quizás, el paso más importante en tu carrera hacia la ingeniería de software profesional.</p>
+    </div>
+
+    <button class="btn-ref" onclick="openRef('ref-deitel-9-1')">Referencia: Deitel Secc. 9.1 | O'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación y UX</button>
+</section>
+
+<section id="sec-9-2">
+    <span>⏱️</span>
+    <h2>9.2 Ejemplo práctico con la clase Tiempo</h2>
+    
+    <p>La implementación de la clase <code>Tiempo</code> sirve como el laboratorio perfecto para aplicar los conceptos de validación de estado. Según <strong>Deitel</strong>, el objetivo es representar la hora del día en un formato de 24 horas, asegurando que cada objeto siempre contenga valores consistentes. Como ingeniero argentino, vos sabés que la precisión es vital: una hora de 25 o un minuto de -5 no solo son errores lógicos, sino fallos en la arquitectura de tu objeto.</p>
+
+    <p><strong>O'Reilly</strong> advierte sobre la trampa de la confianza: nunca supongas que el usuario de la clase pasará datos correctos. Por ello, la función <code>establecerTiempo</code> debe actuar como un firewall. En el código que sigue, notarás el uso de operadores ternarios para filtrar los datos antes de que toquen las variables privadas <code>hora</code>, <code>minuto</code> y <code>segundo</code>.</p>
+
+    <pre><code>// Implementación robusta de la clase Tiempo
+void Tiempo::establecerTiempo(int h, int m, int s) {
+    // Solo se aceptan valores en los rangos universales
+    hora = (h >= 0 && h < 24) ? h : 0;
+    minuto = (m >= 0 && m < 60) ? m : 0;
+    segundo = (s >= 0 && s < 60) ? s : 0;
+}</code></pre>
+
+    <p>Desde la perspectiva de <em>Desarrollo Web</em>, este patrón es análogo a la validación en el servidor: protegés el núcleo del sistema de entradas malformadas. El cuaderno de <em>NotebookLM sobre UX/UI</em> añade que la forma en que presentamos estos datos (el método <code>imprimirUniversal</code>) debe seguir estándares internacionales para evitar fricción cognitiva. El uso de <code>iomanip</code> para formatear con ceros a la izquierda (ej. 08:05:01) es una decisión de diseño profesional que mejora la legibilidad de la salida del sistema.</p>
+
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Miembro de Dato</th>
+                    <th>Rango Lógico</th>
+                    <th>Validación (Fallback)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>hora</code></td>
+                    <td>00 - 23</td>
+                    <td>Reset a 00</td>
+                </tr>
+                <tr>
+                    <td><code>minuto</code></td>
+                    <td>00 - 59</td>
+                    <td>Reset a 00</td>
+                </tr>
+                <tr>
+                    <td><code>segundo</code></td>
+                    <td>00 - 59</td>
+                    <td>Reset a 00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button class="btn-ref" onclick="openRef('ref-deitel-9-2')">Referencia: Deitel Secc. 9.2 | O'Reilly Cap. 13: Simple Classes | Cuadernos NotebookLM: UX/UI y Desarrollo Web</button>
+</section>
+
+<section id="sec-9-3">
+    <span>🔑</span>
+    <h2>9.3 Alcance de las clases y acceso a los miembros de una clase</h2>
+
+    <p>Para vos, como estudiante de ingeniería, comprender el <strong>alcance (scope)</strong> y las reglas de acceso no es solo una cuestión de sintaxis, sino la base de la seguridad lógica en el desarrollo de software. Según la perspectiva académica de <strong>Deitel</strong>, los miembros de una clase (tanto funciones como variables) tienen lo que denominamos <span class="abbr" data-title="Class Scope: El ámbito de visibilidad restringido a los componentes de una misma clase, permitiendo el acceso mutuo sin prefijos.">alcance de clase</span>. Esto implica que dentro de las llaves de la clase, todos los miembros se "conocen" entre sí de forma directa. Sin embargo, cuando el flujo del programa sale de este entorno, se activan las murallas del encapsulamiento.</p>
+
+    <p>De acuerdo con el enfoque de <strong>O'Reilly</strong> en <em>Practical C++ Programming</em>, el control de acceso es la herramienta principal para evitar que el código cliente interfiera con la lógica interna. Si permitís que un objeto sea manipulado arbitrariamente desde afuera, perdés la capacidad de predecir su comportamiento. En este sentido, el cuaderno de <em>NotebookLM sobre Desarrollo Web</em> asocia esta práctica con la creación de módulos estancos, donde la integridad del sistema depende de que cada componente respete sus límites de visibilidad.</p>
+
+    <h3>Niveles de Acceso y Soberanía del Objeto</h3>
+    <p>En C++, la soberanía de los datos se gestiona mediante los especificadores de acceso. Por defecto, si no especificás nada, los miembros de una clase son <code>private</code>, reforzando la idea de que la privacidad es la norma, no la excepción.</p>
+
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Especificador</th>
+                    <th>Visibilidad Interna</th>
+                    <th>Visibilidad Externa</th>
+                    <th>Rol en la Arquitectura (O'Reilly)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>public:</code></td>
+                    <td>Total</td>
+                    <td>Total</td>
+                    <td>Define el "Contrato" o <span class="abbr" data-title="API: Application Programming Interface. Conjunto de funciones que permiten la interacción con la clase.">API</span> del objeto.</td>
+                </tr>
+                <tr>
+                    <td><code>private:</code></td>
+                    <td>Total</td>
+                    <td>Ninguna</td>
+                    <td>Protege el estado crítico y la implementación interna.</td>
+                </tr>
+                <tr>
+                    <td><code>protected:</code></td>
+                    <td>Total</td>
+                    <td>Vía Herencia</td>
+                    <td>Permite la extensión del sistema (jerarquías).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Interacción con Miembros: Operadores Punto y Flecha</h3>
+    <p>Cuando necesitás interactuar con un miembro público desde el exterior (por ejemplo, desde la función <code>main</code>), C++ te exige declarar explícitamente sobre qué objeto estás operando. Esto se logra mediante dos operadores fundamentales que debés dominar:</p>
+    
+    <ul>
+        <li><strong>Operador Punto (<code>.</code>):</strong> Se utiliza con el nombre directo del objeto o una referencia. Es la forma más común de comunicación. Ejemplo: <code>miReloj.establecerTiempo(12, 0, 0);</code>.</li>
+        <li><strong>Operador Flecha (<code>-&gt;</code>):</strong> Se emplea cuando manejás el objeto a través de un <span class="abbr" data-title="Pointer: Variable que almacena una dirección de memoria.">puntero</span>. <strong>Deitel</strong> explica que este operador es una forma simplificada de dereferenciar el puntero y acceder al miembro, mejorando notablemente la legibilidad técnica del código.</li>
+    </ul>
+
+    <div class="diagram-box">
+        <strong>Diagrama de Resolución de Ámbito</strong><br>
+        -------------------------------------------------------------<br>
+        | [ Código Cliente ] ➔ [ Interfaz Public ] ➔ [ Datos Private ] |<br>
+        | (Usa . o ->)      | (Valida y Filtra)   | (Estado Seguro)    |<br>
+        -------------------------------------------------------------
+    </div>
+
+    <h3>Análisis de Usabilidad y Metodologías Activas</h3>
+    <p>Según el cuaderno de <em>NotebookLM sobre UX/UI</em>, debés diseñar tus clases pensando en el "programador cliente" como un usuario. Si hacés públicos demasiados miembros, aumentás la superficie de error y la carga cognitiva. El objetivo es que la interfaz sea mínima pero suficiente. Por otro lado, el cuaderno sobre <em>Metodologías Activas</em> sugiere que el dominio de este tema se logra mediante el "modelado de fallos": intentá acceder a un miembro privado desde el <code>main</code> y observá cómo el compilador actúa como un supervisor de calidad, impidiendo que el error llegue a la etapa de ejecución.</p>
+
+    <p>Como futuro ingeniero de nuestras universidades nacionales, tenés que valorar el <strong>encapsulamiento</strong> no como una restricción, sino como una libertad. Te da la libertad de cambiar cómo funciona tu clase por dentro sin romper los programas de las personas que confían en tu código. Si hoy usás tres enteros para la hora y mañana decidís usar un solo valor de segundos, tus miembros privados te permiten hacer ese cambio manteniendo la interfaz pública intacta.</p>
+
+    <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
+        <h4 style="margin-top: 0; color: var(--accent);">🇦🇷 Consigna de Reflexión Profesional</h4>
+        <p>Pensá en la seguridad de un cajero automático. Los billetes están en un compartimento <code>private</code>. El teclado y la pantalla son la interfaz <code>public</code>. ¿Qué pasaría si el compartimento de billetes fuera público? Exactamente eso es lo que evitás en tu software al usar correctamente los niveles de acceso. Tu misión es ser el arquitecto de esa seguridad.</p>
+    </div>
+
+    <button class="btn-ref" onclick="openRef('ref-deitel-9-3')">Referencia: Deitel Secc. 9.3 | O'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación y Desarrollo Web</button>
+</section>
+
+<section id="sec-9-4">
+    <span>🏗️</span>
+    <h2>9.4 Separar la interfaz de la implementación</h2>
+
+    <p>En el desarrollo de sistemas robustos en C++, vos debés internalizar que la modularización no es una opción estética, sino un imperativo de la <strong>ingeniería de software</strong> profesional. [cite_start]Según el análisis exhaustivo de <strong>Deitel</strong>, separar la interfaz (el "qué") de la implementación (el "cómo") permite construir software escalable, mantenible y reutilizable[cite: 51]. Esta técnica, también destacada por <strong>O'Reilly</strong> en su enfoque práctico, es la piedra angular del <span class="abbr" data-title="Information Hiding: Principio de diseño que oculta los detalles de implementación de un componente de software a sus usuarios.">ocultamiento de información</span>, asegurando que los cambios internos en una clase no colapsen a los programas clientes que dependen de ella.</p>
+
+    <p>Desde la perspectiva del <em>Cuaderno de NotebookLM sobre Desarrollo Web</em>, esta división es análoga a la arquitectura de componentes modernos, donde el "Contrato" entre entidades debe ser inamovible para garantizar la estabilidad del sistema distribuido. Asimismo, el <em>Cuaderno sobre UX UI</em> propone que la interfaz de una clase (su archivo de encabezado) funciona como la <strong>interfaz de usuario del programador</strong>: debe ser clara, minimalista y libre de ruidos innecesarios para optimizar la <span class="abbr" data-title="Developer Experience: La sensación y facilidad de uso que tiene un programador al interactuar con una biblioteca o API.">DX</span>.</p>
+
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Atributo</th>
+                    <th>Archivo de Interfaz (Header .h)</th>
+                    <th>Archivo de Implementación (.cpp)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Propósito</strong></td>
+                    <td>Define el "Contrato" y la estructura de la clase.</td>
+                    <td>Define la lógica algorítmica de las funciones.</td>
+                </tr>
+                <tr>
+                    <td><strong>Contenido</strong></td>
+                    <td>Prototipos de funciones y miembros de datos.</td>
+                    <td>Definición detallada de los métodos.</td>
+                </tr>
+                <tr>
+                    <td><strong>Visibilidad</strong></td>
+                    <td>Pública (lo que el cliente "ve" y usa).</td>
+                    <td>Privada (detalles propietarios ocultos).</td>
+                </tr>
+                <tr>
+                    <td><strong>Frecuencia de cambio</strong></td>
+                    <td>Baja (debe ser estable).</td>
+                    <td>Alta (optimizaciones y correcciones).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>El Archivo de Encabezado (.h): El Plano Arquitectónico</h3>
+    <p>El archivo <code>.h</code> (o <code>.hpp</code>) contiene la declaración de la clase. Es el plano que el compilador necesita para conocer el tamaño de los objetos y la firma de sus métodos. [cite_start]Como señala <strong>Deitel</strong>, aquí es donde definís qué servicios ofrece tu clase al mundo exterior[cite: 51]. Fijate que es vital incluir <strong>directivas de preprocesamiento</strong> para evitar la redefinición accidental si el archivo se incluye varias veces en el mismo proyecto.</p>
+    
+    <pre><code>// Ejemplo de envoltura de preprocesador (Include Guards)
+#ifndef TIEMPO_H
+#define TIEMPO_H
+
+class Tiempo {
+public:
+    Tiempo(); // Constructor
+    void establecerHora(int, int, int);
+    void imprimirUniversal();
+private:
+    int hora;
+    int minuto;
+    int segundo;
+};
+
+#endif</code></pre>
+
+    <p><strong>O'Reilly</strong> advierte que los encabezados no deben contener código ejecutable (excepto funciones <code>inline</code> o plantillas), ya que esto violaría el principio de <span class="abbr" data-title="Separation of Concerns: Principio que establece que un programa debe dividirse en secciones que traten problemas independientes.">SoC</span> y aumentaría dramáticamente los tiempos de compilación en proyectos universitarios de gran escala.</p>
+
+    <h3>El Archivo de Implementación (.cpp): La Fábrica de Lógica</h3>
+    <p>En el archivo <code>.cpp</code>, vos programás la funcionalidad real. Para que el compilador sepa que una función pertenece a una clase específica declarada en otro lado, debés usar el <strong>operador binario de resolución de ámbito (<code>::</code>)</strong>. Este operador vincula el nombre de la función con el nombre de la clase. Según el <em>Cuaderno de Metodologías Activas</em>, este vínculo es un "andamiaje cognitivo" esencial: separa el diseño (declaración) de la construcción (definición).</p>
+
+    <pre><code>#include &lt;iostream&gt;
+#include "Tiempo.h" // Se debe incluir el encabezado
+
+using namespace std;
+
+// Implementación del método usando el operador ::
+void Tiempo::imprimirUniversal() {
+    cout << "Hora: " << hora << ":" << minuto;
+}</code></pre>
+
+    <h3>Proceso de Compilación y Vinculación (Linking)</h3>
+    <p>Comprender cómo C++ procesa estos archivos es clave para tu formación técnica. El proceso se divide en etapas críticas que garantizan la eficiencia del sistema:</p>
+
+    <div class="diagram-box">
+        <strong>Flujo de Construcción del Software:</strong><br>
+        <code>Tiempo.cpp</code> ➔ <strong>Compilador</strong> ➔ <code>Tiempo.obj</code> (Código Objeto)<br>
+        <code>main.cpp</code> ➔ <strong>Compilador</strong> ➔ <code>main.obj</code> (Código Objeto)<br>
+        <code>Bibliotecas Estándar</code> + <code>.obj</code> ➔ <strong>Enlazador (Linker)</strong> ➔ <strong>EJECUTABLE (.exe)</strong>
+    </div>
+
+    <p>Este flujo permite lo que <strong>O'Reilly</strong> llama <em>compilación independiente</em>: si vos solo modificás la lógica en el <code>.cpp</code>, el resto de los archivos del proyecto no necesitan ser re-compilados, solo re-enlazados, ahorrando valioso tiempo de cómputo en sistemas complejos.</p>
+
+    <h3>Análisis de UX y Soberanía Pedagógica</h3>
+    <p>Según el <em>Cuaderno sobre UX UI</em>, un archivo <code>.h</code> bien diseñado actúa como una <strong>capa de abstracción</strong> que protege al programador de la complejidad innecesaria. "Si un desarrollador tiene que abrir el .cpp para entender cómo usar tu clase, tu interfaz falló". Esta soberanía sobre el diseño asegura que el código sea <span class="abbr" data-title="Self-documenting code: Código cuyo nombre y estructura explican su función sin necesidad de comentarios externos excesivos.">autodocumentado</span>.</p>
+
+    <p>En el contexto de las <em>Metodologías Activas</em>, se recomienda el uso de diagramas conceptuales para visualizar la relación entre el Cliente (main) y el Proveedor (Clase). El cliente <strong>confía</strong> en el header, mientras que la clase <strong>garantiza</strong> la implementación en el .cpp. Este "Pacto de Confianza" es lo que permite que equipos de cientos de ingenieros trabajen en el mismo sistema sin pisarse los cables.</p>
+
+    <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
+        <h4 style="margin-top: 0; color: var(--accent);">🇦🇷 Actividad Práctica de Refactorización</h4>
+        <p>Tomá tu código de la clase <code>Tiempo</code> que tenés en un solo archivo. Separá la declaración en <code>Tiempo.h</code> y la lógica en <code>Tiempo.cpp</code>. Intentá compilar el proyecto y observá los errores del <em>Linker</em> si olvidás incluir el archivo objeto. Esta experiencia directa es fundamental para dominar la arquitectura de software en C++.</p>
+    </div>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <span class="timeline-date">Era Pre-Modular (C)</span>
+            <p>Programas monolíticos en un solo archivo. Dificultad extrema para el mantenimiento y tiempos de compilación exponenciales.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Surgimiento de Headers (.h)</span>
+            <p>Introducción de la compilación separada. Las declaraciones permiten que diferentes módulos interactúen sin conocer su código fuente.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">C++ Moderno (C++20 Modules)</span>
+            <p>Evolución hacia un sistema de módulos que elimina la necesidad de archivos de encabezado tradicionales, mejorando aún más la DX y el rendimiento.</p>
+        </div>
+    </div>
+
+    <button class="btn-ref" onclick="openRef('ref-deitel-9-4')">Referencia: Deitel Secc. 9.4 | O'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Desarrollo Web, UX y Educación</button>
+</section>
+
+<section id="sec-9-5">
+    <span>🛠️</span>
+    <h2>9.5 Funciones de acceso y funciones utilitarias</h2>
+
+    <p>En este nivel de tu formación, vos debés comprender que la arquitectura de una clase no se limita únicamente a esconder datos tras la etiqueta <code>private</code>. El verdadero desafío de ingeniería reside en cómo permitís que el mundo exterior interactúe con esos datos de forma segura y cómo organizás la lógica interna para que tu componente sea mantenible. Según el análisis de <strong>Deitel</strong>, las clases profesionales se sirven de dos tipos de funciones miembro fundamentales: las <strong>funciones de acceso</strong> y las <strong>funciones utilitarias</strong> (o de ayuda). Esta distinción no es solo sintáctica, sino que define la <span class="abbr" data-title="Developer Experience: La facilidad con la que un programador puede entender, usar y mantener un código o API.">DX</span> de tu software.</p>
+
+    <p>De acuerdo con el enfoque práctico de <strong>O'Reilly</strong>, el diseño de estas funciones es lo que separa un prototipo escolar de un sistema de misión crítica. La premisa es simple pero potente: el objeto debe tener la "soberanía absoluta" sobre su estado. Si permitís que un valor ilegal entre a tu objeto, la falla no es del usuario de la clase, sino de tu diseño por no haber implementado un "portero" eficiente.</p>
+
+    <h3>Las Funciones de Acceso: Los Guardianes de la Interfaz</h3>
+    <p>Las funciones de acceso son aquellas destinadas a leer o manipular los miembros de datos privados. Vos las conocerás comúnmente como <em>getters</em> y <em>setters</em>. Según el <em>Cuaderno de NotebookLM sobre UX UI</em>, estas funciones constituyen la "cara visible" de tu producto de software; por lo tanto, su diseño debe ser intuitivo y consistente.</p>
+
+    <ul>
+        <li><strong>Setters (Funciones de modificación):</strong> Su propósito es validar el dato antes de asignarlo. Como resalta <strong>Deitel</strong>, un <em>setter</em> debe actuar como un filtro de integridad. Por ejemplo, en nuestra clase <code>Tiempo</code>, el método <code>establecerHora</code> no solo copia un entero, sino que verifica si está en el rango [0, 23]. Si el dato es inválido, el objeto puede optar por ignorar el cambio, lanzar una excepción o asignar un valor por defecto (fallback).</li>
+        <li><strong>Getters (Funciones de obtención):</strong> Permiten que el cliente consulte el estado sin modificarlo. <strong>O'Reilly</strong> advierte sobre una trampa sutil: si tu <em>getter</em> devuelve una referencia o un puntero a un dato privado, estás rompiendo el encapsulamiento. Siempre debés devolver por valor o usar el calificador <code>const</code>.</li>
+        <li><strong>Funciones de Predicado:</strong> Son un subtipo de funciones de acceso que devuelven un valor booleano para testear una condición del objeto. Ejemplos clásicos son <code>estaVacia()</code> para una clase <code>Lista</code> o <code>esMediodia()</code> para nuestra clase <code>Tiempo</code>.</li>
+    </ul>
+
+    <div class="diagram-box">
+        <strong>Flujo de Datos en el Encapsulamiento</strong><br>
+        <code>Código Cliente</code> ➔ (Pedido de Cambio) ➔ <strong>SETTER (Validación)</strong> ➔ [Estado Privado Seguro]<br>
+        <code>Código Cliente</code>  (Copia del Dato)  <strong>GETTER (Lectura)</strong>  [Estado Privado Seguro]
+    </div>
+
+    <h3>Funciones Utilitarias: El "Divide y Vencerás" Interno</h3>
+    <p>A diferencia de las funciones de acceso, las <strong>funciones utilitarias</strong> (también llamadas <em>helper functions</em>) se declaran bajo la etiqueta <code>private</code>. Según <strong>Deitel</strong>, estas funciones no están destinadas a ser llamadas por el usuario de la clase, sino que sirven de apoyo a otras funciones miembro para realizar tareas complejas o repetitivas.</p>
+    
+    <p>Desde la perspectiva del <em>Cuaderno de NotebookLM sobre Desarrollo Web</em>, el uso de funciones utilitarias es una aplicación directa del principio <span class="abbr" data-title="Don't Repeat Yourself: Principio de ingeniería que busca reducir la repetición de información y lógica en el código.">DRY</span>. Si tenés una lógica de validación de formato que se usa tanto en el constructor como en tres métodos <em>set</em> distintos, debés encapsular esa lógica en una función privada. Esto asegura que, si la regla de negocio cambia (por ejemplo, pasamos de formato de 24h a 12h), solo tengas que modificar un único lugar en tu código.</p>
+
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Característica</th>
+                    <th>Función de Acceso (Public)</th>
+                    <th>Función Utilitaria (Private)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Visibilidad</strong></td>
+                    <td>Pública (Accesible por el cliente)</td>
+                    <td>Privada (Solo uso interno)</td>
+                </tr>
+                <tr>
+                    <td><strong>Propósito Principal</strong></td>
+                    <td>Interfaz de comunicación con el mundo</td>
+                    <td>Modularización y limpieza del código interno</td>
+                </tr>
+                <tr>
+                    <td><strong>UX / DX</strong></td>
+                    <td>Debe ser clara y fácil de usar</td>
+                    <td>Debe ser eficiente y específica</td>
+                </tr>
+                <tr>
+                    <td><strong>Ejemplo en Clase Tiempo</strong></td>
+                    <td><code>obtenerHora()</code>, <code>fijarMinuto()</code></td>
+                    <td><code>validarRango(int valor, int max)</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Análisis de Ingeniería y Metodologías Activas</h3>
+    <p>Según el <em>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</em>, el dominio de estas funciones requiere que vos desarrolles un "modelo mental de capas". Imaginá que tu clase es una cebolla: el núcleo son los datos, la capa siguiente son las funciones utilitarias que operan sobre ellos, y la capa exterior (la piel) son las funciones de acceso públicas. Solo esta última capa es la que el resto del sistema "toca".</p>
+
+    <p>Este diseño jerárquico facilita el <strong>mantenimiento evolutivo</strong>. Si decidís optimizar el rendimiento de tu clase cambiando el algoritmo interno, podés hacerlo con total seguridad siempre que la firma de tus funciones públicas no cambie. Como futuro ingeniero argentino, tenés que valorar esta "paz mental" que te da el buen diseño: sabés que un cambio interno no va a romper el trabajo de tus colegas que usan tu componente.</p>
+
+    <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
+        <h4 style="margin-top: 0; color: var(--accent);">🇦🇷 Desafío Práctico: El Portero Invisible</h4>
+        <p>Pensá en una clase <code>CuentaBancaria</code>. ¿Debería la variable <code>saldo</code> ser pública? ¡Claro que no! Implementá un <em>setter</em> <code>depositar(double monto)</code> que use una función utilitaria privada <code>esMontoPositivo(double m)</code>. Si el monto es negativo, el <em>setter</em> debe rechazar la operación. Así es como construís software que resiste el uso incorrecto.</p>
+    </div>
+
+    <p style="margin-top: 2rem;">Recordá que, según <strong>O'Reilly</strong>, "las clases son contratos". Las funciones de acceso definen los términos del contrato, y las funciones utilitarias son la letra pequeña técnica que hace que el contrato se cumpla de forma eficiente. En la próxima sección, veremos cómo los constructores con argumentos predeterminados llevan este concepto de flexibilidad y seguridad un paso más allá.</p>
+
+    <button class="btn-ref" onclick="openRef('ref-deitel-9-5')">Referencia: Deitel Secc. 9.5 | O'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+</section>
+
+<section id="sec-9-6">
+    <span>🏗️</span>
+    <h2>9.6 Constructores con argumentos predeterminados</h2>
+
+    <p>En el diseño avanzado de software en C++, la flexibilidad en la instanciación de objetos es una cualidad que vos debés perseguir para mejorar la <span class="abbr" data-title="Developer Experience: La facilidad con la que un programador puede utilizar y entender una interfaz de programación.">DX</span>. Según el análisis exhaustivo de <strong>Deitel</strong>, los constructores con argumentos predeterminados permiten que una misma función de inicialización responda a múltiples escenarios de creación de objetos. Esta técnica es fundamental para mantener el principio de <span class="abbr" data-title="Don't Repeat Yourself: Principio que busca reducir la repetición de lógica dentro de un sistema.">DRY</span>, evitando la proliferación de múltiples constructores sobrecargados que realicen tareas casi idénticas.</p>
+
+    <p>De acuerdo con <strong>O'Reilly</strong>, esta funcionalidad no es solo una comodidad sintáctica, sino una herramienta de robustez. Al proveer valores por defecto en el prototipo del constructor, vos garantizás que, incluso si el programador cliente omite ciertos datos, el objeto nazca en un estado consistente y predecible. En el caso de nuestra clase <code>Tiempo</code>, esto significa que podés ofrecer un abanico de posibilidades: desde una inicialización a la medianoche por defecto hasta la configuración de una hora específica, todo gestionado por una única pieza de código.</p>
+
+    <h3>El Constructor por Defecto "Todo Terreno"</h3>
+    <p>Un punto académico crítico que señala <strong>Deitel</strong> es que un constructor en el que todos los argumentos tienen valores predeterminados funciona también como el <strong>constructor por defecto</strong> de la clase. Esto es vital porque C++ requiere un constructor por defecto para tareas como la creación de arreglos de objetos. Si vos definís <code>Tiempo(int h = 0, int m = 0, int s = 0)</code>, estás matando dos pájaros de un tiro: proveés flexibilidad y cumplís con los requisitos del compilador para la gestión de memoria estática y dinámica.</p>
+
+    <div class="diagram-box">
+        <strong>Lógica de Resolución del Constructor Predeterminado:</strong><br>
+        <code>Tiempo t1;</code> ➔ <strong>Tiempo(0, 0, 0)</strong> [Medianoche]<br>
+        <code>Tiempo t2(14);</code> ➔ <strong>Tiempo(14, 0, 0)</strong> [14:00 hs]<br>
+        <code>Tiempo t3(21, 30);</code> ➔ <strong>Tiempo(21, 30, 0)</strong> [21:30 hs]<br>
+        <code>Tiempo t4(11, 25, 45);</code> ➔ <strong>Tiempo(11, 25, 45)</strong> [Hora exacta]
+    </div>
+
+    <h3>Análisis desde el Desarrollo Web y la UX</h3>
+    <p>Desde la óptica del <em>Cuaderno de NotebookLM sobre Desarrollo Web</em>, los parámetros predeterminados son una estrategia de diseño de <span class="abbr" data-title="Application Programming Interface: Conjunto de reglas y especificaciones que permiten que las aplicaciones se comuniquen entre sí.">API</span> defensiva. Al igual que en lenguajes modernos de script, permitir que los parámetros sean opcionales reduce el acoplamiento entre el creador de la clase y quien la consume. Vos le das al usuario el poder de decidir cuánta precisión necesita en cada momento sin forzarlo a proveer datos triviales.</p>
+
+    <p>El <em>Cuaderno de NotebookLM sobre UX/UI</em> refuerza esta idea mediante el concepto de <strong>carga cognitiva</strong>. Para un desarrollador, tener que recordar el orden y la obligatoriedad de cinco o seis parámetros de construcción es agotador y propenso a errores. Los argumentos predeterminados actúan como "ajustes de fábrica" seguros. Como ingeniero argentino formado con excelencia, debés aspirar a que tus clases sean "fáciles de usar correctamente y difíciles de usar incorrectamente".</p>
+
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Escenario</th>
+                    <th>Sobrecarga Tradicional</th>
+                    <th>Argumentos Predeterminados</th>
+                    <th>Ventaja Académica</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Mantenimiento</td>
+                    <td>Debés actualizar múltiples funciones.</td>
+                    <td>Actualizás una sola implementación.</td>
+                    <td>Menor riesgo de inconsistencia lógica.</td>
+                </tr>
+                <tr>
+                    <td>Tamaño del Código</td>
+                    <td>Código redundante por cada versión.</td>
+                    <td>Código compacto y centralizado.</td>
+                    <td>Binarios más eficientes y limpios.</td>
+                </tr>
+                <tr>
+                    <td>Flexibilidad</td>
+                    <td>Limitada a las firmas definidas.</td>
+                    <td>Gran variedad de combinaciones.</td>
+                    <td>Mejor adaptación a necesidades cambiantes.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Reglas de Implementación y el Orden de los Factores</h3>
+    <p>Tenés que ser cuidadoso con la sintaxis. Según <strong>O'Reilly</strong>, los valores predeterminados deben asignarse de <strong>derecha a izquierda</strong> en la lista de parámetros. Esto significa que si decidís que el primer parámetro sea opcional, todos los siguientes también deben serlo. Además, <strong>Deitel</strong> hace hincapié en que estos valores se especifican normalmente en el <strong>archivo de encabezado (.h)</strong>, donde reside la interfaz, y no en el archivo de implementación, para que el compilador los vea al procesar el código cliente.</p>
+
+    <pre><code>// En Tiempo.h
+class Tiempo {
+public:
+    // Constructor con argumentos predeterminados
+    // Actúa como constructor por defecto si se invoca sin parámetros
+    Tiempo(int hora = 0, int minuto = 0, int segundo = 0); 
+    
+    // ... resto de la clase ...
+};
+
+// En Tiempo.cpp
+Tiempo::Tiempo(int h, int m, int s) {
+    establecerTiempo(h, m, s); // Validación centralizada
+}</code></pre>
+
+    <h3>Perspectiva Educativa: Andamiaje de Conocimiento</h3>
+    <p>El <em>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</em> propone que este tema es un excelente ejemplo de "andamiaje". Al principio, vos aprendés a construir objetos de forma rígida. Luego, al introducir los argumentos predeterminados, tu modelo mental de "función" se expande para entender la <strong>opcionalidad</strong>. Este es un paso previo fundamental antes de abordar temas más complejos como las plantillas o el polimorfismo.</p>
+
+    <p>Como futuro profesional de la ingeniería, debés reflexionar sobre la elegancia de tus soluciones. Un solo constructor que maneja cuatro casos de uso distintos es una muestra de sofisticación técnica. Sin embargo, advertencia de <strong>Deitel</strong>: no abuses. Si los valores predeterminados no tienen un sentido lógico claro para el dominio del problema (por ejemplo, ¿cuál es la "edad predeterminada" de un Usuario?), es mejor forzar al programador a proveer el dato explícitamente.</p>
+
+    <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
+        <h4 style="margin-top: 0; color: var(--accent);">🇦🇷 Reflexión para el Estudiante de Ingeniería</h4>
+        <p>Pensá en la arquitectura de un sistema de gran escala. Si mañana necesitás agregar un cuarto parámetro al tiempo (por ejemplo, milisegundos), el uso de argumentos predeterminados te permitiría hacerlo sin romper ni una sola línea de código en los miles de archivos que ya usan tu clase <code>Tiempo</code>. Esa es la verdadera <strong>soberanía tecnológica</strong> que nos brinda C++: la capacidad de evolucionar sin destruir.</p>
+    </div>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <span class="timeline-date">Concepto</span>
+            <p>Se definen los valores en la declaración de la clase (.h). Estos valores son fijos en tiempo de compilación.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Llamada</span>
+            <p>El compilador analiza cuántos argumentos pasó el cliente y "rellena" los faltantes con los predeterminados.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Ejecución</span>
+            <p>Se invoca el cuerpo del constructor con todos los parámetros completos, garantizando la integridad del objeto.</p>
+        </div>
+    </div>
+
+    <button class="btn-ref" onclick="openRef('ref-deitel-9-6')">Referencia: Deitel Secc. 9.6 | O'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación y UX</button>
+</section>
+
+<section id="sec-9-7">
+            <span>🧹</span>
+            <h2>9.7 Destructores</h2>
+            
+            <p>Vos, como estudiante avanzado de ingeniería, debés comprender que así como un constructor le da vida al objeto, el <strong>destructor</strong> es el encargado de asegurar una "partida ordenada" del sistema. Según el análisis exhaustivo de <strong>Deitel</strong>, un destructor es una función miembro especial que se invoca de forma automática en el preciso instante en que un objeto sale de su alcance (<em>scope</em>) o es explícitamente eliminado. Su propósito no es destruir el objeto en sí (de eso se encarga el sistema operativo), sino realizar lo que técnicamente llamamos <strong>"housecleaning"</strong> (limpieza de la casa).</p>
+
+            <p>De acuerdo con <strong>O'Reilly</strong>, el destructor es la última línea de defensa contra los <span class="abbr" data-title="Memory Leaks: Fallas de gestión de memoria que ocurren cuando un programa no libera la memoria que ya no necesita, agotando los recursos del sistema.">fugas de memoria</span>. Si tu clase ha solicitado recursos externos durante su existencia —ya sea memoria dinámica mediante <code>new</code>, la apertura de un archivo o la reserva de un canal de comunicación—, el destructor es el sitio mandatorio para liberar esos recursos. En C++, la nomenclatura es estricta: se utiliza el símbolo de tilde (<code>~</code>) seguido inmediatamente del nombre de la clase, simbolizando la operación lógica inversa al constructor.</p>
+
+            <div class="diagram-box">
+                <strong>Ciclo de Vida del Objeto Académico</strong><br>
+                1. Instanciación ➔ <strong>Constructor</strong> (Reserva/Inicializa)<br>
+                2. Vida Útil ➔ <strong>Métodos de Servicio</strong> (Procesa Datos)<br>
+                3. Finalización ➔ <strong>Destructor</strong> (Libera/Limpia)
+            </div>
+
+            <h3>Restricciones Técnicas y Soberanía del Diseño</h3>
+            <p>Un aspecto crítico que resalta <strong>Deitel</strong> es que, a diferencia de los constructores, los destructores <strong>no pueden ser sobrecargados</strong>. Una clase tiene exactamente un destructor. Esto se debe a una razón lógica fundamental: el destructor no recibe argumentos y no devuelve ningún tipo de valor (ni siquiera <code>void</code>). Al no tener parámetros, no existe forma de que el compilador diferencie entre múltiples versiones. Como señala el <em>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</em>, este concepto ayuda a los alumnos a visualizar el "fin de ciclo" como un evento único y predecible dentro del determinismo de C++.</p>
+
+            <pre><code>// Estructura de un destructor en la clase Tiempo
+class Tiempo {
+public:
+    Tiempo();  // Constructor
+    ~Tiempo(); // Destructor (Nótese que no lleva parámetros)
+};
+
+// Implementación en el archivo .cpp
+Tiempo::~Tiempo() {
+    // Aquí iría la lógica de limpieza.
+    // Para la clase Tiempo básica no suele haber memoria dinámica,
+    // pero podrías registrar el evento en un log académico.
+    cout << "Destructor invocado para el objeto Tiempo." << endl;
+}</code></pre>
+
+            <h3>Perspectiva de Desarrollo Web y UX/UI</h3>
+            <p>Desde la óptica del <em>Cuaderno de NotebookLM sobre Desarrollo Web</em>, el concepto de destructor es el precursor de los patrones de "limpieza de efectos" que verás en tecnologías modernas. Por ejemplo, cerrar un <em>socket</em> o una conexión a una base de datos al desmontar un componente es la evolución conceptual de lo que C++ hace nativamente con los destructores. Esta práctica garantiza que el sistema no mantenga "cabos sueltos" que degraden el rendimiento general.</p>
+            
+            <p>Asimismo, el <em>Cuaderno de NotebookLM sobre UX/UI</em> sugiere que una buena gestión de recursos es parte de la <strong>calidad invisible</strong> que percibe el usuario. Un programa que no utiliza destructores para liberar memoria terminará volviéndose lento o colapsará (<em>crash</em>), lo que representa la peor experiencia de usuario posible. Como ingeniero, tu responsabilidad es que la complejidad de esta gestión sea totalmente transparente para el cliente de la clase.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Constructor</th>
+                            <th>Destructor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Nomenclatura</strong></td>
+                            <td><code>NombreClase</code></td>
+                            <td><code>~NombreClase</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Parámetros</strong></td>
+                            <td>Puede recibir muchos (Sobrecarga)</td>
+                            <td>Ninguno (Único)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Invocación</strong></td>
+                            <td>Al crear el objeto</td>
+                            <td>Al destruir el objeto</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Propósito</strong></td>
+                            <td>Inicializar y validar estado</td>
+                            <td>Liberar recursos y limpieza</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>La importancia en la Gestión Dinámica</h3>
+            <p><strong>O'Reilly</strong> hace especial hincapié en que si vos no definís un destructor, el compilador creará uno por defecto que no hace nada. Esto es "peligroso" en manos de un programador descuidado. Si tu clase usa punteros y memoria en el <span class="abbr" data-title="Heap: Área de memoria utilizada para la asignación dinámica, donde el programador debe gestionar manualmente la reserva y liberación.">heap</span>, el destructor por defecto no liberará esa memoria, provocando que tu aplicación "devore" la RAM del sistema operativo. Por lo tanto, la regla de oro universitaria es: <em>si usás <code>new</code> en el constructor, debés usar <code>delete</code> en el destructor</em>.</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-date">Paso 1: Salida de Alcance</span>
+                    <p>El programa llega al final del bloque <code>}</code> donde el objeto fue definido.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">Paso 2: Llamada Automática</span>
+                    <p>C++ detiene la ejecución normal para saltar al código del destructor <code>~Clase()</code>.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">Paso 3: Liberación Física</span>
+                    <p>Una vez ejecutado el destructor, la memoria que ocupaban las variables del objeto es marcada como disponible.</p>
+                </div>
+            </div>
+
+            <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
+                <h4 style="margin-top: 0; color: var(--accent);">🇦🇷 Reflexión de Ingeniería: Metacognición del Recurso</h4>
+                <p>Pensá en el objeto como un inquilino de un departamento (la memoria). El constructor es el contrato de entrada y el depósito. El destructor es la entrega de llaves y la inspección final. Si el inquilino se va sin avisar y deja las luces prendidas (recursos abiertos), el dueño (el Sistema Operativo) pierde dinero y eficiencia. ¿Estás diseñando inquilinos responsables en tus programas de C++?</p>
+            </div>
+
+            <p style="margin-top: 2rem;">En conclusión, el destructor es el garante de la <strong>eficiencia sistémica</strong>. Su correcta implementación distingue a un codificador de un verdadero Ingeniero de Software que entiende que la elegancia de un sistema también reside en cómo este se retira de la memoria.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-9-7')">Referencia: Deitel Secc. 9.7 | O'Reilly Cap. 13: Simple Classes | Cuadernos NotebookLM: Educación, UX y Desarrollo Web</button>
+        </section>
+
+<section id="sec-9-8">
+    <span>⏳</span>
+    <h2>9.8 Cuándo se hacen llamadas a los constructores y destructores</h2>
+
+    <p>Comprender el momento exacto en que se invocan los constructores y destructores no es una mera curiosidad técnica; es una base fundamental para que vos, como futuro ingeniero, puedas garantizar el <strong>determinismo</strong> y la seguridad de memoria en sistemas complejos. Según el análisis exhaustivo de <strong>Deitel</strong>, el orden de ejecución es estrictamente predecible y depende directamente del <span class="abbr" data-title="Scope: El ámbito o región del programa donde un identificador es visible y el objeto tiene vida activa.">alcance</span> y del modo de almacenamiento del objeto.</p>
+
+    <p>De acuerdo con <strong>O'Reilly</strong>, esta previsibilidad es lo que permite a C++ gestionar recursos sin la necesidad de un <span class="abbr" data-title="Garbage Collector: Proceso automático de gestión de memoria que busca objetos que ya no se utilizan para liberar su espacio, ausente en C++ nativo para priorizar el rendimiento.">recolector de basura</span>. Resulta imperativo que visualices la vida de un objeto como un contrato: el constructor adquiere el recurso y el destructor, de manera simétrica, lo libera. Como señala el cuaderno de <em>Metodologías Activas</em>, este aprendizaje requiere que desarrolles una "traza mental" del flujo de control, mapeando cada variable a su posición en la memoria.</p>
+
+    <h3>9.8.1 Objetos de Alcance Global: Los Precursores</h3>
+    <p>Los objetos definidos en el alcance global (fuera de cualquier función) son los primeros en nacer y los últimos en morir. De acuerdo a <strong>Deitel</strong>, sus constructores se ejecutan <strong>antes de que comience la ejecución de <code>main</code></strong>. Si tenés varios objetos globales en un mismo archivo, se construyen en el orden exacto en que aparecen en el código fuente.</p>
+    
+    <p>La destrucción de estos objetos globales ocurre cuando el programa finaliza (después de que <code>main</code> termina su ejecución o se invoca la función <code>exit</code>). Es crucial que recordés que el orden de destrucción es siempre el <strong>inverso</strong> al de construcción. Según el cuaderno de <em>Desarrollo Web</em>, este comportamiento es análogo a la carga de módulos críticos de infraestructura que deben estar disponibles antes de que la aplicación lógica empiece a procesar peticiones.</p>
+
+    <div class="diagram-box">
+        <strong>Flujo de Vida Global:</strong><br>
+        [Carga de Ejecutable] ➔ <strong>Constructores Globales</strong> ➔ <code>int main()</code> ➔ <strong>Destructores Globales</strong> ➔ [Fin de Proceso]
+    </div>
+
+    <h3>9.8.2 Objetos Locales: La Dinámica de la Pila (LIFO)</h3>
+    <p>Los objetos locales (automáticos) se crean en el momento en que el flujo de ejecución llega a su declaración. Aquí es donde entra en juego la estructura de <span class="abbr" data-title="Stack: Estructura de datos de tipo LIFO (Last-In, First-Out) utilizada para gestionar las llamadas a funciones y variables locales.">pila</span>. Según <strong>O'Reilly</strong>, estos objetos siguen la regla <span class="abbr" data-title="Last-In, First-Out: El último objeto en ser creado es el primero en ser destruido al salir del bloque.">LIFO</span>.</p>
+    
+    <p>Imaginá que estás apilando cajas: la última caja que ponés arriba es la primera que tenés que sacar. Cuando un bloque de código (delimitado por llaves <code>{}</code>) finaliza, C++ destruye automáticamente todos los objetos locales definidos en ese bloque en orden inverso a su creación. Esto garantiza que si un objeto B dependía de un objeto A creado anteriormente, el objeto A seguirá existiendo mientras B se destruye.</p>
+
+    <pre><code>void ejemploScope() {
+    Tiempo t1; // Constructor t1
+    Tiempo t2; // Constructor t2
+    // ... proceso ...
+} // 1. Destructor t2 (Último en entrar, primero en salir)
+  // 2. Destructor t1</code></pre>
+
+    <h3>9.8.3 Objetos Locales Estáticos: Persistencia Determinística</h3>
+    <p>Los objetos declarados con la palabra clave <code>static</code> dentro de una función tienen un comportamiento híbrido. Su constructor se ejecuta <strong>una sola vez</strong>, la primera vez que el programa llega a su declaración. Sin embargo, a diferencia de los objetos automáticos, no mueren al salir de la función. Según <strong>Deitel</strong>, estos objetos persisten en memoria hasta que el programa completo termina.</p>
+    
+    <p>Fijate bien en este detalle técnico: el destructor de un objeto estático se ejecuta después de que <code>main</code> termina, pero <strong>antes</strong> de los destructores de los objetos globales definidos antes que ellos. Esta jerarquía asegura que los servicios globales sigan disponibles para los objetos estáticos hasta el último momento.</p>
+
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo de Objeto</th>
+                    <th>Invocación del Constructor</th>
+                    <th>Invocación del Destructor</th>
+                    <th>Ubicación en Memoria</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Global</strong></td>
+                    <td>Antes de <code>main</code></td>
+                    <td>Al terminar el programa</td>
+                    <td>Segmento de Datos</td>
+                </tr>
+                <tr>
+                    <td><strong>Local (Automático)</strong></td>
+                    <td>Al llegar a la declaración</td>
+                    <td>Al salir del bloque <code>{}</code></td>
+                    <td>Pila (Stack)</td>
+                </tr>
+                <tr>
+                    <td><strong>Local Estático</strong></td>
+                    <td>Primera vez que se alcanza</td>
+                    <td>Al terminar el programa</td>
+                    <td>Segmento de Datos</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>9.8.4 El Espejo de la Destrucción: ¿Por qué el Orden Inverso?</h3>
+    <p>Desde la perspectiva de la <strong>Arquitectura de Sistemas</strong>, el orden inverso de destrucción no es caprichoso. Según el cuaderno de <em>UX/UI</em> aplicado al diseño de software, esto se basa en el principio de dependencias. Si el objeto <code>BaseDeDatos</code> se crea primero y el objeto <code>Repositorio</code> (que usa la base de datos) se crea segundo, es lógico que el <code>Repositorio</code> se destruya primero. Si destruyeras la <code>BaseDeDatos</code> primero, el <code>Repositorio</code> quedaría en un estado inconsistente (referenciando algo que ya no existe).</p>
+
+    <p>Este concepto es lo que en el cuaderno de <em>Metodologías Activas</em> llamamos "Simetría de Recursos". Todo lo que un ingeniero abre o reserva, debe cerrarlo en el orden exactamente opuesto para evitar colapsos sistémicos.</p>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <span class="timeline-date">T = 0: Inicio</span>
+            <p>El sistema operativo carga el programa. Se ejecutan constructores de objetos globales en orden de aparición.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">T = 1: Runtime</span>
+            <p>Se ejecuta <code>main</code>. Los objetos locales se crean y destruyen dinámicamente según el flujo de las funciones.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">T = 2: Cierre</span>
+            <p><code>main</code> retorna. Se invocan destructores de objetos estáticos locales y, finalmente, los globales en orden inverso.</p>
+        </div>
+    </div>
+
+    <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
+        <h4 style="margin-top: 0; color: var(--accent);">🇦🇷 Reflexión Académica: La Responsabilidad del Ingeniero</h4>
+        <p>Pensá en la seguridad de un software de control de vuelo o un sistema médico. En estos entornos, no podés permitirte dudas sobre cuándo se libera un recurso. C++ te otorga esta certeza absoluta. Como alumno de esta cátedra, debés dominar estos tiempos de vida para evitar los temidos "punteros colgantes" o accesos a memoria liberada. El orden es tu mejor aliado para construir software de alta fidelidad.</p>
+    </div>
+
+    <button class="btn-ref" onclick="openRef('ref-deitel-9-8')">Referencia: Deitel Secc. 9.8 | O'Reilly Cap. 13: Objects and Classes | Cuadernos NotebookLM: Educación y Desarrollo Web</button>
+</section>
+
+<section id="sec-9-9">
+    <span>⚠️</span>
+    <h2>9.9 Ejemplo práctico con la clase Tiempo: una trampa sutil (devolver una referencia a un miembro de datos private)</h2>
+
+    <p>En este análisis detallado de la arquitectura de objetos en C++, debés prestar especial atención a uno de los errores de diseño más insidiosos y, a la vez, comunes en la práctica académica: la <strong>violación involuntaria del encapsulamiento</strong>. Según el texto fundamental de <strong>Deitel</strong>, esta "trampa sutil" ocurre cuando una función miembro pública devuelve una referencia no constante (<code>&</code>) o un puntero (<code>*</code>) a un miembro de datos declarado como <code>private</code>. Como futuro ingeniero, debés comprender que este acto, aunque parezca inofensivo, equivale a entregarle la llave maestra de tu sistema a cualquier usuario externo, invalidando por completo la seguridad lógica que intentaste construir.</p>
+
+    <p>De acuerdo con <strong>O'Reilly</strong>, el propósito de los miembros privados no es solo cosmético; es una garantía de que el objeto es el único responsable de su propio estado. Si vos permitís que el cliente obtenga un alias directo a la memoria interna del objeto, estás creando lo que en ingeniería denominamos un <span class="abbr" data-title="Backdoor: Puerta trasera o acceso no autorizado que permite saltarse los controles de seguridad y validación establecidos.">acceso por la puerta trasera</span>. Esto permite que el estado del objeto sea modificado sin pasar por las funciones de validación (setters), lo que puede llevar a estados inconsistentes, como una hora 25 en nuestra clase <code>Tiempo</code>.</p>
+
+    <h3>Análisis del "Fallo de Seguridad" Lógica</h3>
+    <p>Imaginá que en tu clase <code>Tiempo</code>, por un descuido, implementás una función que devuelve una referencia a la variable <code>hora</code>. Según el <em>Cuaderno de NotebookLM sobre Desarrollo Web</em>, este error es análogo a exponer la cadena de conexión de una base de datos en el código del lado del cliente (<em>frontend</em>): una vez que el dato "se escapa" del control del servidor (o en este caso, del objeto), ya no tenés forma de auditar qué se hace con él.</p>
+
+    <div class="diagram-box">
+        <strong>Visualización de la Brecha de Seguridad:</strong><br>
+        1. Cliente llama a <code>badGetHora()</code> ➔ 2. El objeto devuelve <code>int&</code> (referencia)<br>
+        3. El cliente escribe: <code>miReloj.badGetHora() = 99;</code><br>
+        <strong>RESULTADO:</strong> El objeto ahora tiene una hora inválida (99) y vos perdiste el control.
+    </div>
+
+    <h3>Perspectiva de UX y Diseño de API</h3>
+    <p>Desde la óptica del <em>Cuaderno de NotebookLM sobre UX UI</em>, una clase que permite estos accesos directos posee una "abstracción con fugas" (<em>Leaky Abstraction</em>). Para el programador que utiliza tu clase, esto genera una experiencia de usuario confusa y peligrosa. La <span class="abbr" data-title="Developer Experience: La calidad de la interacción que tiene un programador al utilizar una biblioteca, API o herramienta de software.">DX</span> se degrada porque el contrato de la clase se vuelve mentiroso: dice que los datos son privados, pero permite su manipulación pública. Esto aumenta drásticamente la carga cognitiva y el riesgo de <em>bugs</em> sistémicos difíciles de rastrear.</p>
+
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Método de Retorno</th>
+                    <th>Estado del Encapsulamiento</th>
+                    <th>Efecto en la Integridad</th>
+                    <th>Recomendación Académica</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Por Valor (int)</strong></td>
+                    <td>Protegido</td>
+                    <td>Seguro: el cliente recibe una copia.</td>
+                    <td>Uso estándar para tipos simples.</td>
+                </tr>
+                <tr>
+                    <td><strong>Por Referencia (int&)</strong></td>
+                    <td><strong>Roto</strong></td>
+                    <td><strong>Peligro:</strong> Modificación externa directa.</td>
+                    <td>Evitar para miembros privados.</td>
+                </tr>
+                <tr>
+                    <td><strong>Referencia Const (const int&)</strong></td>
+                    <td>Protegido</td>
+                    <td>Seguro: solo lectura, sin copia pesada.</td>
+                    <td>Uso profesional para objetos grandes.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>La Trampa en el Código: Un Ejemplo Universitario</h3>
+    <p>Fijate cómo se manifiesta este error en la sintaxis de C++. Como resalta <strong>Deitel</strong>, el compilador no te dará un error de sintaxis, porque el código es técnicamente legal, pero es <strong>semánticamente desastroso</strong>.</p>
+
+    <pre><code>class Tiempo {
+public:
+    // ... constructores ...
+    // LA TRAMPA: Devuelve una referencia al dato privado 'hora'
+    int &obtenerReferenciaHora() {
+        return hora; 
+    }
+private:
+    int hora; // Debería estar protegido, pero la función de arriba lo expone
+};
+
+// En el main.cpp:
+Tiempo t(12, 0, 0);
+int &horaAlias = t.obtenerReferenciaHora();
+horaAlias = 50; // ¡HORA INVÁLIDA! El objeto 't' ahora es inconsistente.</code></pre>
+
+    <p>Este ejemplo demuestra que la visibilidad <code>private</code> es solo una parte de la ecuación. La verdadera soberanía del objeto reside en no delegar el control de su memoria. Según el <em>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</em>, el dominio de este concepto marca la diferencia entre un codificador y un arquitecto de software: el arquitecto entiende que el código debe ser <strong>robusto ante el mal uso</strong>.</p>
+
+    <h3>Estrategias de Mitigación y Buenas Prácticas</h3>
+    <p>Para evitar caer en esta trampa, <strong>O'Reilly</strong> sugiere seguir la regla de oro: "Devolver por valor para tipos básicos y por referencia constante para tipos complejos". Esto asegura la eficiencia sin sacrificar la seguridad. Además, debés habituarte a marcar tus funciones de consulta como <code>const</code>, lo que le indica al compilador y al usuario que la función no tiene intención (ni permiso) de alterar el objeto.</p>
+
+    <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
+        <h4 style="margin-top: 0; color: var(--accent);">🇦🇷 Reflexión Universitaria: El Principio de Menor Privilegio</h4>
+        <p>Pensá en tu clase como un banco. Vos podés consultar tu saldo (get), pero no podés entrar a la bóveda y cambiar el número escrito en los billetes. Al devolver una referencia, estás dejando la bóveda abierta. Como ingeniero formado en la excelencia, tu misión es diseñar sistemas donde las reglas de negocio sean inquebrantables. ¿Tu código es un banco seguro o una caja abierta?</p>
+    </div>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <span class="timeline-date">Fase de Diseño</span>
+            <p>Se definen los miembros como <code>private</code> para ocultar la representación interna (Abstracción).</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Error de Implementación</span>
+            <p>Se crea un método público que devuelve un puntero o referencia al dato privado por "comodidad" o error.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Colapso del Modelo</span>
+            <p>El cliente modifica el dato sin validación. El objeto entra en un estado corrupto, generando fallos en cascada en el sistema.</p>
+        </div>
+    </div>
+
+    <p style="margin-top: 2rem;">En conclusión, debés ser extremadamente cauteloso con los tipos de retorno de tus funciones miembro. Como advierte <strong>Deitel</strong>, la integridad de tus objetos depende de que mantengas una separación estricta entre la interfaz y la implementación, evitando cualquier "fuga" de referencias que permita el acceso no autorizado a los cimientos de tu software.</p>
+
+    <button class="btn-ref" onclick="openRef('ref-deitel-9-9')">Referencia: Deitel Secc. 9.9 | O'Reilly Cap. 13: Classes | Cuadernos NotebookLM: UX UI, Desarrollo Web y Educación</button>
+</section>
+
+<section id="sec-9-10">
+    <span>📋</span>
+    <h2>9.10 Asignación predeterminada a nivel de miembros</h2>
+    
+    <p>En el estudio avanzado de la programación orientada a objetos en C++, uno de los mecanismos más potentes y, a la vez, potencialmente peligrosos es la <strong>asignación predeterminada a nivel de miembros</strong>. Según el análisis técnico de <strong>Deitel</strong>, C++ provee automáticamente un operador de asignación (<code>operator=</code>) que permite igualar un objeto a otro del mismo tipo, como en la expresión <code>t1 = t2;</code>. Este proceso no es una simple operación atómica, sino que el compilador ejecuta una copia individual de cada miembro de datos del objeto fuente al objeto destino.</p>
+
+    <p>Basado en el libro de <strong>O'Reilly</strong>, esta funcionalidad es extremadamente útil para tipos de datos simples (como enteros o flotantes), pero se convierte en una "trampa de arquitectura" cuando la clase gestiona recursos dinámicos. Como futuro ingeniero, debés comprender que la asignación por defecto realiza lo que denominamos una <strong>copia superficial (shallow copy)</strong>. Si tu clase contiene punteros a memoria en el <em>heap</em>, ambos objetos terminarán compartiendo la misma dirección de memoria, lo que viola el principio de independencia de estado.</p>
+
+    <div class="diagram-box">
+        <strong>Esquema de Copia Superficial (Shallow Copy)</strong><br>
+        <code>Objeto A [ptr]</code> ➔ [ Dirección 0x123 ] ➔ { Dato Real }<br>
+        <code>Objeto B = Objeto A</code><br>
+        <code>Objeto B [ptr]</code> ➔ [ Dirección 0x123 ] ➔ { Dato Real }<br>
+        <em>Resultado: Dos objetos "atados" a la misma memoria.</em>
+    </div>
+
+    <h3>Perspectiva de UX UI: La "Interfaz de Cero Fricción" y la Consistencia</h3>
+    <p>Desde la óptica del <em>Cuaderno de NotebookLM sobre UX UI</em>, el comportamiento de las herramientas debe ser predecible para evitar la frustración del usuario (en este caso, el programador). Una "Interfaz de Cero Fricción" implica que si vos creás un objeto nuevo a partir de otro, esperás que sea una entidad autónoma. La asignación superficial es una <strong>abstracción con fugas</strong>: parece que tenés dos objetos, pero en realidad comparten un núcleo común oculto. Esto aumenta la <em>carga cognitiva</em> del desarrollador, quien debe recordar manualmente no destruir un objeto antes que el otro para evitar errores de segmentación.</p>
+
+    <h3>Análisis desde el Desarrollo Web: Sincronización vs. Clonación</h3>
+    <p>El <em>Cuaderno de NotebookLM sobre Desarrollo Web</em> establece una analogía interesante con la gestión de estados en aplicaciones modernas. En el desarrollo web, a menudo nos enfrentamos al problema de "referencia vs. valor". Al igual que en C++, si vos asignás un objeto en JavaScript sin usar técnicas de clonación profunda (<em>deep clone</em>), terminás modificando el estado original sin querer. En sistemas que requieren <strong>Funcionamiento Offline-First</strong>, la integridad de la copia local es vital; una asignación defectuosa en C++ podría corromper la caché de datos que se intenta sincronizar posteriormente con un servidor, generando inconsistencias sistémicas graves.</p>
+
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Característica</th>
+                    <th>Copia Superficial (Default)</th>
+                    <th>Copia Profunda (Personalizada)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Mecanismo</strong></td>
+                    <td>Copia bit a bit de los miembros.</td>
+                    <td>Reserva nueva memoria y copia el contenido.</td>
+                </tr>
+                <tr>
+                    <td><strong>Riesgo Técnico</strong></td>
+                    <td>Punteros colgantes (<em>dangling pointers</em>).</td>
+                    <td>Uso intensivo de memoria y CPU.</td>
+                </tr>
+                <tr>
+                    <td><strong>Contexto de Uso</strong></td>
+                    <td>Clases con tipos primitivos (int, double).</td>
+                    <td>Clases con memoria dinámica o archivos.</td>
+                </tr>
+                <tr>
+                    <td><strong>Soberanía del Dato</strong></td>
+                    <td>Compartida (Peligrosa).</td>
+                    <td>Total (Segura).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Metodologías Activas y el Modelo Mental del Estudiante</h3>
+    <p>De acuerdo con el <em>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</em>, el dominio de este concepto requiere que vos desarrolles una <strong>metacognición</strong> sobre la gestión de recursos. No basta con memorizar la sintaxis; tenés que visualizar el mapa de memoria. El aprendizaje constructivista sugiere que el error de la copia superficial es un "momento de enseñanza" fundamental: solo cuando experimentás el colapso del programa al intentar liberar dos veces la misma memoria (<em>double free error</em>), comprendés la necesidad de sobrecargar el operador de asignación.</p>
+
+    <p>Como señala <strong>Deitel</strong>, la solución profesional es implementar tu propio <code>operator=</code> que realice una copia profunda. Esto asegura que el objeto destino obtenga su propia copia de los datos, manteniendo la <strong>Soberanía Tecnológica</strong> sobre el estado del programa. Fijate en el siguiente ejemplo conceptual de cómo evitar la trampa:</p>
+
+    <pre><code>// Sobrecarga profesional para copia profunda
+const MiClase& MiClase::operator=(const MiClase &fuente) {
+    if (&fuente != this) { // Evitar auto-asignación (Principio de eficiencia)
+        delete ptr;        // Liberar recurso actual
+        ptr = new int(*fuente.ptr); // Clonar el dato real, no la dirección
+    }
+    return *this; // Permitir asignaciones en cascada (t1 = t2 = t3)
+}</code></pre>
+
+    <p>En conclusión, tené siempre presente que la facilidad que te da C++ con la asignación predeterminada es un arma de doble filo. En entornos universitarios y profesionales de Argentina, se espera que un ingeniero no solo haga que el código "ande", sino que sea <strong>resiliente y predecible</strong>. La gestión explícita de la asignación es lo que diferencia a un programador de un arquitecto de software.</p>
+
+    <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
+        <h4 style="margin-top: 0; color: var(--accent);">🇦🇷 Reflexión Académica Universitaria</h4>
+        <p>Pensá en la seguridad de los datos de un alumno en un sistema rural de asistencia. Si vos asignás un "Legajo" a otro y ambos comparten el mismo puntero a las notas, un cambio en una copia afectará a la otra de forma invisible. Como responsable del software, debés garantizar que cada registro sea único e íntegro. ¿Tu código protege la identidad del dato o la pone en riesgo por comodidad sintáctica?</p>
+    </div>
+
+    <button class="btn-ref" onclick="openRef('ref-deitel-9-10')">Referencia: Deitel Secc. 9.10 | O'Reilly Cap. 13: Classes and Assignment | Cuadernos NotebookLM: UX UI, Desarrollo Web y Educación</button>
+</section>
+
+<section id="sec-9-11">
+    <span>🏦</span>
+    <h2>9.11 (Opcional) Ejemplo práctico de Ingeniería de Software: inicio de la programación de las clases del sistema ATM</h2>
+
+    <p>En este análisis detallado, debés comprender que la ingeniería de software profesional no comienza con el código, sino con una fase de abstracción y diseño riguroso. Según el planteo académico de <strong>Deitel</strong>, el caso de estudio del Cajero Automático (<span class="abbr" data-title="Automated Teller Machine: Dispositivo electromecánico que permite realizar transacciones bancarias de forma autónoma.">ATM</span>) actúa como un puente fundamental para que vos, como estudiante, puedas integrar los conceptos de clases y objetos en un sistema de escala real. Este ejemplo no es opcional por su falta de importancia, sino porque requiere una madurez técnica para visualizar la colaboración entre múltiples entidades.</p>
+
+    <p>De acuerdo con el enfoque práctico de <strong>O'Reilly</strong>, un sistema robusto se basa en la definición clara de sus componentes. En esta etapa, te enfocarás en la "identificación de clases", extrayendo los sustantivos del documento de requerimientos para convertirlos en los planos arquitectónicos de tu software. Basado en el <em>Cuaderno de NotebookLM sobre UX UI</em>, el diseño del ATM debe priorizar una interfaz de "cero fricción", donde la complejidad de la base de datos bancaria esté oculta tras una interacción simple y segura para el usuario.</p>
+
+    <div class="diagram-box">
+        <strong>Jerarquía de Composición del Sistema ATM (UML)</strong><br>
+        ------------------------------------------<br>
+        |            Clase: ATM (Todo)           |<br>
+        | <>------------------------------------ |<br>
+        | | - pantalla: Screen                 | |<br>
+        | | - teclado: Keypad                  | |<br>
+        | | - dispensador: CashDispenser       | |<br>
+        | | - ranuraDeposito: DepositSlot      | |<br>
+        ------------------------------------------
+    </div>
+
+    <h3>Identificación de Clases y Relaciones de Composición</h3>
+    <p>Para construir el sistema, primero debés identificar qué entidades interactúan. <strong>Deitel</strong> propone una lista de clases que reflejan tanto componentes físicos como lógicos: <code>ATM</code>, <code>Screen</code>, <code>Keypad</code>, <code>CashDispenser</code>, <code>DepositSlot</code>, <code>BankDatabase</code> y <code>Account</code>. Fijate que el <code>ATM</code> mantiene una relación de <strong>composición</strong> (representada con un diamante sólido en <span class="abbr" data-title="Unified Modeling Language: Lenguaje estándar para la representación visual de sistemas de software.">UML</span>) con sus partes físicas. Esto significa que el ATM "es dueño" de la pantalla y el teclado; si el objeto ATM se destruye, sus componentes internos también dejan de existir.</p>
+
+    <p>Desde la perspectiva del <em>Cuaderno de NotebookLM sobre Desarrollo Web</em>, este modelo es análogo a una arquitectura de microservicios o componentes web modernos: cada clase es una unidad funcional independiente que se comunica mediante mensajes (llamadas a funciones miembro), lo que garantiza la escalabilidad del sistema financiero.</p>
+
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Clase</th>
+                    <th>Responsabilidad Principal</th>
+                    <th>Atributos Clave (Según Deitel)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>ATM</code></td>
+                    <td>Orquestar la sesión y autenticación.</td>
+                    <td><code>usuarioAutenticado</code> (booleano)</td>
+                </tr>
+                <tr>
+                    <td><code>Screen</code></td>
+                    <td>Visualizar mensajes e instrucciones.</td>
+                    <td>Sin estado (Clase utilitaria)</td>
+                </tr>
+                <tr>
+                    <td><code>Keypad</code></td>
+                    <td>Capturar la entrada numérica del usuario.</td>
+                    <td>Sin estado</td>
+                </tr>
+                <tr>
+                    <td><code>CashDispenser</code></td>
+                    <td>Gestionar el inventario de billetes.</td>
+                    <td><code>conteoBilletes</code> (inicialmente 500)</td>
+                </tr>
+                <tr>
+                    <td><code>BankDatabase</code></td>
+                    <td>Validar credenciales y persistir saldos.</td>
+                    <td>Colección de objetos <code>Account</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Definición de Atributos y Operaciones: El Estado del Sistema</h3>
+    <p>Una vez identificadas las clases, tenés que determinar sus <strong>atributos</strong> (qué sabe el objeto) y sus <strong>operaciones</strong> (qué hace el objeto). Según <strong>O'Reilly</strong>, debés ser extremadamente cuidadoso con el principio de menor privilegio: los atributos como el saldo de una <code>Account</code> o el <code>PIN</code> deben ser estrictamente <code>private</code>. <strong>Deitel</strong> resalta que la clase <code>CashDispenser</code>, por ejemplo, debe saber cuántos billetes de $20 le quedan para decidir si puede cumplir con una solicitud de retiro.</p>
+
+    <p>En el inicio de la programación, traducirás estos requerimientos en archivos de encabezado (headers). Mirá este fragmento conceptual de la clase <code>Account</code> que refleja la integridad requerida en ingeniería bancaria:</p>
+
+    <pre><code>class Account {
+public:
+    Account(int num, int pin, double saldo);
+    bool validarPIN(int pinIngresado) const;
+    double obtenerSaldoTotal() const;
+    void abonar(double monto);
+    void cargar(double monto);
+private:
+    int numeroCuenta;
+    int pinSecreto;
+    double saldoActual;
+};</code></pre>
+
+    <h3>UX y Metodologías Activas en el Diseño</h3>
+    <p>Según el <em>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</em>, el diseño del ATM es un ejercicio de <strong>metacognición</strong>. Al programar la clase <code>Screen</code>, no solo estás escribiendo una función <code>mostrarMensaje</code>, sino que estás diseñando la experiencia del usuario final. Debés preguntarte: "¿Es este mensaje claro para una persona con baja alfabetización digital?". Este enfoque constructivista asegura que tu código no sea solo técnicamente correcto, sino socialmente útil en contextos como la ruralidad argentina, donde el acceso a la tecnología puede ser limitado.</p>
+
+    <p>Basado en el análisis de <strong>UX UI</strong>, la clase <code>Keypad</code> debe ser robusta ante entradas malformadas. Si el usuario ingresa caracteres no numéricos, la lógica del objeto debe sanitizar la entrada antes de enviarla a la <code>BankDatabase</code>. Esta separación de preocupaciones (<em>Separation of Concerns</em>) es lo que permite que un equipo de ingenieros trabaje en la seguridad de la base de datos mientras otro optimiza la usabilidad de la pantalla sin interferir entre sí.</p>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <span class="timeline-date">Paso 1: Análisis de Sustantivos</span>
+            <p>Se revisan los requerimientos bancarios. Sustantivos = Clases. Verbos = Operaciones (Métodos).</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Paso 2: Modelado UML</span>
+            <p>Se dibujan los diagramas de clases para visualizar asociaciones y composiciones (el diamante UML).</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Paso 3: Esqueleto de Código</span>
+            <p>Se crean los archivos .h definiendo la interfaz pública y ocultando los datos sensibles en la sección privada.</p>
+        </div>
+    </div>
+
+    <h3>Conclusión de la Fase de Inicio</h3>
+    <p>Como futuro profesional de la informática, tenés que valorar esta etapa de diseño como la inversión más rentable de tu proyecto. Un error detectado en el diagrama UML es económico de corregir; un error de arquitectura detectado después de miles de líneas de código puede ser fatal para la integridad de un sistema financiero. El análisis detallado de las clases del ATM, tal como proponen <strong>Deitel</strong> y <strong>O'Reilly</strong>, te otorga la soberanía tecnológica necesaria para construir software de misión crítica, resiliente y centrado en el ser humano.</p>
+
+    <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
+        <h4 style="margin-top: 0; color: var(--accent);">🇦🇷 Consigna de Ingeniería Situada</h4>
+        <p>Pensá en un sistema de cajeros para zonas rurales de nuestro país con conectividad intermitente. ¿Qué clases adicionales añadirías para permitir un funcionamiento "Offline-First"? Tal vez una clase <code>TransaccionPendiente</code> que almacene localmente los movimientos hasta que se restablezca la conexión con el servidor central de la red Link o Banelco.</p>
+    </div>
+
+    <button class="btn-ref" onclick="openRef('ref-deitel-9-11')">Referencia: Deitel Secc. 9.11 | O'Reilly Cap. 13: Practical Classes | Cuadernos NotebookLM: UX, Educación y Desarrollo Web</button>
+</section>
+
+<section id="sec-9-12">
+    <span>🏁</span>
+    <h2>9.12 Repaso y Consolidación de Conceptos</h2>
+
+    <p>Has llegado al final de esta unidad intensiva sobre el análisis detallado de clases en C++. En este punto, vos no solo debés dominar la sintaxis, sino haber internalizado una nueva forma de pensar la construcción de software. Según la pedagogía de <strong>Deitel</strong>, el aprendizaje de la programación orientada a objetos es un proceso acumulativo donde cada concepto —desde el encapsulamiento hasta el manejo de recursos— actúa como un ladrillo en la formación de tu criterio como ingeniero.</p>
+
+    <p>De acuerdo con el enfoque de <strong>O'Reilly</strong>, el repaso no es una repetición vacía, sino una oportunidad para verificar que tus "contratos de software" sean sólidos. Basado en el <em>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</em>, este cierre busca fomentar la <strong>metacognición</strong>: preguntate no solo si el código compila, sino por qué elegiste ocultar ciertos datos o cómo impacta el orden de destrucción en la estabilidad de tu sistema.</p>
+
+    <h3>Los Pilares de la Unidad en Perspectiva</h3>
+    <p>Para consolidar tu conocimiento, revisemos los ejes transversales que definen a una clase profesional. Según el <em>Cuaderno de NotebookLM sobre UX UI</em>, una clase es exitosa si su <span class="abbr" data-title="Application Programming Interface: Conjunto de funciones y protocolos que definen cómo otros desarrolladores interactúan con tu clase.">API</span> minimiza la carga cognitiva del usuario.</p>
+
+    <div class="table-res">
+        <table>
+            <thead>
+                <tr>
+                    <th>Pilar Fundamental</th>
+                    <th>Dimensión Técnica (Deitel/O'Reilly)</th>
+                    <th>Dimensión de Diseño (UX/Web)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Encapsulamiento</strong></td>
+                    <td>Uso de <code>private</code> para proteger la integridad del estado.</td>
+                    <td>Ocultamiento de complejidad para una interfaz limpia.</td>
+                </tr>
+                <tr>
+                    <td><strong>Ciclo de Vida</strong></td>
+                    <td>Gestión determinística con Constructores y Destructores.</td>
+                    <td>Garantía de "limpieza de la casa" y eficiencia de recursos.</td>
+                </tr>
+                <tr>
+                    <td><strong>Abstracción</strong></td>
+                    <td>Separación de Interfaz (.h) e Implementación (.cpp).</td>
+                    <td>Modularidad equivalente a componentes de caja negra.</td>
+                </tr>
+                <tr>
+                    <td><strong>Soberanía del Dato</strong></td>
+                    <td>Validación estricta y control de referencias salientes.</td>
+                    <td>Seguridad lógica y prevención de estados inconsistentes.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Evolución de tu Modelo Mental de Programación</h3>
+    <p>A lo largo de esta unidad, tu percepción de lo que constituye un "programa" ha evolucionado. De acuerdo con el <em>Cuaderno de NotebookLM sobre Desarrollo Web</em>, este cambio es fundamental para entender arquitecturas modernas de gran escala.</p>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <span class="timeline-date">Inicio: Pensamiento Estructurado</span>
+            <p>Veías al programa como una secuencia de pasos. Los datos eran pasivos y las funciones operaban sobre ellos externamente.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Transición: El Objeto como Entidad</span>
+            <p>Aprendiste que el dato y la función deben vivir juntos. Introdujiste el concepto de "soberanía" del objeto sobre sus miembros privados.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Cierre: Ingeniería de Sistemas</span>
+            <p>Ahora visualizás el software como una colaboración de componentes autónomos (clases) que se comunican mediante contratos claros y seguros.</p>
+        </div>
+    </div>
+
+    <h3>Diagrama de Flujo: La Toma de Decisiones del Arquitecto</h3>
+    <div class="diagram-box">
+        ¿Necesito inicializar datos? ➔ <strong>Constructor</strong><br>
+        ¿Tengo valores comunes? ➔ <strong>Arg. Predeterminados</strong><br>
+        ¿Uso memoria dinámica? ➔ <strong>Destructor + Asignación Profunda</strong><br>
+        ¿El cliente debe ver esto? ➔ <strong>Public vs. Private</strong><br>
+        ¿El dato es sensible? ➔ <strong>Evitar devolver Referencias</strong>
+    </div>
+
+    <h3>Reflexión Crítica: La "Trampa Sutil" y la Ética del Código</h3>
+    <p>Como señala <strong>Deitel</strong>, el error más grave de un principiante es romper el encapsulamiento por comodidad. Devolver una referencia a un dato privado es, en esencia, traicionar el diseño del sistema. <strong>O'Reilly</strong> enfatiza que la robustez se mide en situaciones de error: tu clase <code>Tiempo</code> debe ser capaz de resistir intentos de sabotaje (como asignar una hora 99) sin colapsar. Esta "resiliencia sistémica" es lo que separa a un programador de un ingeniero universitario.</p>
+
+    <p>Desde la metodología activa, te proponemos que no veas a la validación como una restricción, sino como una <strong>libertad</strong>. Al validar en el <em>setter</em>, sos libre de confiar en que el resto de tus métodos siempre trabajarán con datos correctos. Esta paz mental es el resultado de un buen análisis detallado.</p>
+
+    <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
+        <h3 style="margin-top: 0; color: var(--accent);">🧪 Laboratorio de Consolidación Final</h3>
+        <p>Para cerrar esta unidad con excelencia académica, te propongo el siguiente desafío de integración situado en nuestra realidad regional:</p>
+        <p><strong>Situación:</strong> Estás diseñando un sistema de gestión para una cooperativa agrícola. Necesitás una clase <code>Silo</code> que controle la capacidad de almacenamiento.</p>
+        <ul>
+            <li>Implementá la separación de interfaz e implementación (<code>Silo.h</code> y <code>Silo.cpp</code>).</li>
+            <li>Usá un <strong>constructor con argumentos predeterminados</strong> para inicializar la capacidad a 1000 toneladas.</li>
+            <li>Creá una <strong>función utilitaria privada</strong> <code>verificarDesborde(double cantidad)</code> que sea llamada por el método público <code>cargarGrano()</code>.</li>
+            <li>Asegurá el encapsulamiento: no permitas que nadie obtenga una referencia directa a la variable privada <code>stockActual</code>.</li>
+            <li>Agregá un <strong>destructor</strong> que imprima un mensaje de cierre de sesión de seguridad cuando el objeto Silo salga de alcance.</li>
+        </ul>
+        <p><em>"La calidad de un sistema es proporcional a la rigurosidad con la que protegés sus cimientos."</em></p>
+    </div>
+
+    <p style="margin-top: 2rem;">Recordá que, según el <em>Cuaderno de Educación y Metodologías Activas</em>, la práctica reflexiva es la que fija el conocimiento a largo plazo. No te conformes con que el código funcione; buscá la elegancia, la seguridad y la eficiencia que exigen los estándares de <strong>Deitel</strong> y <strong>O'Reilly</strong>. En la próxima unidad, expandiremos estos horizontes mediante la sobrecarga de operadores, llevando la personalización de tipos a un nuevo nivel de sofisticación técnica.</p>
+
+    <button class="btn-ref" onclick="openRef('ref-deitel-9-12')">Referencia: Deitel Secc. 9.12 | O'Reilly Cap. 13: Summary | Cuadernos NotebookLM: Educación, UX/UI y Desarrollo Web</button>
+</section>
+
+        <footer style="text-align: center; margin-top: 5rem; color: var(--text-secondary); border-top: 1px solid var(--border); padding-top: 2rem;">
+            <p>© 2026 - Guía de C++ Académica - Nivel Universitario</p>
+        </footer>
+    </main>
+</div>
+
+<button class="theme-toggle" id="themeToggle">🌓</button>
+
+<div id="refModal" class="modal">
+    <div class="modal-content">
+        <h3 id="refTitle" style="color: var(--accent);">Referencia Académica</h3>
+        <p id="refBody" style="font-size: 1rem;"></p>
+        <button onclick="closeRef()" style="background: var(--accent); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: bold;">Entendido</button>
+    </div>
+</div>
+
+<script>
+    const biblio = {
+        'ref-deitel-9': 'Deitel, P. J., & Deitel, H. M. (2009). C++ Cómo Programar, 6ta Edición. Pearson Educación. Capítulo 9: Clases: Un análisis más detallado, Parte 1.',
+		'ref-deitel-9-1': 'Deitel Secc. 9.1 | O\'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación y UX',
+		'ref-deitel-9-2': 'Deitel Secc. 9.2 | O\'Reilly Cap. 13: Classes | Cuadernos NotebookLM: UX/UI y Metodologías Activas',
+		'ref-deitel-9-3': 'Deitel Secc. 9.3 | O\'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación y Desarrollo Web',
+		'ref-deitel-9-4': 'Deitel Secc. 9.4 | O\'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Desarrollo Web, UX y Educación',
+		'ref-deitel-9-5': 'Deitel Secc. 9.5 | O\'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-9-6': 'Deitel Secc. 9.6 | O\'Reilly Cap. 13: Classes | Cuadernos NotebookLM: Educación y UX',
+		'ref-deitel-9-7': 'Deitel Secc. 9.7 | O\'Reilly Cap. 13: Simple Classes | Cuadernos NotebookLM: Educación, UX y Desarrollo Web',
+		'ref-deitel-9-8': 'Deitel Secc. 9.8 | O\'Reilly Cap. 13: Objects and Classes | Cuadernos NotebookLM: Educación y Desarrollo Web',
+		'ref-deitel-9-9': 'Deitel Secc. 9.9 | O\'Reilly Cap. 13: Classes | Cuadernos NotebookLM: UX UI, Desarrollo Web y Educación',
+		'ref-deitel-9-10': 'Deitel Secc. 9.10 | O\'Reilly Cap. 13: Classes and Assignment | Cuadernos NotebookLM: UX UI, Desarrollo Web y Educación',
+		'ref-deitel-9-11': 'Deitel Secc. 9.11 | O\'Reilly Cap. 13: Practical Classes | Cuadernos NotebookLM: UX, Educación y Desarrollo Web',
+		'ref-deitel-9-12': 'Deitel Secc. 9.12 | O\'Reilly Cap. 13: Summary | Cuadernos NotebookLM: Educación, UX/UI y Desarrollo Web',
+        'ref-oreilly': 'Oualline, S. (2003). Practical C++ Programming. O\'Reilly Media. Capítulo 13: Classes.'
+    };
+
+    function openRef(id) {
+        document.getElementById('refBody').innerText = biblio[id];
+        document.getElementById('refModal').style.display = 'flex';
+    }
+
+    function closeRef() {
+        document.getElementById('refModal').style.display = 'none';
+    }
+
+    // Modo Oscuro Persistente
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        const next = currentTheme === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme-cplus', next);
+    });
+
+    const savedTheme = localStorage.getItem('theme-cplus') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+
+    // Navegación Activa
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 150) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').substring(1) === current) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
