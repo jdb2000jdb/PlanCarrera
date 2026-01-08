@@ -349,9 +349,9 @@ void Tiempo::establecerTiempo(int h, int m, int s) {
     <span>🏗️</span>
     <h2>9.4 Separar la interfaz de la implementación</h2>
 
-    <p>En el desarrollo de sistemas robustos en C++, vos debés internalizar que la modularización no es una opción estética, sino un imperativo de la <strong>ingeniería de software</strong> profesional. [cite_start]Según el análisis exhaustivo de <strong>Deitel</strong>, separar la interfaz (el "qué") de la implementación (el "cómo") permite construir software escalable, mantenible y reutilizable[cite: 51]. Esta técnica, también destacada por <strong>O'Reilly</strong> en su enfoque práctico, es la piedra angular del <span class="abbr" data-title="Information Hiding: Principio de diseño que oculta los detalles de implementación de un componente de software a sus usuarios.">ocultamiento de información</span>, asegurando que los cambios internos en una clase no colapsen a los programas clientes que dependen de ella.</p>
+    <p>En el desarrollo de sistemas robustos en C++, vos debés internalizar que la modularización no es una opción estética, sino un imperativo de la <strong>ingeniería de software</strong> profesional. Según el análisis detallado en el <strong>PDF de C++ de Deitel</strong>, separar la interfaz (el "qué") de la implementación (el "cómo") permite construir software escalable, mantenible y reutilizable. Esta técnica, también destacada por el <strong>PDF de O'Reilly</strong> en su enfoque práctico, constituye la piedra angular del <span class="abbr" data-title="Information Hiding: Principio de diseño que oculta los detalles de implementación de un componente de software a sus usuarios.">ocultamiento de información</span>, asegurando que los cambios internos en una clase no afecten a los programas clientes que dependen de ella.</p>
 
-    <p>Desde la perspectiva del <em>Cuaderno de NotebookLM sobre Desarrollo Web</em>, esta división es análoga a la arquitectura de componentes modernos, donde el "Contrato" entre entidades debe ser inamovible para garantizar la estabilidad del sistema distribuido. Asimismo, el <em>Cuaderno sobre UX UI</em> propone que la interfaz de una clase (su archivo de encabezado) funciona como la <strong>interfaz de usuario del programador</strong>: debe ser clara, minimalista y libre de ruidos innecesarios para optimizar la <span class="abbr" data-title="Developer Experience: La sensación y facilidad de uso que tiene un programador al interactuar con una biblioteca o API.">DX</span>.</p>
+    <p>Desde la perspectiva del <strong>Cuaderno de NotebookLM sobre Desarrollo Web</strong>, esta división es análoga a la arquitectura de componentes modernos, donde el "Contrato" entre entidades debe ser inamovible para garantizar la estabilidad del sistema. Asimismo, el <strong>Cuaderno de NotebookLM sobre UX/UI</strong> propone que la interfaz de una clase (su archivo de encabezado) funciona como la <strong>interfaz de usuario del programador</strong>: debe ser clara, minimalista y libre de ruidos innecesarios para optimizar la <span class="abbr" data-title="Developer Experience: La sensación y facilidad de uso que tiene un programador al interactuar con una biblioteca o API.">DX</span>.</p>
 
     <div class="table-res">
         <table>
@@ -388,7 +388,7 @@ void Tiempo::establecerTiempo(int h, int m, int s) {
     </div>
 
     <h3>El Archivo de Encabezado (.h): El Plano Arquitectónico</h3>
-    <p>El archivo <code>.h</code> (o <code>.hpp</code>) contiene la declaración de la clase. Es el plano que el compilador necesita para conocer el tamaño de los objetos y la firma de sus métodos. [cite_start]Como señala <strong>Deitel</strong>, aquí es donde definís qué servicios ofrece tu clase al mundo exterior[cite: 51]. Fijate que es vital incluir <strong>directivas de preprocesamiento</strong> para evitar la redefinición accidental si el archivo se incluye varias veces en el mismo proyecto.</p>
+    <p>El archivo <code>.h</code> (o <code>.hpp</code>) contiene la declaración de la clase. Es el plano que el compilador necesita para conocer el tamaño de los objetos y la firma de sus métodos. Como señala el <strong>texto de Deitel</strong>, aquí es donde definís qué servicios ofrece tu clase al mundo exterior. Es vital incluir <strong>directivas de preprocesamiento</strong> (include guards) para evitar la redefinición accidental si el archivo se incluye varias veces en el mismo proyecto.</p>
     
     <pre><code>// Ejemplo de envoltura de preprocesador (Include Guards)
 #ifndef TIEMPO_H
@@ -407,10 +407,10 @@ private:
 
 #endif</code></pre>
 
-    <p><strong>O'Reilly</strong> advierte que los encabezados no deben contener código ejecutable (excepto funciones <code>inline</code> o plantillas), ya que esto violaría el principio de <span class="abbr" data-title="Separation of Concerns: Principio que establece que un programa debe dividirse en secciones que traten problemas independientes.">SoC</span> y aumentaría dramáticamente los tiempos de compilación en proyectos universitarios de gran escala.</p>
+    <p>Basado en las advertencias de <strong>O'Reilly</strong>, los encabezados no deben contener código ejecutable (excepto funciones <code>inline</code> o plantillas), ya que esto violaría el principio de <span class="abbr" data-title="Separation of Concerns: Principio que establece que un programa debe dividirse en secciones que traten problemas independientes.">SoC</span> y aumentaría innecesariamente los tiempos de compilación en proyectos de gran escala.</p>
 
     <h3>El Archivo de Implementación (.cpp): La Fábrica de Lógica</h3>
-    <p>En el archivo <code>.cpp</code>, vos programás la funcionalidad real. Para que el compilador sepa que una función pertenece a una clase específica declarada en otro lado, debés usar el <strong>operador binario de resolución de ámbito (<code>::</code>)</strong>. Este operador vincula el nombre de la función con el nombre de la clase. Según el <em>Cuaderno de Metodologías Activas</em>, este vínculo es un "andamiaje cognitivo" esencial: separa el diseño (declaración) de la construcción (definición).</p>
+    <p>En el archivo <code>.cpp</code>, vos programás la funcionalidad real. Para que el compilador sepa que una función pertenece a una clase específica, debés usar el <strong>operador de resolución de ámbito (<code>::</code>)</strong>. De acuerdo con el <strong>Cuaderno de NotebookLM sobre Educación y Metodologías Activas</strong>, este vínculo es un "andamiaje cognitivo" esencial que separa el diseño conceptual de la construcción técnica, permitiendo al estudiante procesar la estructura lógica de forma independiente a su implementación.</p>
 
     <pre><code>#include &lt;iostream&gt;
 #include "Tiempo.h" // Se debe incluir el encabezado
@@ -423,39 +423,39 @@ void Tiempo::imprimirUniversal() {
 }</code></pre>
 
     <h3>Proceso de Compilación y Vinculación (Linking)</h3>
-    <p>Comprender cómo C++ procesa estos archivos es clave para tu formación técnica. El proceso se divide en etapas críticas que garantizan la eficiencia del sistema:</p>
+    <p>Comprender cómo C++ procesa estos archivos es clave para tu formación. El flujo de trabajo garantiza la eficiencia del sistema mediante etapas bien diferenciadas:</p>
 
-    <div class="diagram-box">
+    <div class="diagram-box" style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
         <strong>Flujo de Construcción del Software:</strong><br>
         <code>Tiempo.cpp</code> ➔ <strong>Compilador</strong> ➔ <code>Tiempo.obj</code> (Código Objeto)<br>
         <code>main.cpp</code> ➔ <strong>Compilador</strong> ➔ <code>main.obj</code> (Código Objeto)<br>
         <code>Bibliotecas Estándar</code> + <code>.obj</code> ➔ <strong>Enlazador (Linker)</strong> ➔ <strong>EJECUTABLE (.exe)</strong>
     </div>
 
-    <p>Este flujo permite lo que <strong>O'Reilly</strong> llama <em>compilación independiente</em>: si vos solo modificás la lógica en el <code>.cpp</code>, el resto de los archivos del proyecto no necesitan ser re-compilados, solo re-enlazados, ahorrando valioso tiempo de cómputo en sistemas complejos.</p>
+    <p>Este flujo permite lo que <strong>O'Reilly</strong> denomina <em>compilación independiente</em>: si solo modificás la lógica en el <code>.cpp</code>, los demás archivos del proyecto no necesitan re-compilarse, solo re-enlazarse, optimizando el tiempo de desarrollo.</p>
 
     <h3>Análisis de UX y Soberanía Pedagógica</h3>
-    <p>Según el <em>Cuaderno sobre UX UI</em>, un archivo <code>.h</code> bien diseñado actúa como una <strong>capa de abstracción</strong> que protege al programador de la complejidad innecesaria. "Si un desarrollador tiene que abrir el .cpp para entender cómo usar tu clase, tu interfaz falló". Esta soberanía sobre el diseño asegura que el código sea <span class="abbr" data-title="Self-documenting code: Código cuyo nombre y estructura explican su función sin necesidad de comentarios externos excesivos.">autodocumentado</span>.</p>
+    <p>Según el <strong>Cuaderno de NotebookLM sobre UX/UI</strong>, un archivo <code>.h</code> bien diseñado actúa como una capa de abstracción que protege al programador de la complejidad innecesaria. En la ingeniería de software académica, se sostiene que si un desarrollador debe abrir el <code>.cpp</code> para entender cómo usar una clase, la interfaz ha fallado en su propósito comunicativo. Esta soberanía sobre el diseño asegura que el código sea <span class="abbr" data-title="Self-documenting code: Código cuyo nombre y estructura explican su función sin necesidad de comentarios externos excesivos.">autodocumentado</span>.</p>
 
-    <p>En el contexto de las <em>Metodologías Activas</em>, se recomienda el uso de diagramas conceptuales para visualizar la relación entre el Cliente (main) y el Proveedor (Clase). El cliente <strong>confía</strong> en el header, mientras que la clase <strong>garantiza</strong> la implementación en el .cpp. Este "Pacto de Confianza" es lo que permite que equipos de cientos de ingenieros trabajen en el mismo sistema sin pisarse los cables.</p>
+    <p>En el marco de las <strong>Metodologías Activas</strong>, se fomenta el uso de diagramas para visualizar el "Pacto de Confianza" entre el Cliente (main) y el Proveedor (Clase). El cliente confía en el encabezado, mientras que la clase garantiza la implementación fiel en el archivo de código fuente, permitiendo la colaboración efectiva en equipos de desarrollo profesionales.</p>
 
     <div class="practice-box" style="background: rgba(26, 115, 232, 0.05); padding: 1.5rem; border-left: 5px solid var(--accent); margin-top: 2rem;">
         <h4 style="margin-top: 0; color: var(--accent);">🇦🇷 Actividad Práctica de Refactorización</h4>
-        <p>Tomá tu código de la clase <code>Tiempo</code> que tenés en un solo archivo. Separá la declaración en <code>Tiempo.h</code> y la lógica en <code>Tiempo.cpp</code>. Intentá compilar el proyecto y observá los errores del <em>Linker</em> si olvidás incluir el archivo objeto. Esta experiencia directa es fundamental para dominar la arquitectura de software en C++.</p>
+        <p>Tomá tu código de la clase <code>Tiempo</code>. Separá la declaración en <code>Tiempo.h</code> y la lógica en <code>Tiempo.cpp</code>. Intentá compilar el proyecto y observá los errores del <em>Linker</em> si olvidás incluir el archivo objeto. Esta experiencia directa, tal como sugiere el <strong>Cuaderno de Educación</strong>, es fundamental para dominar la arquitectura física de C++.</p>
     </div>
 
     <div class="timeline">
         <div class="timeline-item">
             <span class="timeline-date">Era Pre-Modular (C)</span>
-            <p>Programas monolíticos en un solo archivo. Dificultad extrema para el mantenimiento y tiempos de compilación exponenciales.</p>
+            <p>Programas monolíticos en un solo archivo con tiempos de compilación exponenciales y difícil mantenimiento.</p>
         </div>
         <div class="timeline-item">
             <span class="timeline-date">Surgimiento de Headers (.h)</span>
-            <p>Introducción de la compilación separada. Las declaraciones permiten que diferentes módulos interactúen sin conocer su código fuente.</p>
+            <p>Introducción de la compilación separada, permitiendo que los módulos interactúen sin conocer el código fuente ajeno.</p>
         </div>
         <div class="timeline-item">
-            <span class="timeline-date">C++ Moderno (C++20 Modules)</span>
-            <p>Evolución hacia un sistema de módulos que elimina la necesidad de archivos de encabezado tradicionales, mejorando aún más la DX y el rendimiento.</p>
+            <span class="timeline-date">C++ Moderno (Módulos)</span>
+            <p>Evolución hacia sistemas de módulos que eliminan la dependencia de encabezados tradicionales, mejorando el rendimiento y la experiencia del desarrollador.</p>
         </div>
     </div>
 
