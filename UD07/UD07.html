@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Guía Universitaria C++ - Manejo de Excepciones. Basada en Deitel y O'Reilly.">
+    <title>Unidad Didáctica 07 - Manejo de Excepciones</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Roboto+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #fdfdfd;
+            --bg-secondary: #f4f4f4;
+            --bg-paper: #ffffff;
+            --text-primary: #212121;
+            --text-secondary: #5f6368;
+            --accent: #1a73e8; 
+            --accent-hover: #1557b0;
+            --code-bg: #f8f9fa;
+            --border: #dadce0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --success: #1e8e3e;
+            --error: #d93025;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-paper: #242424;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --accent: #8ab4f8;
+            --accent-hover: #aecbfa;
+            --code-bg: #2d2e31;
+            --border: #3c4043;
+            --shadow: 0 4px 12px rgba(0,0,0,0.5);
+            --success: #81c995;
+        }
+
+        * { box-sizing: border-box; transition: background-color 0.3s ease, color 0.3s ease; }
+        body { font-family: 'Merriweather', serif; background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.8; margin: 0; scroll-behavior: smooth; }
+
+        h1, h2, h3 { font-family: 'Roboto', sans-serif; }
+        h1 { font-weight: 700; font-size: 2.2rem; text-align: center; margin: 2rem 0; color: var(--accent); }
+        h1 a { text-decoration: none; color: inherit; }
+        h2 { border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-top: 3rem; font-size: 1.6rem; display: flex; align-items: center; gap: 10px; }
+        
+        .app-container { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
+
+        aside { 
+            background-color: var(--bg-secondary); 
+            border-right: 1px solid var(--border); 
+            height: 100vh; 
+            position: sticky; 
+            top: 0; 
+            overflow-y: auto; 
+            padding: 1.5rem; 
+        }
+
+        .nav-links { list-style: none; padding: 0; }
+        .nav-links a { 
+            text-decoration: none; 
+            color: var(--text-secondary); 
+            font-size: 0.85rem; 
+            display: block; 
+            padding: 0.6rem; 
+            border-radius: 4px; 
+            margin-bottom: 2px;
+            border-left: 3px solid transparent;
+        }
+        .nav-links a:hover, .nav-links a.active { background: var(--accent); color: white; border-left: 3px solid var(--accent-hover); }
+
+        main { padding: 2rem 5%; max-width: 1100px; margin: 0 auto; }
+        section { 
+            background: var(--bg-paper); 
+            padding: 2.5rem; 
+            border-radius: 12px; 
+            margin-bottom: 4rem; 
+            box-shadow: var(--shadow); 
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        code { font-family: 'Roboto Mono', monospace; background: var(--code-bg); padding: 0.2rem 0.4rem; border-radius: 4px; color: var(--accent); font-size: 0.9rem; }
+        pre { background: var(--code-bg); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent); overflow-x: auto; margin: 1.5rem 0; }
+
+        .abbr { border-bottom: 2px dotted var(--accent); cursor: help; color: var(--accent); font-weight: 600; position: relative; }
+        .abbr:hover::after {
+            content: attr(data-title);
+            position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%);
+            background: #323336; color: white; padding: 0.6rem 1rem; border-radius: 6px;
+            font-size: 0.85rem; width: 240px; z-index: 100; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .diagram { background: var(--bg-secondary); padding: 2rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border: 1px dashed var(--accent); }
+        .table-res { overflow-x: auto; margin: 2rem 0; }
+        table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); font-family: 'Roboto', sans-serif; font-size: 0.9rem; }
+        th, td { padding: 1rem; border: 1px solid var(--border); text-align: left; }
+        th { background: var(--accent); color: white; }
+
+        .btn-ref { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 1rem; transition: all 0.2s; }
+        .btn-ref:hover { background: var(--accent); color: white; }
+
+        .theme-toggle { position: fixed; bottom: 2rem; right: 2rem; width: 55px; height: 55px; border-radius: 50%; background: var(--accent); color: white; border: none; cursor: pointer; z-index: 100; font-size: 1.4rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .modal-content { background: var(--bg-paper); padding: 2.5rem; border-radius: 12px; max-width: 600px; width: 90%; box-shadow: var(--shadow); }
+
+        .icon-section { font-size: 1.8rem; margin-right: 10px; }
+
+        @media (max-width: 900px) { .app-container { grid-template-columns: 1fr; } aside { display: none; } }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <aside>
+        <h3 style="font-family: 'Roboto'; color: var(--accent); letter-spacing: 1px;">CONTENIDOS UNIDAD 07</h3>
+        <ul class="nav-links">
+            <li><a href="#sec-16-1">16.1 Introducción</a></li>
+            <li><a href="#sec-16-2">16.2 Generalidades del Manejo</a></li>
+            <li><a href="#sec-16-3">16.3 Ejemplo: División por Cero</a></li>
+            <li><a href="#sec-16-4">16.4 Cuándo Utilizar Excepciones</a></li>
+            <li><a href="#sec-16-5">16.5 Volver a Lanzar Excepciones</a></li>
+            <li><a href="#sec-16-6">16.6 Especificaciones</a></li>
+            <li><a href="#sec-16-7">16.7 Excepciones Inesperadas</a></li>
+            <li><a href="#sec-16-8">16.8 Limpieza de la Pila</a></li>
+            <li><a href="#sec-16-9">16.9 Constructores y Destructores</a></li>
+            <li><a href="#sec-16-10">16.10 Excepciones y Herencia</a></li>
+            <li><a href="#sec-16-11">16.11 Fallas de Operador new</a></li>
+            <li><a href="#sec-16-12">16.12 La Clase auto_ptr</a></li>
+            <li><a href="#sec-16-13">16.13 Jerarquía Estándar</a></li>
+            <li><a href="#sec-16-14">16.14 Otras Técnicas de Error</a></li>
+            <li><a href="#sec-16-15">16.15 Repaso Final</a></li>
+        </ul>
+    </aside>
+
+    <main>
+        <header id="home">
+            <h1><a href="#home">Unidad Didáctica 07 - Manejo de Excepciones</a></h1>
+            <p style="text-align: center; font-style: italic; color: var(--text-secondary);">"El código robusto no es el que no tiene errores, sino el que sabe cómo reaccionar ante ellos."</p>
+        </header>
+
+<section id="sec-16-1">
+            <h2><span class="icon-section">🚀</span>16.1 Introducción al Paradigma de Robustez</h2>
+            
+            <p>El manejo de excepciones en C++ representa uno de los pilares fundamentales para la construcción de software de nivel industrial. No se trata simplemente de un "parche" para errores, sino de una técnica sofisticada diseñada para procesar <span class="abbr" data-title="Synchronous Errors: Eventos inesperados que ocurren durante la ejecución normal del flujo de instrucciones, totalmente predecibles en su punto de origen pero impredecibles en su ocurrencia.">errores sincrónicos</span>. Según la perspectiva técnica de <strong>Deitel</strong>, este mecanismo permite que vos, como desarrollador, puedas escribir código mucho más limpio y legible al separar drásticamente la lógica principal del programa (el "camino feliz") de las complejas y a veces tediosas rutinas de manejo de errores y contingencias.</p>
+
+            <p>Desde una mirada pedagógica basada en los cuadernos de <strong>Metodologías Activas</strong>, debés concebir a las excepciones como una transferencia de control delegada. En lugar de que cada pequeña función intente resolver problemas catastróficos para los que no tiene contexto —como la falta de memoria o la corrupción de un archivo—, el componente detecta la anomalía y "patea" la responsabilidad hacia una capa superior del sistema que posea la autoridad y el contexto necesario para decidir qué hacer. Esta visión de "delegación de autoridad" transforma el código de una estructura monolítica y frágil en un sistema resiliente y modular.</p>
+
+            <p><strong>Evolución Histórica y Comparativa:</strong> Históricamente, en lenguajes como C, el manejo de errores se realizaba mediante valores de retorno o variables globales (como <code>errno</code>). Basado en el PDF de <strong>O'Reilly</strong>, este enfoque era propenso a fallas humanas: el programador podía simplemente olvidar chequear un valor de retorno, permitiendo que el error se propagara silenciosamente hasta causar un desastre mayor. C++ soluciona esto obligando al sistema a reaccionar. Si una excepción no es atrapada, el programa termina; no hay término medio. Esto garantiza que ningún error pase desapercibido, alineándose con el principio de robustez que exige el desarrollo de software moderno.</p>
+
+            <p><strong>El Modelo de Terminación vs. Reanudación:</strong> Es crucial que comprendas que C++ implementa lo que <strong>Deitel</strong> denomina el <span class="abbr" data-title="Termination Model: Modelo donde, una vez que se lanza la excepción, el flujo de ejecución nunca regresa al punto donde se originó el error.">modelo de terminación</span>. A diferencia de otros sistemas experimentales que intentan corregir el error y seguir desde el mismo punto (modelo de reanudación), C++ asume que si ocurrió una excepción, el estado del bloque actual es poco confiable. Por lo tanto, se limpia la pila, se destruyen los objetos locales y se busca un manejador externo. Esta decisión de diseño prioriza la seguridad del sistema sobre la continuidad forzada, evitando que operés con datos inconsistentes.</p>
+
+            <div class="diagram">
+                <strong>Anatomía de la Separación de Incumbencias (Separation of Concerns)</strong><br><br>
+                <code>Lógica de Negocio (El 'Qué')</code> ⟷ <code>Capa de Abstracción de Excepciones</code> ⟷ <code>Manejo de Errores (El 'Cómo reparar')</code>
+            </div>
+
+            <p><strong>Perspectiva de UX/UI y Desarrollo Web:</strong> Aplicando los conceptos de los cuadernos de <strong>UX UI</strong>, el manejo de excepciones es el motor detrás de una experiencia de usuario fluida. Un programa que "crashea" sin explicación es un fracaso de diseño. Las excepciones permiten interceptar el fallo y presentar mensajes que, según el cuaderno de <strong>Desarrollo Web</strong>, son análogos a los códigos de estado 500 en <span class="abbr" data-title="Hypertext Transfer Protocol: El protocolo de comunicación de la web donde los errores deben ser gestionados para no romper la conexión.">HTTP</span>: informan que algo salió mal en el servidor (o en el núcleo del programa) pero mantienen la interfaz activa para que el usuario pueda intentar otra acción. Diseñar para el error es, en última instancia, diseñar para la confianza del usuario.</p>
+
+            <p><strong>Impacto en la Arquitectura de Objetos:</strong> El manejo de excepciones no está aislado de la <span class="abbr" data-title="Object-Oriented Programming: Paradigma basado en la creación de clases y objetos que encapsulan datos y comportamientos.">POO</span>. Según <strong>O'Reilly</strong>, la verdadera potencia surge cuando combinamos excepciones con el principio de <span class="abbr" data-title="Resource Acquisition Is Initialization: Técnica donde la gestión de recursos se liga al ciclo de vida de los objetos, garantizando liberación automática.">RAII</span>. Al lanzar una excepción, C++ garantiza que todos los objetos completamente construidos en el ámbito actual sean destruidos mediante sus respectivos destructores. Esto significa que si tenías un archivo abierto o memoria reservada, el sistema se encargará de cerrarlos o liberarlos automáticamente mientras busca un bloque <code>catch</code>. Esta sinergia es lo que permite construir aplicaciones escalables que no sufren de fugas de memoria ante eventos inesperados.</p>
+
+            <p>Finalmente, debés considerar que el uso de excepciones introduce una sobrecarga (overhead) mínima en tiempo de ejecución cuando no ocurren errores, pero el beneficio en términos de mantenibilidad y seguridad es incalculable. Como futuro ingeniero, tu objetivo no es evitar que los errores ocurran —eso es estadísticamente imposible en sistemas complejos— sino asegurar que cuando ocurran, tu programa tenga la madurez necesaria para fallar de manera elegante y controlada, protegiendo la integridad de los datos y la experiencia del usuario.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-1')">Referencia: Deitel Secc. 16.1 | O'Reilly Cap. 22: Exceptions | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+<section id="sec-16-2">
+            <h2><span class="icon-section">🏗️</span>16.2 Generalidades acerca del manejo de excepciones y su arquitectura lógica</h2>
+            
+            <p>Para que comprendas la magnitud de esta herramienta, debés visualizar el manejo de excepciones no como un simple condicional, sino como una infraestructura de seguridad integrada en el núcleo de C++. Esta arquitectura se fundamenta en una tríada indisoluble de palabras clave: <code>try</code>, <code>throw</code> y <code>catch</code>. Según la perspectiva técnica detallada por <strong>Deitel</strong>, este sistema permite que un programa sea "consciente" de sus fallos y posea una estrategia de repliegue ante situaciones que, de otro modo, provocarían un colapso total del sistema.</p>
+
+            <p>El <strong>bloque <code>try</code></strong> actúa como una región vigilada. No es simplemente un contenedor de código; es una declaración de intenciones donde vos, como desarrollador, admitís que las operaciones contenidas poseen un riesgo inherente de falla. Basado en el PDF de <strong>O'Reilly</strong>, un bloque <code>try</code> debe ser lo suficientemente granular para capturar errores específicos sin oscurecer la lógica principal del programa. Dentro de este bloque, si una función o una operación detecta una anomalía que impide su finalización exitosa, se ejecuta la instrucción <code>throw</code>.</p>
+
+            <p>La <strong>instrucción <code>throw</code></strong> es el disparador del mecanismo. Al lanzar una excepción, el flujo normal de ejecución se interrumpe de manera inmediata. Lo que se "lanza" es un objeto, que puede ser desde un tipo primitivo (como un <code>int</code> o un <code>char*</code>) hasta una instancia de una clase compleja. Sin embargo, la recomendación académica de <strong>Deitel</strong> es terminante: siempre debés lanzar objetos de clases de excepción, preferentemente derivadas de la jerarquía estándar, ya que esto permite transportar metadatos críticos sobre el error (como el lugar del fallo o un mensaje descriptivo) hacia el manejador.</p>
+
+            <div class="diagram">
+                
+                <br><strong>Representación del Flujo de Control Excepcional</strong><br><br>
+                <code>[REGIÓN VIGILADA (try)]</code> ➔ <code>[DETECCIÓN Y LANZAMIENTO (throw)]</code> ➔ <code>[BÚSQUEDA DE MANEJADOR (catch)]</code>
+            </div>
+
+            <p><strong>El Proceso de Captura (catch) y el Emparejamiento de Tipos:</strong> El bloque <code>catch</code> es el "paracaídas" del sistema. Cada bloque <code>catch</code> especifica un tipo de excepción que es capaz de procesar. Cuando se lanza una excepción, C++ inicia una búsqueda frenética de un manejador compatible. Basado en <strong>O'Reilly</strong>, este emparejamiento no realiza conversiones automáticas de tipos (coerción); debe haber una coincidencia exacta o una relación de herencia (una excepción de clase derivada puede ser atrapada por un <code>catch</code> que espere una clase base). Si tenés múltiples bloques <code>catch</code>, el compilador los evaluará en orden secuencial, por lo que debés organizar tus manejadores de lo más específico a lo más general.</p>
+
+            <p><strong>Perspectiva Pedagógica y de Metodologías Activas:</strong> En el marco de la educación universitaria, el cuaderno de <strong>Metodologías Activas</strong> sugiere que aprendas este concepto mediante la analogía de la "Posta de Responsabilidad". Imagina que la función donde ocurre el error es un corredor que no puede completar su tramo; en lugar de detener la carrera, le pasa el testimonio (el objeto de excepción) al siguiente corredor disponible en la pila de llamadas que sepa qué hacer. Esta visión te ayuda a internalizar que el manejo de excepciones es un flujo de control no lineal, rompiendo el paradigma de ejecución secuencial estricta.</p>
+
+            <p><strong>Integración con el Diseño Web y UX:</strong> Aunque estamos programando en C++, la filosofía de diseño extraída de los cuadernos de <strong>Desarrollo Web</strong> y <strong>UX UI</strong> es aplicable aquí. Un sistema que maneja excepciones correctamente es la base de la <em>Robustez Percibida</em>. Desde el punto de vista de la <span class="abbr" data-title="User Experience: La disciplina que busca que la interacción del usuario con el sistema sea eficiente, satisfactoria y libre de frustraciones innecesarias.">UX</span>, el manejo de excepciones evita que el usuario se encuentre con una pantalla congelada o un cierre inesperado (crash). En el desarrollo web, esto equivale a gestionar los errores de servidor para que el cliente reciba un mensaje útil en lugar de una conexión rota. En C++, esto se traduce en mantener la integridad de los datos y permitir que el programa intente una recuperación o, al menos, un cierre ordenado.</p>
+
+            <p><strong>Consecuencias de la Omisión (terminate):</strong> Un concepto vital que debés recordar es qué sucede cuando sos negligente con tus capturas. Si una excepción es lanzada y no existe ningún bloque <code>catch</code> compatible en toda la pila de llamadas activa, el sistema invoca automáticamente a la función de la biblioteca estándar <code>terminate()</code>. Según <strong>Deitel</strong>, esto es el último recurso del lenguaje para proteger la integridad del sistema operativo: ante la incertidumbre de un error no gestionado, C++ prefiere abortar la ejecución antes que permitir que el programa continúe en un estado corrupto o impredecible. <strong>O'Reilly</strong> advierte que en sistemas de tiempo real o aplicaciones industriales, un <code>terminate()</code> no planificado es un fallo crítico de ingeniería.</p>
+
+            <p><strong>Buenas Prácticas de Ingeniería de Software:</strong> Para alcanzar un nivel profesional en C++, debés considerar las siguientes generalidades técnicas extraídas de las fuentes técnicas:
+                <ul>
+                    <li><strong>Atrapar por Referencia:</strong> Siempre capturá los objetos de excepción mediante una referencia constante (<code>const Tipo &e</code>). Esto evita la duplicación innecesaria del objeto (eficiencia) y previene el problema del "slicing" (pérdida de información si se atrapa una clase derivada por valor de clase base).</li>
+                    <li><strong>Manejador Universal:</strong> Podés usar <code>catch(...)</code> como un último recurso para atrapar cualquier tipo de excepción, aunque esto debe hacerse con extrema cautela ya que perdés la capacidad de saber qué falló exactamente.</li>
+                    <li><strong>Separación de Incumbencias:</strong> El código de detección de errores pertenece a la lógica de bajo nivel, mientras que el código de decisión sobre qué hacer ante el error suele pertenecer a las capas de interfaz o controladores superiores.</li>
+                </ul>
+            </p>
+
+            <p>En conclusión, dominar estas generalidades te permitirá construir software que no solo "funcione", sino que sea capaz de resistir las condiciones adversas del mundo real. Como futuro profesional, tu compromiso es garantizar que tus programas tengan siempre una red de contención lógica lista para actuar.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-2')">Referencia: Deitel Secc. 16.2 | O'Reilly Cap. 22: Practical Exceptions | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+<section id="sec-16-3">
+            <h2><span class="icon-section">➗</span>16.3 Análisis de Caso: La División por Cero como Umbral de la Robustez</h2>
+            
+            <p>En el ámbito del desarrollo de software de alta integridad, la división por cero no es simplemente un error aritmético trivial; representa una interrupción del contrato lógico de una operación. Como bien señala el PDF de <strong>Deitel</strong>, C++ no genera excepciones de forma automática para errores aritméticos de tipos integrales (a diferencia de otros lenguajes de más alto nivel). Esta decisión de diseño prioriza el rendimiento, dejando en tus manos la responsabilidad de detectar y notificar la inconsistencia. Si no validás esta operación, el sistema podría incurrir en un comportamiento indefinido o terminar abruptamente por una señal del <span class="abbr" data-title="Operating System: El software base que gestiona los recursos de hardware y que, ante una división por cero no gestionada, suele enviar una señal de terminación al proceso.">SO</span>.</p>
+
+            <p>Para abordar esto profesionalmente, debés implementar lo que el cuaderno de <strong>Educación y Metodologías Activas</strong> denomina "programación defensiva". Esto implica que tu función no solo debe ser capaz de calcular el resultado, sino también de validar sus <span class="abbr" data-title="Preconditions: Condiciones que deben cumplirse antes de ejecutar una lógica para garantizar que el resultado sea válido y seguro.">precondiciones</span>. Observá el siguiente desarrollo extendido, donde utilizamos la clase <code>runtime_error</code> de la biblioteca estándar <code>&lt;stdexcept&gt;</code> para encapsular el fallo:</p>
+
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;stdexcept&gt; // Necesaria para runtime_error
+
+// Definición de una función con validación de precondiciones
+double calcularCociente(double numerador, double denominador) {
+    // Verificación explícita: C++ no lanza la excepción solo
+    if (denominador == 0.0) {
+        throw std::runtime_error("Error Crítico: Intento de división por cero en la capa de cálculo.");
+    }
+    return numerador / denominador;
+}
+
+int main() {
+    double n, d;
+    std::cout << "Ingresá el numerador y denominador: ";
+    while (std::cin >> n >> d) {
+        try {
+            // El bloque try vigila la llamada a la función lógica
+            double resultado = calcularCociente(n, d);
+            std::cout << "El resultado es: " << resultado << std::endl;
+        } 
+        catch (const std::runtime_error& e) {
+            // El catch captura la excepción por referencia constante
+            std::cerr << "Excepción detectada: " << e.what() << std::endl;
+            std::cout << "Por favor, ingresá un denominador válido distinto de cero." << std::endl;
+        }
+    }
+    return 0;
+}</code></pre>
+
+            <p><strong>Análisis de la Estructura Lógica:</strong> En este ejemplo, la instrucción <code>throw</code> no solo envía un mensaje; crea un objeto de excepción que "vuela" a través de la pila de llamadas buscando un bloque <code>catch</code> compatible. Según <strong>O'Reilly</strong>, el uso de <code>std::runtime_error</code> es ideal aquí porque estamos ante un evento que depende de datos externos (el input del usuario) y no necesariamente de un error en el código fuente estático. Es un error que ocurre en "tiempo de ejecución".</p>
+
+            
+
+            <p><strong>La Dimensión de la Experiencia de Usuario (UX):</strong> Aquí es donde el cuaderno de <strong>UX UI</strong> se vuelve crítico para tu formación como ingeniero. Existe una brecha semántica entre lo que necesita el desarrollador y lo que necesita el usuario final. 
+            <ul>
+                <li><strong>Para el desarrollador:</strong> La excepción debe ser técnica, incluyendo idealmente el nombre de la función y la naturaleza del error (ej. <code>"division_by_zero_error en calcularCociente"</code>).</li>
+                <li><strong>Para el usuario:</strong> Según los principios de usabilidad, un mensaje como "Runtime Error 0x0045" es inútil y genera ansiedad. La interfaz debe transformar esa excepción técnica en una sugerencia de acción clara: "El denominador no puede ser cero. Por favor, verificá los datos ingresados".</li>
+            </ul>
+            </p>
+
+            <p>Desde la perspectiva del cuaderno de <strong>Desarrollo Web</strong>, este manejo es análogo a la validación de formularios. Si el usuario ingresa un dato inválido, el sistema no debe "romperse"; debe atrapar la anomalía en el backend y devolver una respuesta estructurada (como un código 400 Bad Request) que la interfaz pueda renderizar de manera amigable. En C++, el bloque <code>catch</code> actúa como ese mediador que evita la caída del sistema y permite una recuperación controlada del flujo.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Criterio de Evaluación</th>
+                            <th>Enfoque Tradicional (C-Style)</th>
+                            <th>Enfoque Moderno (C++ Exceptions)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Detección</td>
+                            <td>Retorno de valores especiales (ej. -1 o NULL).</td>
+                            <td>Lanzamiento de objetos descriptivos (throw).</td>
+                        </tr>
+                        <tr>
+                            <td>Separación de Lógica</td>
+                            <td>Mezclada con <code>if/else</code> en cada llamada.</td>
+                            <td>Código limpio en <code>try</code>, gestión en <code>catch</code>.</td>
+                        </tr>
+                        <tr>
+                            <td>Propagación</td>
+                            <td>Manual: cada función debe chequear el retorno anterior.</td>
+                            <td>Automática: la excepción "salta" niveles de la pila solo.</td>
+                        </tr>
+                        <tr>
+                            <td>Seguridad</td>
+                            <td>Fácil de ignorar, llevando a cálculos corruptos.</td>
+                            <td>Imposible de ignorar; si no se atrapa, el programa para.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Profundización Académica:</strong> Un aspecto avanzado que menciona <strong>Deitel</strong> es el impacto en el rendimiento. Debés saber que un bloque <code>try</code> tiene un costo computacional casi nulo si no se lanza ninguna excepción. Sin embargo, el proceso de <span class="abbr" data-title="Stack Unwinding: El proceso de destruir objetos locales y limpiar los marcos de la pila de llamadas mientras se busca un manejador de excepciones.">limpieza de la pila</span> cuando ocurre un <code>throw</code> es costoso. Por lo tanto, la división por cero debe tratarse como una excepción real (un evento poco frecuente pero crítico) y no como una forma de control de flujo ordinaria.</p>
+
+            <p>En conclusión, el manejo de una división por cero te enseña la anatomía completa de la robustez: desde la validación rigurosa en el punto de falla, pasando por la transferencia de control segura, hasta la comunicación efectiva con el usuario. Como futuro profesional egresado de esta cátedra, tu código debe demostrar que sos capaz de prever estos escenarios axiomáticos, garantizando que el software sea predecible incluso ante la imprevisibilidad del input humano.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-3')">Referencia: Deitel Secc. 16.3 | O'Reilly Cap. 22: Exceptions | Cuadernos NotebookLM: UX, Desarrollo Web y Educación</button>
+        </section>
+
+<section id="sec-16-4"> <h2><span class="icon-section">❓</span>16.4 Criterios de Aplicación: ¿Cuándo utilizar el manejo de excepciones?</h2>
+
+        <p>La decisión de cuándo emplear el mecanismo de excepciones es una de las competencias más críticas que debés desarrollar como ingeniero de software. No se trata de una cuestión puramente técnica, sino de una decisión arquitectónica que impacta en la legibilidad, el rendimiento y la robustez del sistema. Según el PDF de <strong>Deitel</strong>, las excepciones deben reservarse estrictamente para situaciones que son, por definición, "excepcionales". Esto implica que no deberías usarlas para gestionar eventos que forman parte del flujo normal y predecible de tu lógica de negocios.</p>
+
+        <p><strong>El Principio de la Condición Excepcional:</strong> Basado en las enseñanzas de <strong>O'Reilly</strong>, una excepción representa un "procedimiento de emergencia". Si una función no puede cumplir con su contrato (es decir, lo que prometió hacer según su firma y documentación), entonces y solo entonces es lícito lanzar una excepción. Por ejemplo, si una función de búsqueda no encuentra un elemento, eso podría ser un resultado normal; devolver un puntero nulo o un iterador de fin es lo esperado. Pero si esa misma función no puede realizar la búsqueda porque la base de datos está corrupta o la memoria se agotó, estamos ante una condición excepcional que requiere un <code>throw</code>.</p>
+
+        <p><strong>Clasificación de Escenarios Apropiados:</strong>
+        Para que tengas una guía clara en tus proyectos universitarios, considerá los siguientes casos donde el uso de excepciones es académicamente correcto y profesionalmente esperado:
+        <ul>
+            <li><strong>Fallas en la Adquisición de Recursos:</strong> Cuando <code>new</code> falla por falta de memoria (<code>bad_alloc</code>) o un archivo esencial para el funcionamiento del programa no puede abrirse.</li>
+            <li><strong>Violaciones de Límites y Rangos:</strong> Accesos a índices de arreglos fuera de rango detectados en tiempo de ejecución, donde continuar la ejecución pondría en riesgo la integridad de la memoria.</li>
+            <li><strong>Errores de Red y Conectividad:</strong> En sistemas distribuidos, la pérdida de conexión con un servidor es un evento que la lógica local no suele poder resolver sin ayuda de capas superiores.</li>
+            <li><strong>Fallos en Constructores:</strong> Como los constructores no devuelven valores, lanzar una excepción es la única forma elegante de informar que un objeto no pudo inicializarse correctamente.</li>
+        </ul>
+        </p>
+
+        <div class="diagram">
+            <strong>Diagrama de Decisión de Ingeniería</strong><br><br>
+            ¿El problema puede resolverse localmente? ➔ <strong>SÍ:</strong> Usá lógica condicional (if/else).<br>
+            ⬇️ NO<br>
+            ¿Es un evento frecuente y esperado? ➔ <strong>SÍ:</strong> Devolvé un código de error o valor centinela.<br>
+            ⬇️ NO<br>
+            <strong>¡LANZÁ UNA EXCEPCIÓN! (throw)</strong>
+        </div>
+
+        <p><strong>El Anti-patrón del Control de Flujo:</strong> Una de las advertencias más enfáticas de <strong>Deitel</strong> es evitar el uso de excepciones para controlar bucles o saltos lógicos ordinarios. Usar un <code>throw</code> para salir de un <code>for</code> anidado es considerado una mala práctica por dos razones fundamentales: primero, confunde a otros programadores que esperan encontrar manejadores de errores, no lógica de salida; segundo, el proceso de <span class="abbr" data-title="Stack Unwinding: El proceso de destrucción de objetos y limpieza de marcos de memoria que ocurre al lanzar una excepción, el cual es computacionalmente costoso.">limpieza de la pila</span> es significativamente más lento que un simple <code>break</code> o <code>return</code>. La eficiencia del sistema se ve seriamente comprometida si el "camino feliz" del código depende de excepciones.</p>
+
+        <p><strong>Perspectiva desde el Desarrollo Web y UX/UI:</strong> Integrando los conceptos de los cuadernos de <strong>NotebookLM</strong>, podemos trazar una analogía potente. En el desarrollo web, las excepciones en C++ se comportan como los errores de la familia 500 (Internal Server Error). No se los mostrás al usuario final tal cual aparecen en la consola del desarrollador. Según el cuaderno de <strong>UX UI</strong>, debés usar la excepción para atrapar el fallo en una capa intermedia y transformar ese error técnico en una respuesta de interfaz amigable. "Error de segmentación en 0x4F" debe convertirse en "Hubo un problema al procesar tu solicitud, por favor intentá de nuevo en unos minutos". Esta separación asegura que el sistema sea robusto sin sacrificar la usabilidad.</p>
+
+        <p><strong>Metodologías Activas y Aprendizaje Basado en la Responsabilidad:</strong> Desde el punto de vista del cuaderno de <strong>Educación</strong>, aprender a usar excepciones es aprender a definir los límites de responsabilidad de cada módulo. Como estudiante, debés preguntarte: "¿Es mi función la encargada de decidir qué hacer si el disco está lleno?". Si la respuesta es no, debés lanzar la excepción hacia arriba. Esto fomenta un pensamiento arquitectónico donde cada pieza del rompecabezas sabe cuándo rendirse y pedir ayuda a la jerarquía superior.</p>
+
+        <div class="table-res">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Atributo</th>
+                        <th>Uso de Valores de Retorno</th>
+                        <th>Uso de Excepciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Frecuencia</strong></td>
+                        <td>Eventos comunes y esperados.</td>
+                        <td>Eventos raros y críticos.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Costo de Ejecución</strong></td>
+                        <td>Mínimo y constante.</td>
+                        <td>Alto solo cuando ocurre el lanzamiento.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Claridad de Código</strong></td>
+                        <td>Puede ensuciar la lógica con múltiples chequeos.</td>
+                        <td>Limpia la lógica principal (Happy Path).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Obligatoriedad</strong></td>
+                        <td>El programador puede ignorar el valor.</td>
+                        <td>El sistema obliga a manejarlo o termina.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p><strong>Conclusión Académica:</strong> En definitiva, usá el manejo de excepciones para proteger la integridad de tus aplicaciones universitarias frente a lo imprevisto. No las uses para ocultar una mala lógica de programación o por pereza de implementar chequeos manuales donde estos son pertinentes. La robustez de un sistema se mide por su capacidad de mantener la estabilidad operativa bajo presión, y el uso juicioso de <code>try-catch</code> es tu herramienta principal para lograrlo. Recordá siempre las palabras de <strong>O'Reilly</strong>: "Las excepciones son para emergencias; no llames a los bomberos para apagar una vela".</p>
+
+        <button class="btn-ref" onclick="openRef('ref-deitel-16-4')">Referencia: Deitel Secc. 16.4 | O'Reilly Cap. 22: Exceptions & Design | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+    </section>
+
+<section id="sec-16-5">
+            <h2><span class="icon-section">🔄</span>16.5 Volver a lanzar una excepción: Gestión de Responsabilidades Compartidas</h2>
+            
+            <p>En el desarrollo de sistemas robustos, es frecuente encontrarse con situaciones donde un único bloque <code>catch</code> no posee la capacidad suficiente o el contexto necesario para resolver una anomalía de manera definitiva. En estos casos, C++ permite la técnica de <strong>volver a lanzar una excepción (rethrow)</strong>. Según el PDF de <strong>Deitel</strong>, esta operación se realiza mediante la instrucción <code>throw;</code> (notá que no lleva argumentos) escrita dentro de un bloque <code>catch</code>. Esta acción indica al sistema que la excepción actual debe ser retransmitida hacia el siguiente nivel de la <span class="abbr" data-title="Call Stack: Estructura de memoria que almacena las funciones activas. Al volver a lanzar, la excepción busca un catch en el marco de la función llamadora.">pila de llamadas</span>.</p>
+
+            <p>Desde la perspectiva de la <strong>Ingeniería de Software</strong>, esta técnica es fundamental para implementar lo que el cuaderno de <strong>Metodologías Activas</strong> denomina "limpieza modular". Una función de bajo nivel, como un manejador de base de datos, puede capturar una excepción para liberar un bloqueo de archivo o cerrar una conexión (asegurando la integridad local) y luego volver a lanzar la excepción para que la capa de interfaz de usuario (UI) informe al usuario de manera adecuada. No estás simplemente pasando el problema, estás realizando una gestión de errores en etapas.</p>
+
+            <div class="diagram">
+                <strong>Flujo de Re-lanzamiento (Rethrow)</strong><br><br>
+                <code>Función A (Nivel Superior)</code> ➔ <code>try { Función B(); } catch(...) { // Manejo Final }</code><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⬇️<br>
+                <code>Función B (Nivel Medio)</code> ➔ <code>try { ... } catch(Error e) { [Limpiar] ➔ <strong>throw;</strong> }</code>
+            </div>
+
+            <p><strong>El matiz técnico del objeto original:</strong> Basado en el PDF de <strong>O'Reilly</strong>, una distinción crítica al usar <code>throw;</code> es que se vuelve a lanzar el objeto de excepción <em>original</em>, manteniendo toda su información de tipo y estado. Si en cambio usaras <code>throw e;</code> (suponiendo que <code>e</code> es el nombre del parámetro del catch), podrías incurrir en el problema del <span class="abbr" data-title="Object Slicing: Fenómeno donde se pierde la información de una clase derivada si se relanza como un objeto de la clase base por valor.">rebanamiento de objetos (slicing)</span> si el catch capturó una referencia a una clase base pero el objeto real era de una clase derivada. Por lo tanto, el uso de <code>throw;</code> vacío es la práctica recomendada para preservar la polimorfia de la excepción.</p>
+
+            <p><strong>Perspectiva de Desarrollo Web y UX:</strong> Aplicando los criterios del cuaderno de <strong>Desarrollo Web</strong>, esta técnica es análoga al comportamiento de los <em>middlewares</em>. Un middleware puede interceptar un error, registrarlo en un log para el desarrollador y luego volver a lanzarlo para que el manejador global de rutas envíe un error 500 al cliente. En cuanto a la <strong>UX UI</strong>, el cuaderno destaca que el sistema debe ser transparente. Si una excepción se relanza varias veces, la "limpieza" en cada etapa asegura que el programa no quede en un estado inconsistente (como una barra de carga infinita), permitiendo que la UI muestre un mensaje de recuperación coherente en el nivel más alto.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Acción</th>
+                            <th>Uso de <code>throw;</code> (Vacío)</th>
+                            <th>Uso de <code>throw e;</code> (Con objeto)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Preservación de Tipo</strong></td>
+                            <td>Mantiene el tipo original (Polimórfico).</td>
+                            <td>Puede causar 'slicing' (pérdida de datos).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contexto de Uso</strong></td>
+                            <td>Solo dentro de un bloque <code>catch</code>.</td>
+                            <td>En cualquier lugar del código.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Estado del Objeto</strong></td>
+                            <td>Relanza el objeto tal cual fue capturado.</td>
+                            <td>Crea una nueva copia del objeto.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Propósito Pedagógico</strong></td>
+                            <td>Delegación de responsabilidad.</td>
+                            <td>Notificación de un error nuevo o transformado.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Ejemplo Académico en C++:</strong> Imaginá que estás procesando una transacción bancaria. Si el sistema detecta un fallo de red, la función de comunicación debe cerrar el socket (limpieza) y relanzar el error para que la función de contabilidad anule la operación en la base de datos.</p>
+            
+            <pre><code>void procesarComunicacion() {
+    try {
+        enviarDatos(); // Puede lanzar excepcion de red
+    } catch (const NetworkError& e) {
+        cerrarSocket(); // Limpieza local indispensable
+        std::cerr << "Log local: Fallo de red detectado." << std::endl;
+        throw; // Volvemos a lanzar para que el nivel superior se entere
+    }
+}</code></pre>
+
+            <p><strong>Consideraciones de Diseño de Sistemas:</strong> Debés tener cuidado de no caer en un bucle infinito de re-lanzamientos. Cada nivel que captura y vuelve a lanzar debe agregar valor, ya sea mediante el registro de logs, la liberación de recursos o la transformación parcial de datos. Según <strong>Deitel</strong>, si un bloque <code>catch</code> no va a hacer absolutamente nada con la excepción, es mejor no capturarla y dejar que se propague naturalmente, a menos que necesités garantizar que ciertos destructores se ejecuten en ese ámbito específico mediante el proceso de <span class="abbr" data-title="Stack Unwinding: Desenrollado de la pila. Proceso por el cual C++ destruye objetos locales al buscar un manejador de excepciones.">desenrollado de la pila</span>.</p>
+
+            <p>En conclusión, volver a lanzar una excepción es una herramienta de <strong>arquitectura de software</strong> que permite la colaboración entre diferentes módulos de un programa. Como futuro profesional, usá esta técnica para asegurar que cada parte de tu código cumpla con su deber de limpieza, sin usurpar la autoridad de decisión que pertenece a las capas lógicas superiores de la aplicación.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-5')">Referencia: Deitel Secc. 16.5 | O'Reilly Cap. 22: Exceptions & Design | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+<section id="sec-16-6">
+            <h2><span class="icon-section">📜</span>16.6 Especificaciones de excepciones: El Contrato entre el Desarrollador y el Compilador</h2>
+            
+            <p>En el diseño de software robusto, la claridad no es solo una virtud estética, sino un requisito técnico indispensable. Las <strong>especificaciones de excepciones</strong> (también conocidas como listas de excepciones o <em>exception specifications</em>) surgieron en C++ como una forma de establecer un contrato explícito sobre el comportamiento de una función. Según el PDF de <strong>Deitel</strong>, una especificación de excepciones le indica al sistema y a otros programadores qué tipos de anomalías puede lanzar una función durante su ejecución. Esto permitía que quien invocara la función supiera de antemano qué bloques <code>catch</code> debía preparar.</p>
+
+            <p>La sintaxis clásica detallada en el texto de <strong>Deitel (6ta Edición)</strong> utiliza la palabra clave <code>throw</code> seguida de una lista entre paréntesis: <code>void miFuncion() throw(ExcepcionA, ExcepcionB) { ... }</code>. Al declarar esto, estás garantizando que la función no permitirá que ninguna excepción fuera de esa lista escape hacia el llamador. Si, por un error de lógica, la función intentara lanzar una <code>ExcepcionC</code>, el sistema invocaría automáticamente a la función <code>unexpected()</code>, la cual, por defecto, detiene la ejecución mediante <code>terminate()</code>. Notá que este mecanismo actúa como un "filtro de seguridad" en tiempo de ejecución.</p>
+
+            <p><strong>El Cambio de Paradigma hacia C++ Moderno:</strong> Es fundamental que como estudiante universitario comprendas la evolución del lenguaje. Basado en el análisis crítico de <strong>O'Reilly</strong>, las especificaciones dinámicas (la lista de excepciones) resultaron ser problemáticas en la práctica. A menudo, el programador no podía prever todas las excepciones de las funciones internas que llamaba, lo que llevaba a cierres inesperados del programa. Por esta razón, los estándares modernos han simplificado este contrato. Según el cuaderno de <strong>Desarrollo Web</strong> de NotebookLM, esta evolución es similar a lo que ocurre en las APIs modernas: se prefiere una definición clara de "éxito o fallo crítico" sobre listas interminables de errores posibles.</p>
+
+            <div class="diagram">
+                
+                <br><strong>Contraste de Especificaciones: Tradicional vs. Moderna</strong><br><br>
+                <code>Tradicional: void f() throw(A, B); // Filtro dinámico costoso</code><br>
+                <code>Moderna: void f() noexcept; // Promesa estática de "no error"</code>
+            </div>
+
+            <p><strong>La palabra clave <code>noexcept</code>:</strong> Hoy en día, la industria prioriza el uso de <code>noexcept</code>. Al marcar una función como <code>noexcept</code>, le estás asegurando al compilador que esa función no lanzará ninguna excepción bajo ninguna circunstancia. Según <strong>O'Reilly</strong>, esto permite optimizaciones de rendimiento masivas, especialmente en operaciones de movimiento de objetos dentro de contenedores de la <span class="abbr" data-title="Standard Template Library: Biblioteca de plantillas estándar de C++ que incluye vectores, listas y algoritmos optimizados.">STL</span>. Si una función <code>noexcept</code> rompe su promesa y lanza algo, el programa llama directamente a <code>std::terminate</code>, sin pasar por el proceso de limpieza de la pila, lo cual es mucho más rápido y seguro para el sistema operativo.</p>
+
+            <p><strong>Perspectiva desde las Metodologías Activas y la Educación:</strong> El cuaderno de <strong>Educación</strong> enfatiza que aprender especificaciones no es solo memorizar sintaxis, sino desarrollar un pensamiento predictivo. Al escribir una especificación, estás documentando tu código de forma ejecutable. No es un comentario que se puede ignorar; es una regla que el compilador y el <em>runtime</em> harán cumplir. Esto fomenta la responsabilidad del programador sobre los efectos colaterales de sus funciones. En tus prácticas académicas, debés acostumbrarte a preguntarte: "¿Esta función garantiza un estado seguro o puede fallar?".</p>
+
+            <p><strong>Relación con el Diseño de Interfaces (UX/UI):</strong> Podrías pensar que este es un tema puramente de bajo nivel, pero el cuaderno de <strong>UX UI</strong> nos recuerda que la predictibilidad del software es la base de una buena experiencia. Una especificación de excepciones bien definida en la capa lógica asegura que el programador de la capa de interfaz sepa exactamente qué errores interceptar para mostrar un mensaje útil al usuario. Sin estas especificaciones, el desarrollador de la <span class="abbr" data-title="User Interface: Interfaz de Usuario. La capa visual donde el error técnico debe transformarse en información comprensible.">UI</span> trabajaría a ciegas, aumentando el riesgo de que la aplicación se cierre sin aviso, lo que representa el nivel más bajo de usabilidad.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Especificación Dinámica (throw list)</th>
+                            <th>Especificación Estática (noexcept)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Sintaxis</strong></td>
+                            <td><code>throw(T1, T2)</code></td>
+                            <td><code>noexcept</code> o <code>noexcept(bool)</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Momento de Verificación</strong></td>
+                            <td>Tiempo de ejecución (Runtime)</td>
+                            <td>Tiempo de compilación y ejecución</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Impacto en Rendimiento</strong></td>
+                            <td>Negativo (requiere chequeos constantes)</td>
+                            <td>Positivo (permite optimizaciones de código)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Estado Actual</strong></td>
+                            <td>Obsoleto / Removido en C++17</td>
+                            <td>Estándar de Oro en C++ moderno</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Analogía Web</strong></td>
+                            <td>Documentación manual de errores</td>
+                            <td>Tipado fuerte en TypeScript</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Casos Especiales: La especificación vacía:</strong> Observá que <code>throw()</code> (lista vacía) es semánticamente equivalente a <code>noexcept</code>. Ambas indican que la función no debería lanzar nada. Sin embargo, debés preferir <code>noexcept</code> porque es la forma moderna que permite al compilador generar código más eficiente para el manejo de memoria. Como futuro ingeniero, debés entender que cada línea de código es una promesa; si declarás que una función no falla, asegurate de que su lógica interna sea lo suficientemente robusta para sostener esa afirmación, especialmente en sistemas donde la integridad de los datos es crítica.</p>
+
+            <p>En conclusión, aunque las listas de excepciones dinámicas del texto de <strong>Deitel</strong> ya no se usen en la industria moderna, su estudio es vital para comprender cómo C++ intentó inicialmente resolver el problema de la documentación de errores. La transición hacia <code>noexcept</code> refleja una maduración del lenguaje: de un control dinámico y pesado hacia un diseño de sistemas donde la seguridad se garantiza por contrato y se optimiza por arquitectura. Aplicar estos criterios en tus proyectos universitarios no solo mejorará la calidad de tus programas, sino que te preparará para trabajar con los estándares de ingeniería de software que exigen las empresas líderes del sector.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-6')">Referencia: Deitel Secc. 16.6 | O'Reilly Cap. 22: Practical Exceptions | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+<section id="sec-16-7">
+            <h2><span class="icon-section">⚠️</span>16.7 Procesamiento de excepciones inesperadas: El Protocolo de Última Instancia</h2>
+            
+            <p>En el diseño de sistemas de alta disponibilidad, la predictibilidad es el activo más valioso de un desarrollador. Como has visto en la sección anterior, las especificaciones de excepciones actúan como un contrato formal. Sin embargo, ¿qué sucede cuando ese contrato se rompe? Aquí es donde entra el <strong>procesamiento de excepciones inesperadas</strong>. Según la documentación técnica de <strong>Deitel</strong>, si una función lanza una excepción que no figura en su lista de especificación de excepciones, el sistema no permite que esta se propague de manera caótica; en su lugar, el <em>runtime</em> de C++ interviene invocando a la función <code>unexpected()</code>.</p>
+
+            <p>Es vital que comprendas el flujo de fatalidad que esto desencadena. Por defecto, la función <code>unexpected()</code> invoca a <code>terminate()</code>, la cual a su vez llama a <code>abort()</code> para finalizar el programa inmediatamente. Basado en el PDF de <strong>O'Reilly</strong>, este comportamiento "draconiano" es preferible a permitir que el programa continúe ejecutándose en un estado de inconsistencia lógica. En el ámbito universitario, debés ver esto como el "fusible" de seguridad de tu código: ante la incertidumbre de un error no declarado, el lenguaje elige la autodestrucción controlada para proteger la integridad de los datos del sistema operativo.</p>
+
+            <div class="diagram">
+                
+                <br><strong>Jerarquía de Fallo ante Excepciones no Declaradas</strong><br><br>
+                <code>Excepción Lanzada</code> ➔ <code>¿Está en la Lista?</code><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;❌ NO ➔ <code>unexpected()</code> ➔ <code>terminate()</code> ➔ <strong>EXIT</strong>
+            </div>
+
+            <p><strong>Personalización del Comportamiento con <code>set_unexpected</code>:</strong> C++ te permite, como ingeniero, intervenir en este proceso. Mediante la función <code>set_unexpected()</code> (disponible en el encabezado <code>&lt;exception&gt;</code>), podés registrar tu propia función de manejo. Según <strong>Deitel</strong>, un manejador personalizado de <code>unexpected</code> tiene dos opciones legales para evitar la terminación inmediata:
+                <ul>
+                    <li><strong>Lanzar una excepción permitida:</strong> Si el manejador lanza una excepción que sí estaba en la lista original de la función que falló, el proceso de búsqueda de <code>catch</code> se reanuda normalmente.</li>
+                    <li><strong>Lanzar un <code>bad_exception</code>:</strong> Si la lista de especificaciones de la función original incluía a <code>std::bad_exception</code>, podés relanzar este tipo de objeto para "unificar" el error y permitir que el programa continúe.</li>
+                </ul>
+            </p>
+
+            <p><strong>Perspectiva Pedagógica y Metodologías Activas:</strong> Desde el cuaderno de <strong>Educación</strong>, se enfatiza la importancia de la "Metacognición sobre el Error". No basta con que tu programa no se cierre; tenés que entender por qué falló la predicción de tu diseño. El procesamiento de excepciones inesperadas te obliga a confrontar las lagunas en tu arquitectura de software. En tus prácticas de laboratorio, debés utilizar estos mecanismos no para ocultar errores, sino para realizar un <em>volcado de memoria</em> o un registro de logs antes de que el sistema colapse, permitiendo un diagnóstico posterior.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Función de Control</th>
+                            <th>Activación Típica</th>
+                            <th>Comportamiento por Defecto</th>
+                            <th>Manejador de Reemplazo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>unexpected()</code></td>
+                            <td>Violación de la lista <code>throw(...)</code>.</td>
+                            <td>Llama a <code>terminate()</code>.</td>
+                            <td><code>set_unexpected(mi_func)</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>terminate()</code></td>
+                            <td>Excepción no atrapada o error en limpieza de pila.</td>
+                            <td>Llama a <code>abort()</code>.</td>
+                            <td><code>set_terminate(mi_func)</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>bad_exception</code></td>
+                            <td>Relanzada por un manejador <code>unexpected</code>.</td>
+                            <td>Permite captura si está en la firma.</td>
+                            <td>N/A (Es un tipo de objeto)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Impacto en UX/UI y Desarrollo Web:</strong> El cuaderno de <strong>UX UI</strong> advierte que el peor escenario para un usuario es el "cierre silencioso" o el congelamiento de la aplicación. En el desarrollo moderno, esto es análogo a un <em>Unhandled Rejection</em> en entornos web. Si bien en C++ el procesamiento es a nivel de proceso, aplicar una estrategia de manejo de <code>unexpected</code> te permite, por ejemplo, intentar guardar el trabajo actual del usuario en un archivo temporal antes de que <code>abort()</code> limpie la memoria. Basado en el cuaderno de <strong>Desarrollo Web</strong>, esta es la diferencia entre un servicio que "desaparece" y uno que muestra una "Página de Error Crítico" informativa.</p>
+
+            <p><strong>Ejemplo de Implementación Académica:</strong> Considerá el siguiente fragmento de código donde se protege la integridad del sistema ante una violación de contrato:</p>
+
+            <pre><code>#include &lt;exception&gt;
+#include &lt;iostream&gt;
+
+void miManejadorInesperado() {
+    std::cerr << "LOG CRÍTICO: Se detectó una excepción no declarada en el contrato de la función." << std::endl;
+    // Intentamos salvar el estado del programa aquí
+    throw; // Relanza para intentar convertirla en bad_exception o terminar
+}
+
+void funcionRestringida() throw(int, std::bad_exception) {
+    throw 'A'; // Lanzamos un char, que NO está en la lista de int
+}
+
+int main() {
+    std::set_unexpected(miManejadorInesperado);
+    try {
+        funcionRestringida();
+    } catch (const std::bad_exception& e) {
+        std::cerr << "Recuperado: La anomalía se transformó en bad_exception." << std::endl;
+    }
+    return 0;
+}</code></pre>
+
+            <p><strong>Análisis Crítico de Robustez:</strong> Como futuro ingeniero, debés ser consciente de que el uso de <code>set_unexpected</code> y <code>set_terminate</code> son herramientas de <em>sistemas de misión crítica</em>. Según <strong>O'Reilly</strong>, en la mayoría de las aplicaciones comerciales modernas se prefiere el uso de <code>noexcept</code>, ya que simplifica radicalmente este flujo al eliminar las listas de excepciones. Sin embargo, el conocimiento de <code>unexpected()</code> es fundamental para entender la evolución de la seguridad en lenguajes compilados y para trabajar en sistemas legados donde la especificación dinámica era el estándar de oro.</p>
+
+            <p>En conclusión, el procesamiento de excepciones inesperadas es el testimonio de la obsesión de C++ por el control. El lenguaje no deja nada al azar: si cometés un error de omisión en tus especificaciones, hay una jerarquía de funciones lista para intervenir. Tu responsabilidad académica es diseñar sistemas donde estos "manejadores de última instancia" sean solo eso: una red de seguridad que esperás nunca tener que utilizar, pero que garantiza que el fallo, si ocurre, sea digno y controlado.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-7')">Referencia: Deitel Secc. 16.7 | O'Reilly Cap. 22: Exceptions & Runtime | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+<section id="sec-16-8">
+            <h2><span class="icon-section">🧹</span>16.8 Mecánica Profunda de la Limpieza de la Pila (Stack Unwinding)</h2>
+            
+            <p>La <strong>Limpieza de la Pila</strong>, o <span class="abbr" data-title="Stack Unwinding: El proceso automático de destruir objetos locales y liberar marcos de memoria cuando una excepción busca su manejador correspondiente.">Stack Unwinding</span>, es quizás el mecanismo más sofisticado y vital para la integridad de un programa en C++. Según el análisis técnico de <strong>Deitel</strong>, este proceso se dispara en el preciso instante en que una excepción es lanzada y no es capturada en el bloque actual. Debés visualizar la ejecución de tu programa como una torre de platos (marcos de pila); cuando ocurre un <code>throw</code>, el sistema empieza a retirar esos platos uno por uno, buscando un bloque <code>catch</code> que sea capaz de lidiar con el problema.</p>
+
+            <p><strong>El Proceso Paso a Paso:</strong> Basado en las explicaciones de <strong>O'Reilly</strong>, el desenrollado funciona de la siguiente manera:
+                <ol>
+                    <li>Se busca un bloque <code>try</code> que encierre la instrucción <code>throw</code>.</li>
+                    <li>Si no se encuentra un <code>catch</code> compatible en la función actual, la función termina prematuramente.</li>
+                    <li><strong>Aquí ocurre la magia:</strong> Antes de que la función desaparezca de la memoria, C++ invoca automáticamente los <strong>destructores</strong> de todos los objetos locales que fueron construidos exitosamente dentro de esa función.</li>
+                    <li>El control regresa a la función que llamó a la actual, y el proceso se repite: se busca un <code>catch</code>, si no está, se limpian los objetos locales y se sigue subiendo en la <span class="abbr" data-title="Call Stack: Estructura LIFO que almacena las llamadas activas a funciones y sus variables locales.">pila de llamadas</span>.</li>
+                </ol>
+            </p>
+
+            <div class="diagram" style="text-align: left; font-family: 'Roboto Mono', monospace; font-size: 0.85rem;">
+                <strong>Visualización del Desenrollado (Stack Unwinding)</strong><br><br>
+                [Nivel 3] Función Detonante -> <code>throw Excepcion;</code> (No hay catch)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <em>Acción: Ejecutar Destructores de Nivel 3</em> ➔ <strong>POP</strong><br>
+                [Nivel 2] Función Intermedia (No hay catch)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <em>Acción: Ejecutar Destructores de Nivel 2</em> ➔ <strong>POP</strong><br>
+                [Nivel 1] Función Llamadora -> <code>catch(Excepcion& e)</code><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <strong>¡ÉXITO!</strong> El flujo se detiene aquí y se ejecuta el manejador.
+            </div>
+
+            <p><strong>La Conexión Crucial con RAII:</strong> Según los principios de ingeniería detallados en <strong>O'Reilly</strong>, la limpieza de la pila es lo que hace posible el patrón <span class="abbr" data-title="Resource Acquisition Is Initialization: Técnica donde la gestión de recursos (memoria, archivos, sockets) se liga al ciclo de vida de los objetos locales.">RAII</span>. Si diseñaste tus clases para que cierren archivos o liberen memoria en sus destructores, la limpieza de la pila garantiza que esos recursos no se "fuguen" (leaks) incluso si el programa falla catastróficamente. En términos de los cuadernos de <strong>Desarrollo Web</strong>, esto es análogo a un recolector de basura (Garbage Collector) pero mucho más predecible y determinista, ya que sabés exactamente cuándo se liberará el recurso.</p>
+
+            <p><strong>Advertencia Académica de Seguridad:</strong> Un punto crítico que resalta <strong>Deitel</strong> es la interacción entre el desenrollado y los destructores. Si durante la limpieza de la pila (mientras ya se está procesando una excepción) un destructor lanza <em>otra</em> excepción, el sistema entra en un estado de ambigüedad técnica. Como C++ no puede gestionar dos excepciones simultáneas de esta manera, invocará inmediatamente a <code>terminate()</code>. Por lo tanto, como futuro profesional egresado, <strong>nunca debés permitir que una excepción escape de un destructor</strong>.</p>
+
+            <p><strong>Perspectiva desde las Metodologías Activas y UX:</strong> El cuaderno de <strong>Educación y Metodologías Activas</strong> sugiere que visualices este proceso como una "red de seguridad invisible". No la ves mientras programás el flujo normal, pero está ahí para asegurar que el sistema no quede en un estado inconsistente. Desde la óptica de <strong>UX UI</strong>, el Stack Unwinding es el "héroe anónimo" de la experiencia de usuario: permite que el programa se recupere o se cierre de forma limpia, evitando que queden procesos "zombis" o archivos bloqueados que impidan al usuario reiniciar su tarea. Una buena limpieza de pila es la diferencia entre un programa que requiere reiniciar la computadora y uno que simplemente pide reintentar una acción.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Manejo Manual (C-Style)</th>
+                            <th>Stack Unwinding (C++)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Garantía de Limpieza</strong></td>
+                            <td>Nula; depende de que el programador no olvide el <code>free/fclose</code>.</td>
+                            <td>Absoluta para objetos con destructor (RAII).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Complejidad de Código</strong></td>
+                            <td>Alta; requiere múltiples etiquetas <code>goto</code> o retornos anidados.</td>
+                            <td>Baja; el compilador genera el código de limpieza automáticamente.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Propagación de Error</strong></td>
+                            <td>Manual y propensa a errores (chequeo de valores de retorno).</td>
+                            <td>Automática; la excepción "salta" niveles hasta ser atendida.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Impacto en Performance</strong></td>
+                            <td>Mínimo pero constante.</td>
+                            <td>Solo tiene costo cuando ocurre una excepción.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Profundización en Ingeniería:</strong> Basado en el PDF de <strong>O'Reilly</strong>, debés considerar que el desenrollado de la pila tiene un costo computacional significativo en comparación con una ejecución normal. El sistema debe consultar tablas de metadatos para saber qué objetos están activos y en qué orden destruirlos. Por esta razón, recordá la máxima de la unidad: usá excepciones para lo excepcional. Si tu programa está desenrollando la pila constantemente, tenés un problema de diseño arquitectónico, no un problema de errores. En sistemas de alto rendimiento, este costo es la razón por la cual preferimos el paso por referencia y evitamos copias innecesarias de objetos grandes en la pila.</p>
+
+            <p>En conclusión, dominar el concepto de Stack Unwinding te permite escribir código con la confianza de que C++ "te cuida las espaldas". Entender cómo se desarman los marcos de ejecución te da una perspectiva única sobre la seguridad de memoria y la gestión de recursos. Como estudiante de nivel universitario, tu objetivo es diseñar clases cuyos destructores sean piezas de relojería capaces de limpiar el desorden ante cualquier contingencia, permitiendo que la arquitectura de excepciones mantenga la estabilidad global del sistema.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-8')">Referencia: Deitel Secc. 16.8 | O'Reilly Cap. 22: Practical Exceptions | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+<section id="sec-16-9">
+            <h2><span class="icon-section">🏗️</span>16.9 Dualidad Crítica: El Ciclo de Vida del Objeto frente a las Excepciones</h2>
+            
+            <p>En la arquitectura de sistemas robustos en C++, el manejo de excepciones no puede disociarse del ciclo de vida de los objetos. Los <strong>constructores</strong> y <strong>destructores</strong> juegan roles antagónicos pero complementarios en este escenario. Según el PDF de <strong>Deitel</strong>, comprender esta interacción es vital para evitar estados de memoria inconsistentes y cierres catastróficos del sistema. Como futuro ingeniero, debés visualizar al objeto no solo como un contenedor de datos, sino como un gestor de recursos que debe responder ante la adversidad desde su nacimiento hasta su desaparición.</p>
+
+            <h3>La Crisis del Nacimiento: Excepciones en Constructores</h3>
+            <p>Un constructor tiene una misión única: establecer el invariante de la clase. Sin embargo, dado que los constructores no devuelven valores, no pueden usar códigos de error tradicionales. Basado en el PDF de <strong>O'Reilly</strong>, la única forma elegante y estándar de informar que un objeto no pudo inicializarse correctamente es lanzando una excepción. Cuando lanzás una excepción desde un constructor, C++ considera que el objeto <strong>nunca existió</strong>.</p>
+            
+            <p>Esto tiene una implicancia de seguridad crítica: si el objeto no se terminó de construir, su destructor <strong>no se ejecutará</strong>. Por lo tanto, si tu constructor reservó memoria antes del error, tenés que liberarla manualmente antes de lanzar la excepción o, preferiblemente, usar objetos <span class="abbr" data-title="Resource Acquisition Is Initialization: Técnica donde los recursos se gestionan a través de objetos locales cuyos destructores liberan el recurso automáticamente.">RAII</span> como miembros de la clase. Según el cuaderno de <strong>Metodologías Activas</strong>, este concepto de "objetos que nacen muertos" ayuda a los estudiantes a entender por qué la composición es preferible a la gestión manual de punteros dentro de una clase.</p>
+
+            <div class="diagram">
+                <strong>Flujo de Falla en Construcción</strong><br><br>
+                <code>Llamada a Constructor</code> ➔ <code>Error en Init</code> ➔ <code><strong>throw</strong></code> ➔ <code>Objeto descartado (Sin Destructor)</code>
+            </div>
+
+            <h3>La Regla de Oro: El Silencio de los Destructores</h3>
+            <p>La máxima autoridad en ingeniería de software, citada tanto por <strong>Deitel</strong> como por <strong>O'Reilly</strong>, dicta: <strong>"Jamás permitas que una excepción escape de un destructor"</strong>. La razón técnica es aterradora para la estabilidad: el proceso de <span class="abbr" data-title="Stack Unwinding: El proceso de limpieza de la pila de llamadas que ocurre cuando una excepción busca su manejador.">desenrollado de la pila</span>. Si una excepción ya está activa y el sistema está destruyendo objetos locales para limpiar la memoria, y uno de esos destructores lanza <em>otra</em> excepción, el programa invocará inmediatamente a <code>std::terminate()</code>.</p>
+            
+            <p>Como señala el cuaderno de <strong>Desarrollo Web</strong>, esto es análogo a un servidor que intenta cerrar una conexión de base de datos tras un error; si el cierre de la conexión también falla y bloquea el proceso, el servidor entero colapsa. En C++, el sistema no puede gestionar dos excepciones "volando" simultáneamente por la pila, por lo que el programa "se suicida" para prevenir la corrupción de datos.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Momento</th>
+                            <th>Acción Recomendada</th>
+                            <th>Consecuencia de Error</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Constructor</strong></td>
+                            <td>Lanzar excepción ante falla de recurso.</td>
+                            <td>El objeto se considera no construido; evita <span class="abbr" data-title="Zombie Objects: Objetos que han fallado en su inicialización pero siguen vivos en memoria con un estado inválido o peligroso.">objetos zombis</span>.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Destructor</strong></td>
+                            <td>Atrapar y absorber errores (catch silente).</td>
+                            <td>Si la excepción escapa durante el unwinding: <strong>Crash total</strong> del sistema.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Perspectiva de Diseño y UX</h3>
+            <p>Aplicando los principios del cuaderno de <strong>UX UI</strong>, la gestión interna de estos fallos debe ser invisible pero infalible para el usuario. Un error en un constructor que es bien manejado permite que la interfaz informe: "No se pudo cargar el recurso, intente nuevamente". Si el error ocurre en un destructor y no se maneja, la aplicación desaparece, destruyendo la confianza del usuario. La robustez técnica en el código de bajo nivel es la base sobre la cual se construye una experiencia de usuario fluida y profesional.</p>
+
+            <p><strong>Ejemplo práctico de validación académica:</strong></p>
+            <pre><code>class RecursoCritico {
+public:
+    RecursoCritico() {
+        // Si falla la apertura, lanzamos. El objeto no se crea.
+        if (!abrirArchivo()) throw std::runtime_error("Fallo de inicio");
+    }
+    ~RecursoCritico() {
+        try {
+            cerrarArchivo(); // Operación que podría fallar
+        } catch (...) {
+            // ABSORBER: Logueamos pero NO lanzamos. Protegemos la pila.
+            std::cerr << "Error silenciado en destructor para evitar terminate().";
+        }
+    }
+};</code></pre>
+
+            <p>En conclusión, debés ser quirúrgico en el uso de excepciones dentro del ciclo de vida. Usalas en los constructores para garantizar que nunca operemos con objetos inválidos, pero mantén tus destructores como zonas de seguridad absoluta, donde cualquier error sea contenido y gestionado internamente. Esta disciplina separa al programador aficionado del ingeniero de software universitario capaz de diseñar sistemas de misión crítica.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-9')">Referencia: Deitel Secc. 16.9 | O'Reilly Cap. 22: Exceptions & Objects | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+<section id="sec-16-10">
+            <h2><span class="icon-section">🌳</span>16.10 Arquitectura Polimórfica: Excepciones y la Jerarquía de Clases</h2>
+            
+            <p>La verdadera potencia del manejo de excepciones en C++ se manifiesta cuando aprovechamos el sistema de tipos y la herencia. No debés ver a las excepciones como eventos aislados, sino como una jerarquía estructurada de información. Según el PDF de <strong>Deitel</strong>, C++ permite que una clase derivada sea tratada como su clase base durante el proceso de captura. Esto significa que un bloque <code>catch</code> diseñado para una clase base puede interceptar cualquier objeto de una clase derivada, permitiendo un manejo de errores genérico o específico según la necesidad del sistema.</p>
+
+            <p><strong>El Principio del Emparejamiento Polimórfico:</strong> Basado en el análisis de <strong>O'Reilly</strong>, cuando lanzás un objeto de una clase derivada, el sistema de ejecución (<em>runtime</em>) busca un bloque <code>catch</code> compatible. Debido a la relación "es-un" (is-a) de la herencia, un manejador de la clase base es una coincidencia legal para un objeto derivado. Esto te permite, por ejemplo, tener un manejador universal para <code>std::runtime_error</code> que capture tanto errores de red como fallas de archivos, simplificando la lógica de recuperación en capas superiores de la aplicación.</p>
+
+            <div class="diagram">
+                <strong>Visualización de la Jerarquía de Captura</strong><br><br>
+                <code>catch (ExcepcionBase& e)</code> <span style="color: var(--accent);">← Capta todo lo inferior</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;▲<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;│ (Herencia)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;▼<br>
+                <code>catch (ExcepcionDerivada& e)</code> <span style="color: var(--success);">← Capta solo el error específico</span>
+            </div>
+
+            <p><strong>La Regla de Oro del Orden de los Bloques Catch:</strong> Existe un peligro técnico latente en la jerarquía. Como los bloques <code>catch</code> se evalúan de forma secuencial (de arriba hacia abajo), el orden de declaración es crítico. Según <strong>Deitel</strong>, si ponés el manejador de la clase base antes que el de la clase derivada, el de la base "ocultará" al derivado, volviéndolo código inalcanzable. El compilador de C++ suele emitir una advertencia, pero como futuro ingeniero, es tu responsabilidad asegurar que los manejadores vayan de lo más <strong>específico</strong> a lo más <strong>general</strong>.</p>
+
+            <p><strong>Perspectiva desde las Metodologías Activas:</strong> El cuaderno de <strong>Educación y Metodologías Activas</strong> propone que esta estructura jerárquica es una herramienta pedagógica excelente para entender el <span class="abbr" data-title="Scope: El ámbito o alcance de una definición. En excepciones, el alcance del catch define qué tan granular es nuestra respuesta al error.">alcance (scope)</span>. En tus proyectos universitarios, debés diseñar tus propias familias de excepciones. No lances simples enteros o cadenas; creá una clase <code>ErrorProyecto</code> y derivá de ella <code>ErrorDatos</code>, <code>ErrorInterfaz</code>, etc. Esto fomenta un pensamiento arquitectónico donde el error es un ciudadano de primera clase con su propia taxonomía.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Estrategia de Captura</th>
+                            <th>Uso Recomendado</th>
+                            <th>Ventaja en Ingeniería</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Derivada Específica</strong></td>
+                            <td>En capas bajas, cerca de la falla.</td>
+                            <td>Permite una reparación quirúrgica del estado.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Base Intermedia</strong></td>
+                            <td>En controladores o gestores de recursos.</td>
+                            <td>Agrupa errores similares para limpiezas comunes.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Base Estándar (std::exception)</strong></td>
+                            <td>En el <code>main</code> o niveles globales.</td>
+                            <td>Evita que el programa termine abruptamente ante errores desconocidos.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Integración con UX/UI y Desarrollo Web:</strong> Aplicando los conceptos del cuaderno de <strong>UX UI</strong>, la herencia de excepciones es la clave para una comunicación efectiva con el usuario. 
+            <ul>
+                <li>Una <code>ExcepcionDerivada</code> como <code>TarjetaExpirada</code> permite mostrar un mensaje puntual: "Che, tu tarjeta venció, probá con otra".</li>
+                <li>Una <code>ExcepcionBase</code> como <code>FalloPago</code> permite un mensaje genérico: "Hubo un problema con el pago, contactate con soporte".</li>
+            </ul>
+            Según el cuaderno de <strong>Desarrollo Web</strong>, esto es idéntico al "error bubbling" en arquitecturas modernas, donde los errores suben por la jerarquía de componentes hasta encontrar un <span class="abbr" data-title="Error Boundary: Un componente o estructura que atrapa errores en su árbol de hijos para mostrar una interfaz de repuesto y evitar el colapso total.">límite de error (Error Boundary)</span> que sabe cómo renderizar la falla de forma amigable para el cliente.</p>
+
+            <p><strong>Ejemplo de Implementación Académica:</strong></p>
+            <pre><code>class ErrorMatematico : public std::runtime_error { /* ... */ };
+class DivisionPorCero : public ErrorMatematico { /* ... */ };
+
+try {
+    // Código de cálculo complejo
+} 
+catch (const DivisionPorCero& e) {
+    // Manejo específico: pedir nuevo denominador
+}
+catch (const ErrorMatematico& e) {
+    // Manejo general: loguear error de cálculo
+}
+catch (const std::exception& e) {
+    // Manejo de última instancia: error desconocido
+}</code></pre>
+
+            <p><strong>Consideraciones de Eficiencia y Seguridad:</strong> Basado en el PDF de <strong>O'Reilly</strong>, siempre debés atrapar las excepciones por <strong>referencia</strong> (<code>const Excepcion& e</code>). Esto es vital cuando trabajamos con herencia para evitar el <span class="abbr" data-title="Object Slicing: Fenómeno donde se pierde la parte 'derivada' de un objeto si se pasa por valor a una función o catch que espera la clase base.">rebanamiento (slicing)</span>. Si atrapás por valor, perderás la información polimórfica y no podrás llamar a métodos virtuales que la clase derivada podría haber sobrescrito para dar más detalles del error (como el método <code>what()</code>).</p>
+
+            <p>En conclusión, la sinergia entre excepciones y herencia transforma el manejo de errores de una tarea defensiva a una herramienta de diseño proactiva. Como estudiante de nivel universitario, tu objetivo es construir jerarquías de excepciones que reflejen la realidad de tu dominio de problema, permitiendo que tu software sea tan elocuente en el fallo como lo es en el éxito. La robustez no es solo evitar el crash, sino saber exactamente qué falló y por qué, manteniendo siempre la elegancia arquitectónica que caracteriza a un profesional de la ingeniería.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-10')">Referencia: Deitel Secc. 16.10 | O'Reilly Cap. 22: Exceptions & Inheritance | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+<section id="sec-16-11">
+            <h2><span class="icon-section">💾</span>16.11 Gestión de la Memoria Crítica: Procesamiento de las fallas de operador new</h2>
+            
+            <p>La asignación dinámica de memoria es uno de los terrenos más fértiles para la aparición de errores en aplicaciones de gran escala. En C++, cuando utilizás el operador <code>new</code> para reservar espacio en el <span class="abbr" data-title="Heap: Área de memoria utilizada para la asignación dinámica durante la ejecución del programa.">heap</span>, el sistema interactúa directamente con el gestor de recursos del sistema operativo. Según el PDF de <strong>Deitel</strong>, existe un cambio de paradigma fundamental entre el lenguaje C tradicional y C++ moderno: mientras que en C la función <code>malloc</code> devolvía un puntero nulo (NULL) ante la falta de memoria, C++ estandarizó el uso de excepciones para señalizar este fallo catastrófico.</p>
+
+            <p><strong>El surgimiento de <code>std::bad_alloc</code>:</strong> Por defecto, cuando el operador <code>new</code> no puede satisfacer una solicitud de memoria, lanza una excepción de tipo <code>std::bad_alloc</code> (definida en el encabezado <code>&lt;new&gt;</code>). Basado en el PDF de <strong>O'Reilly</strong>, esta decisión de diseño es superior porque obliga al programador a considerar el fallo. Un puntero nulo puede pasar desapercibido y causar una violación de segmentación mucho después del punto de falla, mientras que una excepción interrumpe el flujo inmediatamente, permitiendo una gestión de errores centralizada y segura.</p>
+
+            <div class="diagram">
+                <strong>Evolución del Control de Memoria</strong><br><br>
+                <code>Enfoque C:</code> Puntero NULL ➔ Requiere chequeo manual <code>if (p == NULL)</code> en cada línea.<br>
+                <code>Enfoque C++:</code> throw <strong>bad_alloc</strong> ➔ Salta al bloque catch superior automáticamente.
+            </div>
+
+            <p><strong>Personalización con <code>set_new_handler</code>:</strong> C++ no solo te permite atrapar el error, sino que te ofrece una herramienta de recuperación proactiva. Mediante la función <code>std::set_new_handler</code>, podés registrar una función propia (el <em>new-handler</em>) que se ejecutará automáticamente cuando <code>new</code> falle. Según <strong>Deitel</strong>, un <em>new-handler</em> bien diseñado tiene tres opciones académicamente válidas: 
+                <ul>
+                    <li>Intentar liberar memoria existente para que la siguiente tentativa de <code>new</code> tenga éxito.</li>
+                    <li>Lanzar una excepción distinta o más descriptiva.</li>
+                    <li>Llamar a <code>abort()</code> o <code>exit()</code> si la recuperación es imposible.</li>
+                </ul>
+            </p>
+
+            <p><strong>Perspectiva Pedagógica y de Metodologías Activas:</strong> El cuaderno de <strong>Educación</strong> de NotebookLM sugiere que el aprendizaje de la gestión de memoria debe ser "vivencial". Para los estudiantes de ingeniería, es vital realizar ejercicios de simulación de agotamiento de recursos. No se trata solo de escribir el código, sino de entender la responsabilidad ética de desarrollar software que no "muera" silenciosamente, sino que informe su estado. Esta visión fomenta la programación defensiva como una competencia profesional troncal.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>new estándar</th>
+                            <th>new(nothrow)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Comportamiento en falla</strong></td>
+                            <td>Lanza <code>std::bad_alloc</code>.</td>
+                            <td>Devuelve <code>0</code> (NULL).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Manejo recomendado</strong></td>
+                            <td>Bloque <code>try...catch</code>.</td>
+                            <td>Verificación manual <code>if</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Uso ideal</strong></td>
+                            <td>Sistemas robustos modernos.</td>
+                            <td>Sistemas legados o embebidos críticos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ubicación de librería</strong></td>
+                            <td><code>&lt;new&gt;</code></td>
+                            <td><code>&lt;new&gt;</code> (usa <code>std::nothrow</code>).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Impacto en UX/UI y Desarrollo Web:</strong> Aplicando los conceptos del cuaderno de <strong>UX UI</strong>, la falta de memoria es el escenario de "error crítico" por excelencia. Si tu programa en C++ es el backend de una aplicación web, un fallo de <code>new</code> mal gestionado puede tirar abajo el servidor entero. Según el cuaderno de <strong>Desarrollo Web</strong>, esto es comparable a un desbordamiento de memoria en Node.js; la diferencia es que C++ te da el control quirúrgico para intentar una recuperación. Desde la <span class="abbr" data-title="User Experience: La experiencia total del usuario al interactuar con el sistema, la cual se degrada ante cierres inesperados.">UX</span>, una aplicación que atrapa el <code>bad_alloc</code> y guarda el trabajo del usuario antes de cerrarse es percibida como profesional, mientras que una que desaparece sin aviso genera desconfianza y frustración.</p>
+
+            <p><strong>El operador new(nothrow):</strong> Existe una variante para quienes prefieren el estilo de C por razones específicas de rendimiento o compatibilidad. Al usar <code>new(std::nothrow)</code>, le indicás al compilador que no querés excepciones. Si falla, el puntero será NULL. Sin embargo, <strong>O'Reilly</strong> advierte que esto es peligroso en programas grandes, ya que si olvidás un solo chequeo, el programa fallará de todas formas al intentar desreferenciar el puntero nulo.</p>
+
+            <p><strong>Ejemplo técnico universitario:</strong></p>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;new&gt; // Necesario para bad_alloc y set_new_handler
+
+void miManejadorMemoria() {
+    std::cerr << "LOG: Intento de recuperación de memoria..." << std::endl;
+    // Aquí podrías liberar un pool de reserva
+    std::set_new_handler(0); // Si no podemos limpiar nada, desactivamos para que lance la excepción
+}
+
+int main() {
+    std::set_new_handler(miManejadorMemoria);
+    try {
+        double* granArreglo = new double[1000000000000L]; // Solicitud excesiva
+    } catch (const std::bad_alloc& e) {
+        std::cerr << "Fallo fatal de asignación: " << e.what() << std::endl;
+    }
+    return 0;
+}</code></pre>
+
+            <p>En conclusión, el procesamiento de las fallas de <code>new</code> es el guardián de la estabilidad de tus aplicaciones. Como futuro profesional, debés integrar el uso de <code>bad_alloc</code> como una práctica estándar, entendiendo que el heap no es infinito y que tu código debe ser lo suficientemente maduro para reconocer sus límites físicos. La robustez no consiste en ignorar el error, sino en diseñar un camino de salida digno que proteja la información del usuario y la integridad del sistema operativo.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-11')">Referencia: Deitel Secc. 16.11 | O'Reilly Cap. 22: Resource Management | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+<section id="sec-16-12">
+            <h2><span class="icon-section">🛡️</span>16.12 Gestión Automatizada: La clase auto_ptr y la Seguridad en la Asignación Dinámica</h2>
+            
+            <p>En el desarrollo de software profesional, uno de los desafíos más persistentes y peligrosos es la gestión de la memoria dinámica. Cuando asignás memoria en el <span class="abbr" data-title="Heap: Segmento de memoria utilizado para la asignación dinámica, cuya gestión recae tradicionalmente en el programador.">heap</span> mediante el operador <code>new</code>, asumís la responsabilidad ética y técnica de liberarla con <code>delete</code>. Sin embargo, como bien señala el PDF de <strong>Deitel</strong>, la presencia de excepciones introduce una variable crítica: si una excepción ocurre entre la asignación y la liberación, el flujo del programa saltará el <code>delete</code>, provocando una fuga de memoria. Para mitigar este riesgo, C++ introdujo el concepto de punteros inteligentes, representados inicialmente por la clase <code>auto_ptr</code>.</p>
+
+            <p><strong>El Principio de la Propiedad Única:</strong> La clase <code>auto_ptr</code> es una plantilla (template) que encapsula un puntero crudo y lo gestiona bajo el paradigma <span class="abbr" data-title="Resource Acquisition Is Initialization: Técnica donde el ciclo de vida de un recurso se vincula al ciclo de vida de un objeto local en la pila.">RAII</span>. Según el análisis de <strong>O'Reilly</strong>, la característica distintiva de <code>auto_ptr</code> es que "posee" el objeto al que apunta. Al ser un objeto local (en la pila), su destructor se ejecutará automáticamente cuando el objeto salga de alcance, ya sea por una finalización normal de la función o debido al proceso de <span class="abbr" data-title="Stack Unwinding: El desmantelamiento de la pila de llamadas que destruye objetos locales mientras busca un bloque catch.">limpieza de la pila</span> tras una excepción. En ese momento, el destructor de <code>auto_ptr</code> invoca internamente a <code>delete</code>, garantizando que el recurso se libere sin intervención manual.</p>
+
+            <div class="diagram">
+                <strong>Arquitectura de Protección de auto_ptr</strong><br><br>
+                [Pila (Stack)] ➔ <code>auto_ptr&lt;T&gt; objetoLocal</code> ➔ (Posee/Apunta a) ➔ [Montículo (Heap)] ➔ <code>Objeto T</code><br>
+                ⬇️ <em>Si ocurre Excepción</em> ⬇️<br>
+                <code>Stack Unwinding</code> ➔ Destruye <code>auto_ptr</code> ➔ Ejecuta <code>delete</code> sobre <code>Objeto T</code> ➔ <strong>¡Memoria Liberada!</strong>
+            </div>
+
+            
+
+            <p><strong>Transferencia de Dominio (Ownership Transfer):</strong> Un aspecto técnico fundamental que debés comprender es que <code>auto_ptr</code> no permite la copia compartida. Basado en el PDF de <strong>Deitel</strong>, si asignás un <code>auto_ptr</code> a otro, el primero pierde la propiedad del puntero y queda nulo, mientras que el segundo asume el control total. Esta semántica de transferencia evita que dos destructores intenten liberar la misma memoria (doble liberación), un error que corrompería el sistema. Esta es la razón por la cual no debés usar <code>auto_ptr</code> en contenedores de la <span class="abbr" data-title="Standard Template Library: Colección de clases y algoritmos estándar que requieren semánticas de copia seguras.">STL</span>, ya que los algoritmos de ordenamiento o copia destruirían la integridad de los punteros.</p>
+
+            <p><strong>Perspectiva Pedagógica y Metodologías Activas:</strong> El cuaderno de <strong>Educación</strong> de NotebookLM destaca que el estudio de <code>auto_ptr</code> es una puerta de entrada al pensamiento sistémico. Como futuro ingeniero, no debés ver el código como instrucciones aisladas, sino como un ecosistema donde los recursos deben autogestionarse. En tus prácticas universitarias, aprender el funcionamiento de esta clase te permite valorar la evolución del lenguaje hacia herramientas más modernas como <code>unique_ptr</code> o <code>shared_ptr</code>. La clave no es memorizar la sintaxis, sino internalizar la "cultura de la robustez": diseñar código que limpie su propio desorden ante el fracaso.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Puntero Crudo (T*)</th>
+                            <th>auto_ptr&lt;T&gt;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Liberación de Memoria</strong></td>
+                            <td>Manual (Peligro de olvido).</td>
+                            <td>Automática (vía Destructor).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Seguridad ante Excepciones</strong></td>
+                            <td>Baja (Produce fugas/leaks).</td>
+                            <td>Alta (Resistente al unwinding).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Transferencia</strong></td>
+                            <td>Copia de dirección (Aliasing).</td>
+                            <td>Transferencia de propiedad (Move).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Uso Recomendado</strong></td>
+                            <td>Solo para bajo nivel/optimización.</td>
+                            <td>Sustituido hoy por <code>unique_ptr</code>.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Impacto en UX/UI y Desarrollo Web:</strong> Aunque parezca un concepto de bajo nivel, el cuaderno de <strong>Desarrollo Web</strong> y el de <strong>UX UI</strong> convergen en un punto vital: la estabilidad. Una aplicación que sufre de <span class="abbr" data-title="Memory Leak: Degradación progresiva del sistema debido a la ocupación innecesaria de memoria que nunca se devuelve al SO.">fugas de memoria</span> se vuelve lenta, inestable y eventualmente se cierra ("crashea"). Desde la perspectiva de la interfaz de usuario, esto se traduce en una experiencia frustrante donde el programa deja de responder a los clics o gestos del usuario. El uso de punteros inteligentes garantiza que la aplicación mantenga una huella de memoria constante y saludable, lo cual es la base técnica de una interfaz fluida y profesional.</p>
+
+            <p><strong>Ejemplo de Implementación Académica:</strong></p>
+            <pre><code>#include &lt;memory&gt; // Necesario para auto_ptr
+#include &lt;iostream&gt;
+
+void procesoCritico() {
+    // El objeto se asigna dinámicamente pero se gestiona localmente
+    std::auto_ptr&lt;MiClase&gt; ptr(new MiClase());
+    
+    ptr->hacerAlgo(); // Uso normal del objeto
+    
+    if (errorDetectado) {
+        throw std::runtime_error("Fallo inesperado");
+    }
+    // Si la excepción vuela, ptr se destruye y libera la memoria.
+    // No necesitás un delete manual aquí.
+}</code></pre>
+
+            <p><strong>Evolución y Obsolescencia:</strong> Es imperativo mencionar que, si bien la 6ta edición de <strong>Deitel</strong> profundiza en <code>auto_ptr</code>, los estándares actuales de C++ (C++11 en adelante) han marcado a esta clase como obsoleta (deprecated) y finalmente la han eliminado en favor de <code>std::unique_ptr</code>. Según <strong>O'Reilly</strong>, el cambio se debió a que las semánticas de copia de <code>auto_ptr</code> eran confusas y propensas a errores lógicos. Sin embargo, el concepto fundamental de "Smart Pointer" que inauguró <code>auto_ptr</code> sigue siendo el estándar de oro para la seguridad de memoria en C++. Como profesional, debés conocer esta raíz histórica para entender por qué las arquitecturas modernas exigen la eliminación total de los punteros crudos en la lógica de negocio.</p>
+
+            <p>En conclusión, <code>auto_ptr</code> representa el primer gran esfuerzo institucional de C++ por automatizar la seguridad de los recursos en entornos volátiles. Al utilizarlo, transformás la memoria dinámica en un recurso predecible y seguro. Tu objetivo en esta cátedra universitaria es dominar este modelo de "propiedad y responsabilidad", asegurando que tus programas sean capaces de fallar de manera elegante sin dejar rastro de basura en el sistema operativo del usuario. La robustez técnica es, en última instancia, el mayor gesto de respeto hacia la estabilidad del sistema y la experiencia del usuario final.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-12')">Referencia: Deitel Secc. 16.12 | O'Reilly Cap. 22: Resource Management | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+<section id="sec-16-13">
+            <h2><span class="icon-section">📊</span>16.13 Taxonomía del Error: Jerarquía de excepciones de la Biblioteca Estándar</h2>
+            
+            <p>Para que vos puedas diseñar sistemas verdaderamente robustos y profesionales, no basta con "lanzar cualquier cosa". C++ provee una estructura organizada y jerárquica de clases de excepción que te permiten categorizar las fallas con precisión quirúrgica. Según el PDF de <strong>Deitel</strong>, esta jerarquía tiene su raíz en la clase base <code>std::exception</code> (definida en el encabezado <code>&lt;exception&gt;</code>). Esta clase es la piedra angular que garantiza que todos los objetos de excepción compartan una interfaz común, principalmente a través del método virtual <span class="abbr" data-title="what(): Función miembro virtual de std::exception que devuelve una cadena de caracteres (const char*) describiendo el error.">what()</span>.</p>
+
+            <p><strong>La Gran División: Lógica vs. Tiempo de Ejecución.</strong> Basado en el análisis de <strong>O'Reilly</strong>, la biblioteca estándar divide las excepciones en dos grandes ramas fundamentales que debés comprender para tu formación como ingeniero:
+                <ul>
+                    <li><strong><code>logic_error</code>:</strong> Son errores que, en teoría, podrías haber evitado mediante una programación más cuidadosa o una validación previa. Representan fallas en la lógica interna del programa.</li>
+                    <li><strong><code>runtime_error</code>:</strong> Son fallas que ocurren por eventos externos o condiciones del entorno que son imposibles de predecir con total certeza antes de que el programa se ejecute (como un desbordamiento matemático o una falla de red).</li>
+                </ul>
+            </p>
+
+            <div class="diagram">
+                <strong>Estructura de la Jerarquía Estándar (std::exception)</strong><br><br>
+                <code>exception</code> (Raíz)<br>
+                ├── <code>bad_alloc</code> (Falla de memoria)<br>
+                ├── <code>bad_cast</code> (Falla en dynamic_cast)<br>
+                ├── <strong><code>logic_error</code></strong><br>
+                │   ├── <code>invalid_argument</code><br>
+                │   ├── <code>length_error</code><br>
+                │   └── <code>out_of_range</code><br>
+                └── <strong><code>runtime_error</code></strong><br>
+                    ├── <code>overflow_error</code><br>
+                    └── <code>underflow_error</code>
+            </div>
+
+            <p><strong>Análisis detallado de la rama <code>logic_error</code>:</strong> Según <strong>Deitel</strong>, estas excepciones derivan de una clase que hereda de <code>exception</code>. Como futuro profesional, debés usarlas para señalar violaciones de los presupuestos lógicos de tu código:
+                <ul>
+                    <li><strong><code>invalid_argument</code>:</strong> Se lanza cuando pasás un argumento a una función que no tiene sentido (por ejemplo, una cadena de bits con caracteres que no son 0 o 1).</li>
+                    <li><strong><code>length_error</code>:</strong> Ocurre cuando intentás crear un objeto (como un <code>std::vector</code> o <code>std::string</code>) que supera el tamaño máximo permitido por el sistema.</li>
+                    <li><strong><code>out_of_range</code>:</strong> Es el error clásico de los "índices locos". Se lanza, por ejemplo, cuando el método <code>at()</code> de un contenedor recibe una posición que no existe.</li>
+                </ul>
+            </p>
+
+            <p><strong>Perspectiva de Metodologías Activas y Educación:</strong> El cuaderno de <strong>Educación</strong> de NotebookLM propone que esta jerarquía es una herramienta de "andamiaje cognitivo". Para el estudiante, clasificar el error no es solo un trámite; es un ejercicio de autocrítica sobre su propio código. Si lanzás un <code>logic_error</code>, estás admitiendo que el error está en tu algoritmo; si lanzás un <code>runtime_error</code>, estás reconociendo la fragilidad del mundo real. Esta distinción fomenta un pensamiento arquitectónico donde aprendés a blindar tus funciones contra lo previsible y lo imprevisible.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Clase de Excepción</th>
+                            <th>Naturaleza del Fallo</th>
+                            <th>Ejemplo de Aplicación Universitaria</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>std::bad_alloc</code></td>
+                            <td>Gestión de Recursos</td>
+                            <td>Cuando el <code>heap</code> se agota al crear una matriz gigante.</td>
+                        </tr>
+                        <tr>
+                            <td><code>std::out_of_range</code></td>
+                            <td>Error Lógico</td>
+                            <td>Acceder al elemento 11 de un arreglo de 10 elementos.</td>
+                        </tr>
+                        <tr>
+                            <td><code>std::overflow_error</code></td>
+                            <td>Error de Ejecución</td>
+                            <td>Un cálculo aritmético que excede la capacidad del tipo <code>double</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><code>std::bad_cast</code></td>
+                            <td>Tipado Dinámico</td>
+                            <td>Falla al intentar un <code>dynamic_cast</code> a una referencia.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Impacto en UX/UI y Desarrollo Web:</strong> Aplicando los criterios del cuaderno de <strong>UX UI</strong>, la jerarquía de excepciones es el diccionario que traduce el caos técnico en comunicación humana. Un <code>logic_error</code> capturado en el backend de una aplicación web (comparable a un error 400 en <span class="abbr" data-title="Hypertext Transfer Protocol: El protocolo base de la web.">HTTP</span>) le indica a la interfaz que debe pedirle al usuario que revise sus datos. Por otro lado, un <code>runtime_error</code> (comparable a un error 500) le indica a la UI que debe mostrar un mensaje de "Servicio momentáneamente fuera de línea". Según el cuaderno de <strong>Desarrollo Web</strong>, esta categorización permite que el sistema sea resiliente: podés tener un manejador global para <code>std::exception</code> que actúe como red de seguridad para que el sitio nunca se "rompa" del todo, mostrando siempre una interfaz de recuperación coherente.</p>
+
+            <p><strong>La importancia de <code>what()</code> y el polimorfismo:</strong> Un detalle técnico que resalta <strong>O'Reilly</strong> es que, al atrapar por referencia a la clase base (<code>const std::exception& e</code>), el polimorfismo asegura que cuando llames a <code>e.what()</code>, obtengas la descripción específica del error derivado. Esto es vital para el registro de errores (logging) en sistemas industriales, donde necesitás saber exactamente qué pasó sin importar qué tan profunda sea la jerarquía de clases.</p>
+
+            <p>En conclusión, la jerarquía estándar de C++ es una lección de orden y responsabilidad. Como estudiante de nivel universitario, tu meta es integrar estas clases en tus desarrollos, evitando lanzar tipos primitivos. Al usar la jerarquía estándar, no solo hacés que tu código sea compatible con las herramientas de depuración más avanzadas, sino que también demostrás una madurez profesional que entiende que el manejo de errores es una disciplina de diseño en sí misma. Recordá: un buen ingeniero se conoce por cómo maneja los momentos en los que todo sale mal.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-13')">Referencia: Deitel Secc. 16.13 | O'Reilly Cap. 22: Practical Exceptions | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+<section id="sec-16-14">
+            <h2><span class="icon-section">🛠️</span>16.14 Alternativas y Complementos: Otras técnicas para el manejo de errores</h2>
+            
+            <p>Aunque el manejo de excepciones es el estándar de oro en C++ moderno para la gestión de errores sincrónicos, no es la única herramienta en tu arsenal de ingeniería. Como futuro profesional, debés comprender que existen escenarios donde las excepciones pueden ser excesivas o inadecuadas. Según el PDF de <strong>Deitel</strong> y las perspectivas prácticas de <strong>O'Reilly</strong>, la robustez de un sistema se construye combinando diversas estrategias, desde la validación preventiva hasta el uso de diagnósticos en tiempo de compilación y ejecución.</p>
+
+            <h3>1. Códigos de Retorno y Valores Centinela</h3>
+            <p>Antes de la estandarización de las excepciones, el método predominante era el uso de <span class="abbr" data-title="Return Codes: Valores numéricos o constantes devueltos por una función para indicar el éxito o el tipo de falla ocurrido durante su ejecución.">códigos de retorno</span>. Este enfoque, heredado del lenguaje C, consiste en que cada función devuelve un valor (generalmente un entero o un puntero) que el llamador debe inspeccionar mediante estructuras <code>if/else</code>. Según <strong>O'Reilly</strong>, aunque este método es eficiente en términos de rendimiento, sufre de un defecto crítico: el programador puede simplemente olvidar verificar el resultado, permitiendo que el error se propague silenciosamente.</p>
+            
+            <p>Desde la óptica del cuaderno de <strong>Desarrollo Web</strong>, esto es análogo a la verificación manual de respuestas en una API. Si no gestionás el código de estado, tu aplicación seguirá funcionando sobre datos corruptos. En C++, esto ensucia la lógica del programa, mezclando el flujo de datos con el flujo de control de errores, lo que dificulta la mantenibilidad a largo plazo.</p>
+
+            <h3>2. La macro assert y la validación de invariantes</h3>
+            <p>Para errores que "no deberían ocurrir nunca" (errores de lógica del programador), C++ ofrece la macro <code>assert</code>, disponible en el encabezado <code>&lt;cassert&gt;</code>. Según <strong>Deitel</strong>, un aserto evalúa una expresión condicional; si el resultado es falso, el programa imprime un mensaje de error y termina inmediatamente mediante la función <code>abort()</code>. Es fundamental que entiendas que <code>assert</code> no es para errores del usuario, sino para detectar bugs durante la fase de desarrollo.</p>
+            
+            <p><strong>El rol de NDEBUG:</strong> Una ventaja técnica que resalta <strong>O'Reilly</strong> es que los asertos pueden desactivarse por completo para la versión final (producción) del software. Al definir la macro <code>NDEBUG</code> antes de incluir el encabezado, el compilador ignora todos los <code>assert</code>, eliminando cualquier impacto en el rendimiento. Esto permite que durante el testeo tengas un sistema estrictamente vigilado y en producción un ejecutable optimizado.</p>
+
+            <div class="diagram">
+                <strong>Ciclo de Vida del Error con assert</strong><br><br>
+                <code>[Desarrollo]</code> ➔ <code>assert(p != NULL)</code> ➔ <strong>Falla</strong> ➔ <code>Muestra línea/archivo y Aborta</code><br>
+                ⬇️ <em>Compilación con -DNDEBUG</em> ⬇️<br>
+                <code>[Producción]</code> ➔ <code>assert(...)</code> ➔ <strong>Ignorado</strong> ➔ <code>Máxima velocidad</code>
+            </div>
+
+            
+
+            <h3>3. Funciones de Terminación: abort() y exit()</h3>
+            <p>Existen situaciones tan graves que la única respuesta posible es el cese inmediato de operaciones. <strong>Deitel</strong> distingue claramente entre dos funciones de la biblioteca estándar:
+                <ul>
+                    <li><strong><code>abort()</code>:</strong> Provoca una terminación anormal y estrepitosa. No limpia la pila, no llama a destructores de objetos estáticos ni realiza tareas de mantenimiento. Es el "botón de pánico".</li>
+                    <li><strong><code>exit()</code>:</strong> Permite una salida más ordenada. Aunque no desenrolla la pila para objetos locales, sí ejecuta las funciones registradas con <code>atexit()</code> y destruye objetos con duración de almacenamiento estático.</li>
+                </ul>
+            </p>
+
+            <h3>4. Perspectiva de UX/UI y Metodologías Activas</h3>
+            <p>El cuaderno de <strong>UX UI</strong> de NotebookLM advierte sobre el peligro de estas técnicas en la experiencia del usuario. Un <code>assert</code> que falla en una aplicación comercial es percibido como un colapso del sistema ("crash"). Para un usuario final, esto destruye la confianza. Por ello, estas técnicas deben usarse para blindar la capa interna (el motor del software), mientras que las excepciones o validaciones condicionales deben manejar la interacción con el mundo exterior.</p>
+            
+            <p>Desde las <strong>Metodologías Activas</strong>, se fomenta que vos como estudiante realices un análisis de "costo-beneficio" de cada técnica. No existe una solución única. En el desarrollo de sistemas de tiempo real, donde las excepciones pueden ser demasiado lentas, los códigos de retorno son la norma. En aplicaciones de escritorio complejas, las excepciones son indispensables.</p>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Técnica</th>
+                            <th>Uso Principal</th>
+                            <th>¿Limpia la Pila?</th>
+                            <th>Visibilidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Excepciones</strong></td>
+                            <td>Errores inesperados pero recuperables (E/S, Memoria).</td>
+                            <td>Sí (Stack Unwinding).</td>
+                            <td>Alta (Flujo separado).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Códigos de Retorno</strong></td>
+                            <td>Errores comunes y esperados (Búsquedas fallidas).</td>
+                            <td>No.</td>
+                            <td>Baja (Mezclado con lógica).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>assert</strong></td>
+                            <td>Detección de bugs durante el desarrollo.</td>
+                            <td>No (Llama a abort).</td>
+                            <td>Solo en Debug.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>exit() / abort()</strong></td>
+                            <td>Fallas críticas irrecuperables del sistema.</td>
+                            <td>No.</td>
+                            <td>Terminación total.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Consideraciones de Ingeniería de Software:</strong> Debés tener cuidado con el uso de <code>setjmp</code> y <code>longjmp</code>, técnicas antiguas del lenguaje C para saltos no locales. <strong>O'Reilly</strong> es categórico: evitá estas funciones en C++, ya que no son compatibles con el concepto de destructores y pueden dejar tu programa en un estado de corrupción de memoria irreversible. En C++, la estructura <code>try-catch</code> ha reemplazado completamente estas prácticas peligrosas.</p>
+
+            <p>En conclusión, la maestría en programación C++ no consiste en usar solo excepciones, sino en saber cuándo un simple <code>if</code> preventivo es más eficiente, cuándo un <code>assert</code> salvará horas de depuración a tu equipo, y cuándo una excepción es el único camino para garantizar la integridad de los datos. Como futuro profesional egresado, tu criterio para elegir la herramienta adecuada según el contexto (rendimiento vs. seguridad) es lo que definirá la calidad y robustez de tus desarrollos.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-14')">Referencia: Deitel Secc. 16.14 | O'Reilly Cap. 14: Debugging and Assertions | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+<section id="sec-16-15">
+            <h2><span class="icon-section">🏁</span>16.15 Síntesis Integradora y Repaso de Ingeniería de Excepciones</h2>
+            
+            <p>Llegamos al cierre de la <strong>Unidad Didáctica 07</strong>. A esta altura, ya debés haber comprendido que el manejo de excepciones en C++ no es un mero accesorio sintáctico, sino una filosofía de diseño que garantiza la supervivencia del software ante condiciones adversas. Según el PDF de <strong>Deitel</strong>, la robustez de una aplicación universitaria se mide por su capacidad de mantener un estado consistente, incluso cuando los recursos físicos o las entradas del usuario fallan. Esta sección final condensa los conocimientos técnicos de <strong>O'Reilly</strong> y las pautas estratégicas de los cuadernos de <strong>NotebookLM</strong> para consolidar tu perfil como desarrollador de nivel superior.</p>
+
+            <h3>Decálogo del Manejo Profesional de Excepciones</h3>
+            <p>Para que tu código sea considerado de calidad industrial, debés seguir estas directrices académicas extraídas de nuestras fuentes técnicas:</p>
+            <ul>
+                <li><strong>Especificidad en el Bloque <code>try</code>:</strong> No envuelvas todo el <code>main</code> en un solo bloque. Según <strong>Deitel</strong>, debés ser quirúrgico: protegé solo las líneas que realmente pueden fallar para no ocultar bugs lógicos bajo el manto de una excepción genérica.</li>
+                <li><strong>Captura por Referencia Constante:</strong> Siempre usá <code>catch (const std::exception& e)</code>. Como advierte <strong>O'Reilly</strong>, esto evita el <span class="abbr" data-title="Object Slicing: Fenómeno donde se pierde la información de una clase derivada si se captura por valor en lugar de por referencia.">rebanamiento de objetos</span> y mejora el rendimiento al no crear copias innecesarias en la pila.</li>
+                <li><strong>Higiene en Destructores:</strong> Esta es la regla inquebrantable de la ingeniería en C++. Un destructor que lanza una excepción durante el <span class="abbr" data-title="Stack Unwinding: Proceso de limpieza automática de la pila que ocurre tras un throw.">desenrollado de la pila</span> provocará que el sistema operativo mate tu proceso mediante <code>std::terminate</code>.</li>
+                <li><strong>Documentación del Contrato:</strong> Si usás C++ moderno, marcá tus funciones de consulta o destructores como <code>noexcept</code> para permitir optimizaciones del compilador y dar seguridad al llamador.</li>
+            </ul>
+
+            <div class="table-res">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Concepto Clave</th>
+                            <th>Visión de Deitel / O'Reilly</th>
+                            <th>Visión de Metodologías y UX</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Lanzamiento (Throw)</strong></td>
+                            <td>Transferencia de control no lineal ante fallas críticas.</td>
+                            <td>Notificación de que el "contrato de servicio" se rompió.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Limpieza (Unwinding)</strong></td>
+                            <td>Destrucción automática de objetos locales (RAII).</td>
+                            <td>Garantía de que no queden "basuras" que afecten la sesión del usuario.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Jerarquía Estándar</strong></td>
+                            <td>Clasificación técnica entre <code>logic_error</code> y <code>runtime_error</code>.</td>
+                            <td>Diccionario para traducir fallos técnicos en mensajes de interfaz (UX).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Punteros Inteligentes</strong></td>
+                            <td>Uso de <code>auto_ptr</code> o <code>unique_ptr</code> para evitar leaks.</td>
+                            <td>Arquitectura modular que facilita el mantenimiento y la escalabilidad web.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Actividad Práctica: El Método de "Inyección de Errores"</h3>
+            <p>Basado en el cuaderno de <strong>Metodologías Activas</strong>, te proponemos un ejercicio de autoevaluación. La teoría se fija mediante la experimentación. No esperes a que el error ocurra por accidente; provocalo vos mismo para testear la resiliencia de tu arquitectura. Seguí estos pasos en tu laboratorio:</p>
+            <ol>
+                <li><strong>Falla de Memoria Simulada:</strong> Intentá asignar un vector con un tamaño que supere tu <span class="abbr" data-title="RAM: Random Access Memory. Memoria volátil del sistema que el operador new intenta ocupar.">RAM</span> física y verificá si tu bloque <code>catch(std::bad_alloc)</code> captura el error o si el programa colapsa.</li>
+                <li><strong>Corrupción de Entrada:</strong> Ingresá caracteres alfabéticos donde tu programa espera un <code>double</code> para dividir. ¿Lanzaste la excepción manualmente o dejaste que el sistema entre en un estado indefinido?</li>
+                <li><strong>Prueba de Fuga:</strong> Usá un puntero crudo (<code>T*</code>) y lanzá una excepción antes del <code>delete</code>. Luego repetilo usando <code>std::auto_ptr</code> (o <code>unique_ptr</code>). Comprobá con un analizador de memoria cómo la segunda opción es la única que protege el sistema.</li>
+            </ol>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-date">Era Pre-Excepciones</span>
+                    <p>Uso de <code>setjmp/longjmp</code> y códigos de error manuales. Riesgo altísimo de fugas de memoria y baja legibilidad.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">C++ Estándar (Deitel 6ta Ed)</span>
+                    <p>Consolidación de <code>try/catch</code>, <code>auto_ptr</code> y la jerarquía <code>std::exception</code>. El manejo de errores se vuelve parte del sistema de tipos.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">C++ Moderno y Futuro</span>
+                    <p>Introducción de <code>noexcept</code> y depreciación de especificaciones dinámicas. Integración total con <span class="abbr" data-title="Modern Web Architectures: Sistemas distribuidos donde el error local debe propagarse de forma asincrónica y segura.">arquitecturas web modernas</span>.</p>
+                </div>
+            </div>
+
+            <h3>La Dimensión Humana: UX y Educación</h3>
+            <p>Como destaca el cuaderno de <strong>UX UI</strong>, el manejo de excepciones es la última línea de defensa de la dignidad del usuario. Un programa que se cierra sin aviso es una falta de respeto al trabajo ajeno. En tus proyectos, asegurate de que cada <code>catch</code> no sea un "agujero negro" (bloque vacío), sino que informe al usuario o registre el error para su posterior reparación.</p>
+            
+            <p>Desde la perspectiva del cuaderno de <strong>Desarrollo Web</strong>, recordá que en sistemas distribuidos, una excepción en el núcleo de C++ a menudo debe ser mapeada a una respuesta de red. Tu habilidad para categorizar los errores mediante la jerarquía de clases facilitará enormemente la integración con interfaces modernas y servicios en la nube.</p>
+
+            <p><strong>Conclusión Final:</strong> Has recorrido desde la anatomía básica del <code>throw</code> hasta la complejidad de las jerarquías polimórficas. El manejo de excepciones es lo que separa a un codificador de un <strong>Ingeniero en Software</strong>. Te invitamos a repasar cada diagrama conceptual de esta página y a consultar las fuentes académicas ante cualquier duda técnica. La robustez no es un accidente; es el resultado de un diseño consciente y disciplinado.</p>
+
+            <button class="btn-ref" onclick="openRef('ref-deitel-16-15')">Referencia: Deitel Secc. 16.15 | O'Reilly Cap. 22: Summary | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI</button>
+        </section>
+
+        <footer style="text-align: center; margin-top: 5rem; color: var(--text-secondary); border-top: 1px solid var(--border); padding-top: 2rem;">
+            <p>© 2026 - Cátedra de Programación Universitaria C++ <br> Basado en las obras de Deitel & O'Reilly.</p>
+        </footer>
+    </main>
+</div>
+
+<button class="theme-toggle" id="themeToggle" title="Cambiar modo de color">🌓</button>
+
+<div id="refModal" class="modal">
+    <div class="modal-content">
+        <h3 id="refTitle" style="color: var(--accent);">Referencia Académica</h3>
+        <p id="refBody" style="margin: 1.5rem 0; font-family: 'Roboto';"></p>
+        <button onclick="closeRef()" style="background: var(--accent); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: bold;">Entendido</button>
+    </div>
+</div>
+
+<script>
+    const biblio = {
+        'ref-deitel-16-1': 'Deitel Secc. 16.1 | O\'Reilly Cap. 22: Exceptions | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-2': 'Deitel Secc. 16.2 | O\'Reilly Cap. 22: Practical Exceptions | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-3': 'Deitel Secc. 16.3 | O\'Reilly Cap. 22: Exceptions | Cuadernos NotebookLM: UX, Desarrollo Web y Educación',
+		'ref-deitel-16-4': 'Deitel Secc. 16.4 | O\'Reilly Cap. 22: Exceptions & Design | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-5': 'Deitel Secc. 16.5 | O\'Reilly Cap. 22: Exceptions & Design | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-6': 'Deitel Secc. 16.6 | O\'Reilly Cap. 22: Practical Exceptions | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-7': 'Deitel Secc. 16.7 | O\'Reilly Cap. 22: Exceptions & Runtime | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-8': 'Deitel Secc. 16.8 | O\'Reilly Cap. 22: Practical Exceptions | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-9': 'Deitel Secc. 16.9 | O\'Reilly Cap. 22: Exceptions & Objects | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-10': 'Deitel Secc. 16.10 | O\'Reilly Cap. 22: Exceptions & Inheritance | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-11': 'Deitel Secc. 16.11 | O\'Reilly Cap. 22: Resource Management | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-12': 'Deitel Secc. 16.12 | O\'Reilly Cap. 22: Resource Management | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-13': 'Deitel Secc. 16.13 | O\'Reilly Cap. 22: Practical Exceptions | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-14': 'Deitel Secc. 16.14 | O\'Reilly Cap. 14: Debugging and Assertions | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI',
+		'ref-deitel-16-15': 'Deitel Secc. 16.15 | O\'Reilly Cap. 22: Summary | Cuadernos NotebookLM: Educación, Desarrollo Web y UX/UI'
+    };
+
+    function openRef(id) {
+        document.getElementById('refBody').innerText = biblio[id];
+        document.getElementById('refModal').style.display = 'flex';
+    }
+
+    function closeRef() {
+        document.getElementById('refModal').style.display = 'none';
+    }
+
+    // Toggle de Tema
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        const next = currentTheme === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+    });
+
+    // Cargar tema guardado
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+
+    // Scroll Spy para Navegación
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 200) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').substring(1) === current) {
+                link.classList.add('active');
+            }
+        });
+    });
+
+    // Cerrar modal al hacer click fuera
+    window.onclick = function(event) {
+        let modal = document.getElementById('refModal');
+        if (event.target == modal) {
+            closeRef();
+        }
+    }
+</script>
+
+</body>
+</html>
