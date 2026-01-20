@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++: El Puente en Ingeniería Informática</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #f0ad4e;
+            --bg-dark: #121212;
+            --text-light: #ffffff;
+            --tooltip-bg: rgba(20, 30, 50, 0.95);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .infographic-container {
+            position: relative;
+            width: 95%;
+            max-width: 1400px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            background-color: #1a2635;
+        }
+
+        .main-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            pointer-events: none; 
+            user-select: none;
+        }
+
+        /* --- AREAS INTERACTIVAS (HOTSPOTS) --- */
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.2s;
+        }
+
+        /* Efecto visual al pasar el mouse por el área (opcional, ayuda a identificar que es clickeable) */
+        .hotspot:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1) inset;
+        }
+
+        /* Posicionamiento (Mismos valores anteriores) */
+        #spot-memory { top: 8%; left: 2%; width: 28%; height: 25%; }
+        #spot-hardware { top: 38%; left: 2%; width: 28%; height: 20%; }
+        #spot-zero { top: 63%; left: 2%; width: 28%; height: 30%; }
+        #spot-bridge { top: 15%; left: 32%; width: 36%; height: 45%; }
+        #spot-paradigm { top: 8%; left: 70%; width: 28%; height: 28%; }
+        #spot-compilation { top: 38%; left: 70%; width: 28%; height: 25%; }
+        #spot-discipline { top: 66%; left: 70%; width: 28%; height: 28%; }
+        #spot-industrial { top: 62%; left: 32%; width: 36%; height: 33%; }
+
+
+        /* --- TOOLTIP SIMPLIFICADO --- */
+        #simple-tooltip {
+            position: fixed; /* Fixed evita problemas de scroll */
+            visibility: hidden;
+            opacity: 0;
+            background: var(--tooltip-bg);
+            border: 1px solid var(--secondary-color);
+            padding: 10px 15px;
+            border-radius: 6px;
+            z-index: 100;
+            pointer-events: none; /* CRUCIAL: El mouse ignora el tooltip para poder hacer click debajo */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            transform: translate(15px, 15px); /* Offset del cursor */
+            transition: opacity 0.2s ease;
+            max-width: 250px;
+        }
+
+        #simple-tooltip.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        #tooltip-title {
+            font-weight: bold;
+            color: var(--secondary-color);
+            display: block;
+            margin-bottom: 4px;
+            font-size: 1rem;
+        }
+
+        #tooltip-hint {
+            font-size: 0.8rem;
+            color: #ccc;
+            font-style: italic;
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #1a2635, #243447);
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 90%;
+            position: relative;
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            max-height: 90vh; /* Evita que se salga en pantallas pequeñas */
+            overflow-y: auto; /* Scroll interno si es muy largo */
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            color: var(--secondary-color);
+            cursor: pointer;
+            line-height: 1;
+            z-index: 1001;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        .modal-body h2 {
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+            margin-top: 0;
+        }
+
+        .modal-body p {
+            line-height: 1.7;
+            font-size: 1.05rem;
+            color: #e0e0e0;
+            margin-bottom: 15px;
+        }
+
+        /* Estilos específicos para bloques de código o énfasis en texto */
+        .modal-body code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #ff8c00;
+        }
+    </style>
+</head>
+<body>
+
+<div class="infographic-container" id="container">
+    <img src="./Imgs/PorQue.png" alt="Infografía C++" class="main-image">
+
+    <div class="hotspot" id="spot-memory" data-section="memory"></div>
+    <div class="hotspot" id="spot-hardware" data-section="hardware"></div>
+    <div class="hotspot" id="spot-zero" data-section="zero"></div>
+    <div class="hotspot" id="spot-bridge" data-section="bridge"></div>
+    <div class="hotspot" id="spot-industrial" data-section="industrial"></div>
+    <div class="hotspot" id="spot-paradigm" data-section="paradigm"></div>
+    <div class="hotspot" id="spot-compilation" data-section="compilation"></div>
+    <div class="hotspot" id="spot-discipline" data-section="discipline"></div>
+
+    <div id="simple-tooltip">
+        <span id="tooltip-title">Título</span>
+        <span id="tooltip-hint">Click para ver detalle</span>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+    <div class="modal-content">
+        <span class="modal-close" id="modal-close-btn">&times;</span>
+        <div class="modal-body">
+            <h2 id="modal-title">Título del Modal</h2>
+            <div id="modal-description">
+                </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- DATOS DE CONTENIDO ---
+    const contentData = {
+        "memory": {
+            title: "Gestión de Memoria y Punteros",
+            fullDesc: "<p>C++ expone al estudiante a la realidad de la memoria del sistema. Al tener que gestionar manualmente la asignación y liberación de recursos (usando punteros, <code>new</code>, <code>delete</code> o smart pointers), el estudiante comprende profundamente la diferencia entre el <strong>stack</strong> (memoria rápida y automática) y el <strong>heap</strong> (memoria dinámica y manual).</p><p>Se aprenden las consecuencias reales de las fugas de memoria (<em>memory leaks</em>), algo que lenguajes con Garbage Collector (como Java o Python) suelen ocultar, resultando en ingenieros más conscientes de los recursos.</p>"
+        },
+        "hardware": {
+            title: "Cercanía al Hardware",
+            fullDesc: "<p>C++ permite manipular bits, direcciones de memoria y registros de CPU casi tan directamente como en Assembler, pero manteniendo estructuras de alto nivel.</p><p>Esta capacidad es absolutamente fundamental para un ingeniero informático que probablemente trabajará en áreas críticas como sistemas embebidos, desarrollo de controladores (drivers), robótica avanzada o sistemas de tiempo real donde la interacción directa y precisa con el hardware es obligatoria y la latencia no es negociable.</p>"
+        },
+        "zero": {
+            title: "Abstracción de Costo Cero",
+            fullDesc: "<p>C++ enseña un concepto vital en ingeniería: la eficiencia absoluta. El principio de <em>zero-overhead abstraction</em> dicta que no debes pagar (en términos de rendimiento) por lo que no usas.</p><p>Esto entrena a los estudiantes a escribir código que es tan eficiente como el código escrito a mano en C puro, pero utilizando abstracciones modernas, seguras y legibles. Es el equilibrio perfecto entre productividad y potencia bruta.</p>"
+        },
+        "bridge": {
+            title: "El Puente Pedagógico",
+            fullDesc: "<p>Para estudiantes de Ingeniería en Informática, C++ es más que un lenguaje; es una herramienta pedagógica esencial.</p><p>A diferencia de enfoques puramente teóricos o centrados solo en procesos de alto nivel, la Ingeniería en Informática requiere un dominio absoluto del puente entre el hardware y el software. C++ fuerza al estudiante a entender cómo funciona realmente la computadora debajo de las capas de abstracción, creando una base sólida para cualquier especialización futura.</p>"
+        },
+        "paradigm": {
+            title: "Programación Multiparadigma",
+            fullDesc: "<p>A diferencia de C (estrictamente imperativo) o versiones antiguas de Java (estrictamente orientado a objetos), C++ permite enseñar y combinar múltiples estilos de programación.</p><p>El estudiante domina la programación procedimental, la orientada a objetos (POO) y la potente programación genérica (metaprogramación con Templates). Esto proporciona una caja de herramientas mental increíblemente versátil para atacar problemas de distinta naturaleza sin necesidad de cambiar de lenguaje base.</p>"
+        },
+        "compilation": {
+            title: "Comprensión de Compilación",
+            fullDesc: "<p>El modelo de compilación de C++ obliga a entender la diferencia crucial entre declaración (archivos .h) y definición (archivos .cpp), y el proceso de <em>linking</em> (enlace).</p><p>Esto desmitifica el proceso de cómo un texto de código fuente se convierte en un ejecutable binario real, proporcionando una base sólida e indispensable para entender cómo funcionan los sistemas operativos, las librerías dinámicas y estáticas, y los cargadores de programas.</p>"
+        },
+        "discipline": {
+            title: "Disciplina y Tipado Fuerte",
+            fullDesc: "<p>Es un lenguaje formativo que 'castiga' los errores de lógica severamente. El sistema de tipos estático fuerte obliga al estudiante a ser explícito y extremadamente cuidadoso con los datos que manipula.</p><p>Aprender a depurar (debug) un error de segmentación (<em>segmentation fault</em>) en C++ desarrolla habilidades de análisis y resolución de problemas mucho más agudas y profundas que simplemente depurar una excepción genérica en un lenguaje interpretado o de tipado débil.</p>"
+        },
+        "industrial": {
+            title: "Estándar en Sistemas Críticos",
+            fullDesc: "<p>Desde motores de videojuegos de vanguardia (como Unreal Engine) hasta sistemas financieros de alta frecuencia (HFT) y el núcleo de los navegadores web que usamos a diario (Chrome, Firefox, Edge), C++ sigue siendo el rey indiscutible del rendimiento.</p><p>Enseñar C++ prepara a los ingenieros para industrias exigentes donde la baja latencia y la optimización extrema no son características opcionales, sino requisitos funcionales ineludibles.</p>"
+        }
+    };
+
+    // Elementos
+    const tooltip = document.getElementById('simple-tooltip');
+    const tooltipTitle = document.getElementById('tooltip-title');
+    const hotspots = document.querySelectorAll('.hotspot');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-description');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+
+    // --- LÓGICA DE INTERACCIÓN ---
+
+    // Función para abrir modal
+    function openModal(sectionKey) {
+        const data = contentData[sectionKey];
+        if (data) {
+            modalTitle.textContent = data.title;
+            modalDesc.innerHTML = data.fullDesc;
+            modal.classList.add('active');
+            tooltip.classList.remove('active'); // Esconder tooltip al abrir modal
+        }
+    }
+
+    hotspots.forEach(spot => {
+        // 1. Mostrar Tooltip al entrar
+        spot.addEventListener('mouseenter', (e) => {
+            const section = e.target.getAttribute('data-section');
+            if(contentData[section]) {
+                tooltipTitle.textContent = contentData[section].title;
+                tooltip.classList.add('active');
+            }
+        });
+
+        // 2. Mover Tooltip con el mouse
+        spot.addEventListener('mousemove', (e) => {
+            // Usamos clientX/Y porque el tooltip tiene position: fixed
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            tooltip.style.left = x + 'px';
+            tooltip.style.top = y + 'px';
+        });
+
+        // 3. Esconder Tooltip al salir
+        spot.addEventListener('mouseleave', () => {
+            tooltip.classList.remove('active');
+        });
+
+        // 4. CLICK -> Abrir Modal
+        spot.addEventListener('click', (e) => {
+            const section = e.target.getAttribute('data-section');
+            openModal(section);
+        });
+    });
+
+    // --- LÓGICA DE CIERRE DE MODAL ---
+
+    modalCloseBtn.addEventListener('click', () => modal.classList.remove('active'));
+    
+    // Cierra si click fuera de la caja
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('active');
+    });
+
+    // Cierra con ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') modal.classList.remove('active');
+    });
+
+</script>
+
+</body>
+</html>
