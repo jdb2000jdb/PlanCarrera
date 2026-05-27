@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciclo de Aprendizaje Experiencial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos generales y de la tipografía */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        /* Contenedor principal del gráfico */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+            margin-bottom: 60px;
+        }
+
+        /* Estilos para el SVG */
+        svg {
+            width: 100%;
+            height: auto;
+            overflow: visible;
+        }
+
+        /* Clases para los elementos del SVG */
+        .quadrant {
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
+        }
+
+        .quadrant:hover {
+            transform: scale(1.03);
+            opacity: 0.85;
+        }
+
+        .main-text {
+            font-size: 20px;
+            font-weight: 700;
+            fill: #334155;
+        }
+
+        .sub-text {
+            font-size: 22px;
+            font-weight: 700;
+            fill: #475569;
+        }
+        
+        .side-label {
+            font-size: 16px;
+            font-weight: bold;
+            fill: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .central-text {
+            font-size: 14px;
+            fill: #475569;
+        }
+
+        /* Animación de rotación sutil para el ciclo */
+        @keyframes rotate-cycle {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #cycle-paths {
+            transform-origin: center;
+            animation: rotate-cycle 120s linear infinite;
+        }
+
+        /* Estilos para las tarjetas de información */
+        .learning-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 2rem;
+        }
+
+        .style-card {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .style-card:hover, .style-card.highlight {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .card-header {
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0d9488;
+            float: left;
+            margin-right: 1rem;
+            line-height: 1;
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+        
+        .tagline {
+            font-size: 1rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        .card-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .card-section h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-section p {
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .card-section ul {
+            list-style-position: inside;
+            padding-left: 0;
+            color: #475569;
+        }
+        
+        .card-section li {
+            margin-bottom: 0.25rem;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .badge {
+            background-color: #f0fdfa;
+            color: #14b8a6;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+
+        .card-content {
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #14b8a6;
+            text-align: center;
+            font-style: italic;
+            color: #0f766e;
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="chart-container">
+        <!-- SVG que representa el ciclo de aprendizaje -->
+        <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+            <!-- Definiciones de gradientes y filtros -->
+            <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#14b8a6;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#0d9488;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#2dd4bf;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#14b8a6;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#5eead4;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#2dd4bf;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#99f6e4;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#5eead4;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+
+            <!-- Círculo interior gris -->
+            <circle cx="400" cy="400" r="200" fill="#e2e8f0" />
+            <circle cx="400" cy="400" r="195" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="2"/>
+
+            <!-- Grupo de los paths del ciclo para animación conjunta -->
+            <g id="cycle-paths">
+                <!-- Quadrant 1: Observación reflexiva -->
+                <path d="M 400 100 A 300 300 0 0 1 700 400 L 600 400 A 200 200 0 0 0 400 200 Z" fill="url(#grad1)"/>
+                <!-- Quadrant 2: Conceptualización abstracta -->
+                <path d="M 700 400 A 300 300 0 0 1 400 700 L 400 600 A 200 200 0 0 0 600 400 Z" fill="url(#grad2)"/>
+                <!-- Quadrant 3: Experimentación activa -->
+                <path d="M 400 700 A 300 300 0 0 1 100 400 L 200 400 A 200 200 0 0 0 400 600 Z" fill="url(#grad3)"/>
+                <!-- Quadrant 4: Experiencia concreta -->
+                <path d="M 100 400 A 300 300 0 0 1 400 100 L 400 200 A 200 200 0 0 0 200 400 Z" fill="url(#grad4)"/>
+            </g>
+            
+            <!-- Flechas del ciclo -->
+            <g fill="#0f766e">
+                <!-- Flecha superior (Experiencia -> Observación) -->
+                <path d="M 400 90 L 425 125 L 375 125 Z" transform="rotate(90 400 107.5)"/>
+                <!-- Flecha derecha (Observación -> Conceptualización) -->
+                <path d="M 710 400 L 675 375 L 675 425 Z" transform="rotate(90 692.5 400)"/>
+                <!-- Flecha inferior (Conceptualización -> Experimentación) -->
+                <path d="M 400 710 L 375 675 L 425 675 Z" transform="rotate(90 400 692.5)"/>
+                <!-- Flecha izquierda (Experimentación -> Experiencia) -->
+                <path d="M 90 400 L 125 425 L 125 375 Z" transform="rotate(90 107.5 400)"/>
+            </g>
+
+            <!-- Textos centrales -->
+            <text x="400" y="240" text-anchor="middle" class="central-text">Se relaciona con lo personal</text>
+            <text x="400" y="260" text-anchor="middle" class="central-text">y profesional</text>
+            <text x="400" y="540" text-anchor="middle" class="central-text">Se relaciona con el proceso</text>
+            <text x="400" y="560" text-anchor="middle" class="central-text">educativo</text>
+            <text x="380" y="405" text-anchor="middle" class="central-text" transform="rotate(-90 380 405)">Cómo lo percibimos</text>
+            <text x="500" y="390" text-anchor="middle" class="central-text">Cómo lo procesamos</text>
+            <line x1="400" y1="200" x2="400" y2="600" stroke="#cbd5e1" stroke-width="2" />
+            <line x1="200" y1="400" x2="600" y2="400" stroke="#cbd5e1" stroke-width="2" />
+
+            <!-- Etiquetas laterales y flechas -->
+            <defs>
+                <!-- Marcador de flecha canónico (apunta a la derecha). 'orient=auto' lo rotará según la dirección de la línea. -->
+                <marker id="arrow-head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+                </marker>
+            </defs>
+            <text x="150" y="50" text-anchor="middle" class="side-label">Lado práctico</text>
+            <path d="M 250 70 L 50 70" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-head)" />
+            <text x="650" y="50" text-anchor="middle" class="side-label">Lado analítico</text>
+            <path d="M 550 70 L 750 70" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-head)" />
+            
+            <!-- Títulos principales de las fases (no interactivos) -->
+            <g class="main-labels" style="pointer-events: none;">
+                <text x="400" y="40" text-anchor="middle" class="main-text">Experiencia concreta</text>
+                <text x="400" y="65" text-anchor="middle" class="main-text">pasada</text>
+                <text x="840" y="390" text-anchor="end" class="main-text">Observación</text>
+                <text x="840" y="415" text-anchor="end" class="main-text">reflexiva</text>
+                <text x="400" y="770" text-anchor="middle" class="main-text">Conceptualización</text>
+                <text x="400" y="795" text-anchor="middle" class="main-text">abstracta</text>
+                <text x="-40" y="390" text-anchor="start" class="main-text">Experimentación</text>
+                <text x="-40" y="415" text-anchor="start" class="main-text">activa</text>
+            </g>
+            
+            <!-- Grupo Interactivo 1: Observación Reflexiva -->
+            <g id="quadrant-1" class="quadrant" data-title="Observación Reflexiva" data-question="1. ¿Por Qué?">
+                <rect x="500" y="150" width="250" height="200" fill="transparent" />
+                <text x="625" y="270" text-anchor="middle" class="sub-text">1. ¿Por Qué?</text>
+            </g>
+            
+            <!-- Grupo Interactivo 2: Conceptualización Abstracta -->
+            <g id="quadrant-2" class="quadrant" data-title="Conceptualización Abstracta" data-question="2. ¿Qué?">
+                <rect x="500" y="450" width="250" height="200" fill="transparent" />
+                <text x="625" y="570" text-anchor="middle" class="sub-text">2. ¿Qué?</text>
+            </g>
+
+            <!-- Grupo Interactivo 3: Experimentación Activa -->
+            <g id="quadrant-3" class="quadrant" data-title="Experimentación Activa" data-question="3. ¿Cómo?">
+                <rect x="50" y="450" width="250" height="200" fill="transparent" />
+                <text x="175" y="570" text-anchor="middle" class="sub-text">3. ¿Cómo?</text>
+            </g>
+
+            <!-- Grupo Interactivo 4: Experiencia Concreta -->
+            <g id="quadrant-4" class="quadrant" data-title="Experiencia Concreta Pasada" data-question="4. ¿Y si? ¿Qué Más?">
+                <rect x="50" y="150" width="250" height="200" fill="transparent" />
+                <text x="175" y="270" text-anchor="middle" class="sub-text">4. ¿Y si? ¿Qué Más?</text>
+            </g>
+        </svg>
+    </div>
+
+    <main class="learning-grid">
+        <!-- Card 1: ¿Por Qué? -->
+        <section id="card-1" class="style-card">
+            <div class="card-content">
+                <div class="card-header">
+                    <span class="question-number">1.</span>
+                    <h2>¿Por Qué?</h2>
+                    <p class="tagline">¡Véndelo! Hazlo relevante. Motiva. Proporciona razones para que quieran aprender.</p>
+                </div>
+                <div class="card-section">
+                    <h3>Rol: Motivador</h3>
+                    <p>Crea una razón para aprender. Genera expectación y deseo de saber más.</p>
+                </div>
+                <div class="card-section">
+                    <h3>Método</h3>
+                    <p>Simulación y Debate. Provocar reflexión.</p>
+                </div>
+                <div class="card-section">
+                    <h3>Destrezas Clave</h3>
+                    <ul>
+                        <li>Enfocar y dirigir el pensamiento</li>
+                        <li>Observar, preguntar y visualizar</li>
+                        <li>Imaginar, deducir y generar ideas</li>
+                    </ul>
+                </div>
+                <div class="card-section">
+                    <h3>Consejo Profesional</h3>
+                    <p><strong>Motivación:</strong> ¿Qué deseas lograr y qué deseas evitar? Conecta el aprendizaje con valores y responde a "¿Qué hay para mí en esto?".</p>
+                </div>
+                <div class="badge-container">
+                    <span class="badge">Global</span>
+                    <span class="badge">Lado Analítico</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <p>Apelar a la Imaginación</p>
+            </div>
+        </section>
+
+        <!-- Card 2: ¿Qué? -->
+        <section id="card-2" class="style-card">
+            <div class="card-content">
+                <div class="card-header">
+                    <span class="question-number">2.</span>
+                    <h2>¿Qué?</h2>
+                    <p class="tagline">Explica de forma clara y concisa. Historia con fórmula mágica.</p>
+                </div>
+                <div class="card-section">
+                    <h3>Rol: Educador</h3>
+                    <p>Entregar el contenido. "Enseñar" la información de manera estructurada.</p>
+                </div>
+                <div class="card-section">
+                    <h3>Método</h3>
+                    <p>Informacional. Proveer datos, dar instrucciones y demostraciones.</p>
+                </div>
+                <div class="card-section">
+                    <h3>Destrezas Clave</h3>
+                    <ul>
+                        <li>Análisis y reconocimiento de patrones</li>
+                        <li>Ordenar, priorizar y clasificar</li>
+                        <li>Dividir la información en bloques manejables</li>
+                    </ul>
+                </div>
+                <div class="card-section">
+                    <h3>Consejo Profesional</h3>
+                    <p><strong>Engagement:</strong> Dale vida al contenido. Utiliza historias y apela a las emociones y sentidos para hacerlo más atractivo y memorable.</p>
+                </div>
+                <div class="badge-container">
+                    <span class="badge">Educar</span>
+                    <span class="badge">Lado Analítico</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <p>Apelar al Aspecto Analítico</p>
+            </div>
+        </section>
+
+        <!-- Card 3: ¿Cómo? -->
+        <section id="card-3" class="style-card">
+            <div class="card-content">
+                <div class="card-header">
+                    <span class="question-number">3.</span>
+                    <h2>¿Cómo?</h2>
+                    <p class="tagline">Guía a través de la habilidad.</p>
+                </div>
+                <div class="card-section">
+                    <h3>Rol: Coach</h3>
+                    <p>Facilitar la práctica. ¿Cómo funciona? ¿Cómo lo hacen los expertos? ¿Cómo lo haría yo?</p>
+                </div>
+                 <div class="card-section">
+                    <h3>Método</h3>
+                    <p>Facilitar. Guiar en lugar de decir. Permitir la apropiación de la información.</p>
+                </div>
+                <div class="card-section">
+                    <h3>Destrezas Clave</h3>
+                    <ul>
+                        <li>Indagar, explorar y resolver problemas</li>
+                        <li>Experimentar y aprender de los demás</li>
+                        <li>Desglosar tareas en partes manejables</li>
+                    </ul>
+                </div>
+                <div class="card-section">
+                    <h3>Consejo Profesional</h3>
+                    <p><strong>Confianza:</strong> Haz que los aprendices se sientan "bien" y seguros en lo que hacen. Instala e integra el contenido a través de la práctica guiada.</p>
+                </div>
+                 <div class="badge-container">
+                    <span class="badge">Coaching</span>
+                    <span class="badge">Lado Práctico</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <p>Apelar al Sentido Común</p>
+            </div>
+        </section>
+
+        <!-- Card 4: ¿Y si? / ¿Qué más? -->
+        <section id="card-4" class="style-card">
+            <div class="card-content">
+                <div class="card-header">
+                    <span class="question-number">4.</span>
+                    <h2>¿Y si? / ¿Qué más?</h2>
+                    <p class="tagline">Piensa en nuevas aplicaciones. Conectar el presente con su relevancia y aplicación futura.</p>
+                </div>
+                <div class="card-section">
+                    <h3>Rol: Colega / Mentor</h3>
+                    <p>Fomentar el autodescubrimiento. ¿Qué puede llegar a ser esto? ¿Qué más puedo hacer con esto?</p>
+                </div>
+                <div class="card-section">
+                    <h3>Método</h3>
+                    <p>Autodescubrimiento. Conectar el presente con su aplicación y relevancia futura.</p>
+                </div>
+                <div class="card-section">
+                    <h3>Destrezas Clave</h3>
+                    <ul>
+                        <li>Integración y evaluación de habilidades</li>
+                        <li>Sintetizar, representar y reenfocar</li>
+                        <li>Transferir el aprendizaje al entorno real</li>
+                    </ul>
+                </div>
+                <div class="card-section">
+                    <h3>Consejo Profesional</h3>
+                    <p><strong>Integración:</strong> El marco "¿Qué pasaría si...?" es la puerta a un mayor aprendizaje. Guía a la audiencia para que establezca sus propias conexiones y se apropie de la información.</p>
+                </div>
+                <div class="badge-container">
+                    <span class="badge">Aplicación</span>
+                    <span class="badge">Lado Práctico</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <p>Apelar a la Energía Dinámica</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const quadrants = document.querySelectorAll('.quadrant');
+            const cards = document.querySelectorAll('.style-card');
+
+            quadrants.forEach(quadrant => {
+                quadrant.addEventListener('click', () => {
+                    // Extrae el número del ID del cuadrante (ej. 'quadrant-1' -> '1')
+                    const quadrantNumber = quadrant.id.split('-')[1];
+                    const targetCard = document.getElementById(`card-${quadrantNumber}`);
+
+                    if (targetCard) {
+                        // Elimina el resaltado de todas las tarjetas
+                        cards.forEach(c => c.classList.remove('highlight'));
+                        
+                        // Añade el resaltado a la tarjeta objetivo
+                        targetCard.classList.add('highlight');
+                        
+                        // Desplaza la vista a la tarjeta
+                        targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                        // Elimina el resaltado después de un tiempo
+                        setTimeout(() => {
+                            targetCard.classList.remove('highlight');
+                        }, 2500);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
